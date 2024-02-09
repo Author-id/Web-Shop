@@ -15,6 +15,8 @@
 # https://docs.gitlab.com/ee/development/cicd/templates.html
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+default:
+  image: python:3.10
 
 stages:          # List of stages for jobs, and their order of execution
   - test
@@ -24,5 +26,5 @@ lint-test-job:   # This job also runs in the test stage.
   script:
     - echo "Linting code... This will take about 10 seconds."
     - pip3 install -r requirements.txt
-    - python3 -m flake8
+    - python3 -m black --check lyceum -l 79
     - echo "No lint issues found."
