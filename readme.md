@@ -1,6 +1,6 @@
 '''bash  
-python -m venv venv  
+python3 -m venv venv  
 sudo venv/bin/activate  
-pip install -r requirements/prod.txt  
+pip3 install -r requirements/prod.txt  
 source .env  
-python manage.py runserver  
+python3 manage.py runserver  
