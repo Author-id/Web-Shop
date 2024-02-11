@@ -1,5 +1,6 @@
 stages:
   - linting
+  - testing
 
 flake8:
     stage: linting
@@ -15,3 +16,11 @@ lint:
   image: registry.gitlab.com/pipeline-components/black:latest
   script:
       - black --line-length 79 --exclude venv --check lyceum
+
+test:
+  stage: testing
+  image: python 3.10
+  script:
+    - pip install -r requirements/test.txt
+    - cd lyceum
+    - python manage.py test
