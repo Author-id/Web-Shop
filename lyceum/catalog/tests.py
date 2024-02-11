@@ -13,5 +13,3 @@ class StaticURLTests(TestCase):
         self.assertEqual(status_code, HTTPStatus.OK)
         status_code = Client().get("/catalog/abs/").status_code
         self.assertEqual(status_code, HTTPStatus.NOT_FOUND)
-
-
