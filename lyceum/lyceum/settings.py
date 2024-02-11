@@ -11,7 +11,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "ABOBA")
 
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true",)
 
-ALLOWED_HOSTS = list(map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")))
+ALLOWED_HOSTS = list(
+    map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(","))
+)
 
 
 INSTALLED_APPS = [
@@ -24,7 +26,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -35,7 +36,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 INTERNAL_IPS = [
@@ -94,8 +94,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+if DEBUG:
+    INTERNAL_IPS.append("debug_toolbar")
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 LANGUAGE_CODE = "en-us"
 
