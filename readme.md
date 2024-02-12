@@ -3,7 +3,7 @@
 # Setup Commands
 
 - You should rename .env.example to .env
-
+# write this commands in terminal
 ```
 mv .env.example .env
 ```
