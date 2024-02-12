@@ -1,6 +1,6 @@
 stages:
   - linting
-  - testing
+  - test
 
 
 flake8:
@@ -8,7 +8,7 @@ flake8:
   image: registry.gitlab.com/pipeline-components/flake8:latest
   script:
     - pip install flake8 pep8-naming flake8-import-order flake8-quotes
-    - flake8 --inline-quotes '"' --exclude venv lyceum
+    - flake8 --verbose --inline-quotes '"' .
 
 
 black:
@@ -18,10 +18,11 @@ black:
     - black --line-length 79 --exclude venv --check --skip-string-normalization --check .
 
 
-test:
-  stage: testing
-  image: python:3.9
+django-tests:
+  stage: test
   script:
-    - pip install -r requirements/prod.txt
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - pip install -r requirements/dev.txt
     - cd lyceum
-    - python manage.py test
+    - python3 manage.py test
