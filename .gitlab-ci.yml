@@ -1,31 +1,27 @@
-black:
-  stage: lint
-  image: registry.gitlab.com/pipeline-components/black:latest
-  script:
-    - black --line-length 79 --exclude venv --skip-string-normalization --check .
-  only:
-    - merge_requests
-    - main
 stages:
-  - lint
+  - linting
+  - testing
+
 
 flake8:
-  stage: lint
+  stage: linting
   image: registry.gitlab.com/pipeline-components/flake8:latest
   script:
     - pip install flake8 pep8-naming flake8-import-order flake8-quotes
     - flake8 --inline-quotes '"' --exclude venv lyceum
-  only:
-    - merge_requests
-    - main
+
+
+black:
+  stage: linting
+  image: registry.gitlab.com/pipeline-components/black:latest
+  script:
+    - black --line-length 79 --exclude venv --check --skip-string-normalization --check .
+
 
 test:
-  stage: lint
+  stage: testing
   image: python:3.11
   script:
     - pip install -r requirements/prod.txt
     - cd lyceum
     - python manage.py test
-  only:
-    - merge_requests
-    - main

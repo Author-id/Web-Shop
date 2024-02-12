@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.crja72.ru/django/2024/spring/course/students/197180-ivan3624-course-1112/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2024/spring/course/students/197180-ivan3624-course-1112/-/commits/main)
+[![pipeline status](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/-/commits/main)
 
 # Setup Commands
 
