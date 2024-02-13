@@ -11,7 +11,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "not_so_secret")
 
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true",)
 
-ALLOWED_HOSTS = list(map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")))
+ALLOWED_HOSTS = list(
+    map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(","))
+)
 
 
 INSTALLED_APPS = [
@@ -79,19 +81,22 @@ AUTH_PASSWORD_VALIDATORS = [
         "UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation." "MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation."
+        "MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation." "CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation."
+        "CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation." "NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation."
+        "NumericPasswordValidator",
     },
 ]
 
 if DEBUG:
     INTERNAL_IPS.append("debug_toolbar")
-    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.insert(0, "debug_toolbar." "middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 LANGUAGE_CODE = "en-us"
