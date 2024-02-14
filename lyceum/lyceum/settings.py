@@ -96,7 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 if DEBUG:
     INTERNAL_IPS.append("debug_toolbar")
-    MIDDLEWARE.insert(0, "debug_toolbar." "middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 LANGUAGE_CODE = "en-us"
