@@ -15,7 +15,7 @@ black:
   stage: linting
   image: registry.gitlab.com/pipeline-components/black:latest
   script:
-    - black --config pyproject.toml --check --verbose -- .
+    - black --check --verbose --line-length 79 -- .
 
 django_test:
   stage: test
