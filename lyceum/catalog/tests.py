@@ -9,7 +9,7 @@ class StaticURLTests(TestCase):
         self.assertEqual(resp.status_code, HTTPStatus.OK)
 
     def test_item_detail_endpoint(self):
-        resp = Client().get("/catalog/3/")
+        resp = Client().get("/catalog/3")
         self.assertEqual(resp.status_code, HTTPStatus.OK)
 
         resp = Client().get("/catalog/string/")
