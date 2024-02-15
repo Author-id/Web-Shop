@@ -1,5 +1,5 @@
-import parameterized
 from django.test import Client, TestCase
+import parameterized
 
 
 class StaticURLTests(TestCase):
