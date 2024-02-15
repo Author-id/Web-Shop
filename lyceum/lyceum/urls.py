@@ -6,7 +6,7 @@ from . import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("homepage.urls")),
-    path("about/", include("about.urls")),
+    path("", include("about.urls")),
     path("", include("catalog.urls")),
 ]
 
