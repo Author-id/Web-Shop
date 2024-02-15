@@ -2,26 +2,25 @@ stages:
   - linting
   - test
 
-
 flake8:
   stage: linting
   image: registry.gitlab.com/pipeline-components/flake8:latest
   script:
-    - pip install flake8 pep8-naming flake8-import-order flake8-quotes
+    - pip install pep8-naming==0.13.3
+    - pip install flake8-quotes==3.3.2
+    - pip install flake8-import-order==0.18.2
     - flake8 --exclude venv --import-order-style=google --verbose . --inline-quotes '"'
-
 
 black:
   stage: linting
   image: registry.gitlab.com/pipeline-components/black:latest
   script:
-    - black --line-length 79 --exclude venv --check --skip-string-normalization --check .
+    - black --config pyproject.toml --check --verbose -- .
 
-
-django-tests:
+django_test:
   stage: test
-  image: python:3.11
+  image: python:3.10
   script:
-    - pip install -r requirements/dev.txt
+    - pip install -r requirements/prod.txt
     - cd lyceum
-    - python3 manage.py test
+    - python manage.py test

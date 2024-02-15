@@ -3,11 +3,11 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "not_so_secret")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "ABOBA")
 
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true",)
 
@@ -15,10 +15,17 @@ ALLOWED_HOSTS = list(
     map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(","))
 )
 
+# SECRET_KEY = os.environ.get("SECRET_KEY", "123456")
+# str_debug = os.environ.get("DEBUG", "true")
+# DEBUG = str_debug.lower() in ["true", "yes", "1"]
+# str_allowed_hosts = os.environ.get("ALLOWED_HOSTS", "127.0.0.1")
+# ALLOWED_HOSTS = str_allowed_hosts.split(",")
+
+# print(SECRET_KEY, DEBUG, ALLOWED_HOSTS)
 
 INSTALLED_APPS = [
-    "catalog.apps.CatalogConfig",
     "homepage.apps.HomepageConfig",
+    "catalog.apps.CatalogConfig",
     "about.apps.AboutConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -26,6 +33,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -36,10 +44,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-]
-
-INTERNAL_IPS = [
-    "127.0.0.1",
 ]
 
 ROOT_URLCONF = "lyceum.urls"
@@ -62,8 +66,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "lyceum.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     "default": {
@@ -72,30 +74,35 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "UserAttributeSimilarityValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation"
+            ".UserAttributeSimilarityValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "MinimumLengthValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation.MinimumLengthValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "CommonPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation"
+            ".CommonPasswordValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        "NumericPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation"
+            ".NumericPasswordValidator"
+        ),
     },
 ]
 
 if DEBUG:
-    INTERNAL_IPS.append("debug_toolbar")
+    INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
@@ -107,12 +114,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
