@@ -1,30 +1,48 @@
+from http import HTTPStatus
+
 from django.test import Client, TestCase
-import parameterized
 
 
 class StaticURLTests(TestCase):
-    def test_endpoint(self):
-        response = Client().get("/catalog/")
-        self.assertEqual(response.status_code, 200)
+    def test_item_list_endpoint(self):
+        resp = Client().get("/catalog/")
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
 
-    @parameterized.parameterized.expand(
-        [
-            ("0", 200),
-            ("1", 200),
-            ("2", 200),
-            ("3", 200),
-            ("02934890823489423", 200),
-            ("-1", 404),
-            ("-0293817465", 404),
-            ("-", 404),
-            ("+", 404),
-            ("a", 404),
-            ("abcde", 404),
-            ("-+_abdce_+-", 404),
-            ("777/", 404),
-            ("%*^!@#$()", 404),
+    def test_item_detail_endpoint(self):
+        resp = Client().get("/catalog/3/")
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+
+        resp = Client().get("/catalog/string/")
+        self.assertEqual(resp.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_re_positive_int_endpoint(self):
+        resp = Client().get("/catalog/re/23/")
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.content, "23".encode())
+
+        not_founs_urls = [
+            "/catalog/re/string/",
+            "/catalog/re/23/string/",
+            "/catalog/re/-23/",
+            "/catalog/re/0/",
         ]
-    )
-    def test_catalog_item_detail_endpoint(self, url, correct_status_code):
-        response = Client().get(f"/catalog/{url}/")
-        self.assertEqual(response.status_code, correct_status_code)
+
+        for url in not_founs_urls:
+            resp = Client().get(url)
+            self.assertEqual(resp.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_converter_positive_integer_endpoint(self):
+        resp = Client().get("/catalog/converter/23/")
+        self.assertEqual(resp.status_code, HTTPStatus.OK)
+        self.assertEqual(resp.content, "23".encode())
+
+        not_founs_urls = [
+            "/catalog/converter/string/",
+            "/catalog/converter/23/string/",
+            "/catalog/converter/-23/",
+            "/catalog/converter/0/",
+        ]
+
+        for url in not_founs_urls:
+            resp = Client().get(url)
+            self.assertEqual(resp.status_code, HTTPStatus.NOT_FOUND)
