@@ -10,8 +10,8 @@ def item_detail(request, pk):
 
 
 def item_detail_re(request, pk):
-    return HttpResponse(str(pk))
+    return HttpResponse("<body>" + str(pk) + "</body>")
 
 
 def item_detail_converter(request, pk):
-    return HttpResponse(str(pk))
+    return HttpResponse("<body>" + str(pk) + "</body>")
