@@ -15,13 +15,13 @@ ALLOWED_HOSTS = list(
     map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(","))
 )
 
-# SECRET_KEY = os.environ.get("SECRET_KEY", "123456")
-# str_debug = os.environ.get("DEBUG", "true")
-# DEBUG = str_debug.lower() in ["true", "yes", "1"]
-# str_allowed_hosts = os.environ.get("ALLOWED_HOSTS", "127.0.0.1")
-# ALLOWED_HOSTS = str_allowed_hosts.split(",")
-
-# print(SECRET_KEY, DEBUG, ALLOWED_HOSTS)
+ALLOW_REVERSE = os.getenv("DJANGO_ALLOW_REVERSE", "True").lower() in [
+    "",
+    "true",
+    "yes",
+    "1",
+    "y",
+]
 
 INSTALLED_APPS = [
     "homepage.apps.HomepageConfig",
@@ -43,6 +43,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "lyceum.middleware.ReverseMiddleware",
 ]
 
 ROOT_URLCONF = "lyceum.urls"
