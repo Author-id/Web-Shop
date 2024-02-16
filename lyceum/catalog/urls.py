@@ -14,5 +14,5 @@ urlpatterns = [
     path("catalog/", item_list),
     path("catalog/<int:pk>/", item_detail),
     re_path(r"^catalog/re/(?P<pk>[1-9]\d*/)", item_detail_re),
-    path("catalog/converter/<positiveid:pk>", item_detail_converter),
+    path("catalog/converter/<positiveid:pk>/", item_detail_converter),
 ]
