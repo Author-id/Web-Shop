@@ -81,8 +81,3 @@ class StaticURLTests(TestCase):
             expected_status,
             msg=f"/catalog/{prefix}/{param}/ get not {expected_status}",
         )
-
-
-
-
-
