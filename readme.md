@@ -23,7 +23,7 @@ python manage.py runserver
 Then the application will start on http://localhost:8000
 
 
-# How to run in on Linux OS
+# How to run it on Linux OS
 
 1. Clone this repo and prepare workplace:  
 git clone https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112  
