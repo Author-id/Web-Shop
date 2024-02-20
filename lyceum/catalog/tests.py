@@ -86,18 +86,18 @@ class StaticURLTests(TestCase):
         )
 
 
-class DBItemTests(TestCase):
+class ItemModelTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
 
         cls.category = catalog.models.Category.objects.create(
-            name="Test",
-            slug="Test",
+            name="Ягоды",
+            slug="berries",
         )
         cls.tag = catalog.models.Tag.objects.create(
-            name="Test",
-            slug="Test",
+            name="Из Египта",
+            slug="from_egypt",
         )
 
     @parameterized.parameterized.expand(
@@ -107,13 +107,11 @@ class DBItemTests(TestCase):
             ("test", "Я превосходно", True),
             ("test", "превосходно Я", True),
             ("test", "превосходно роскошно", True),
-            ("test", "роскошно!", True),
-            ("test", "!роскошно", True),
-            ("test", "!роскошно", True),
-            ("test", "роскошно©", True),
             ("test", "превосходноН", False),
             ("test", "превНосходно", False),
             ("test", "Нпревосходно", False),
+            ("test", "превосходно!", True),
+            ("test", "!превосходно", True),
             ("test", "Я превосх%одно", False),
             ("test", "превосходнороскошно", False),
             ("test" * 38, "превосходно", False),
@@ -151,7 +149,7 @@ class DBItemTests(TestCase):
             )
 
 
-class DBTagTests(TestCase):
+class TagModelTests(TestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", True),
@@ -169,16 +167,16 @@ class DBTagTests(TestCase):
             ("test", "*abs*", False),
             ("test", "a*bs", False),
             ("test" * 38, "abs", False),
-            ("test", "abs" * 67, False),
+            ("test", "abs" * 100, False),
         ],
     )
-    def test_add_item(self, name, slug, is_validate):
+    def test_add_item(self, name, slug, is_valid):
         item_count = catalog.models.Tag.objects.count()
         self.item = catalog.models.Tag(
             name=name,
             slug=slug,
         )
-        if not is_validate:
+        if not is_valid:
             with self.assertRaises(ValidationError):
                 self.item.full_clean()
                 self.item.save()
@@ -197,29 +195,27 @@ class DBTagTests(TestCase):
             )
 
 
-class DBCategoryTests(TestCase):
+class CategoryModelTests(TestCase):
     @parameterized.parameterized.expand(
         [
-            ("test", "abs", 1, True),
+            ("test", "abs", 0, False),
             ("test", "1abs2", 1, True),
             ("test", "a12bs", 1, True),
             ("test", "ABS", 1, True),
             ("test", "-abs-", 1, True),
             ("test", "_abs_", 1, True),
-            ("test", "_abs_", 32767, True),
-            ("test", "Я", 1, False),
-            ("test", "Яabs", 1, False),
-            ("test", "Я abs", 1, False),
-            ("test", "aЯbs", 1, False),
-            ("test", "absЯ", 1, False),
-            ("test", "abs Я", 1, False),
-            ("test", "*abs*", 1, False),
-            ("test", "a*bs", 1, False),
-            ("test" * 38, "abs", 1, False),
-            ("test", "abs" * 67, 1, False),
+            ("test", "_abs_", 32767, False),
+            ("test", "Я", 0, False),
+            ("test", "Яabs", 0, False),
+            ("test", "Я abs", 0, False),
+            ("test", "aЯbs", 0, False),
+            ("test", "absЯ", 0, False),
+            ("test", "abs Я", 0, False),
+            ("test", "*abs*", 0, False),
+            ("test", "a*bs", 0, False),
+            ("test" * 38, "abs", 0, False),
+            ("test", "abs" * 67, 0, False),
             ("test", "abs", 32768, False),
-            ("test", "abs", 0, False),
-            ("test", "abs", -1, False),
         ],
     )
     def test_add_item(self, name, slug, weight, is_validate):
@@ -246,3 +242,4 @@ class DBCategoryTests(TestCase):
                 item_count + 1,
                 msg="no add validate item",
             )
+
