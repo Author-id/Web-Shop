@@ -197,7 +197,7 @@ class DBTagTests(TestCase):
             )
 
 
-class CategoryTests(TestCase):
+class DBCategoryTests(TestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", 1, True),
