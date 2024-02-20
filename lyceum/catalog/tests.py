@@ -3,9 +3,9 @@ import itertools
 
 from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
-import parameterized
 
 import catalog.models
+import parameterized
 
 
 class StaticURLTests(TestCase):

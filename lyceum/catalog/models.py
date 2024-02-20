@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 import django.core.validators
-import django.db
 
 from core.models import AbstractModel
+import django.db
 
 
 def perfect_in_text_validator(value):
