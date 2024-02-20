@@ -86,18 +86,18 @@ class StaticURLTests(TestCase):
         )
 
 
-class ItemModelTests(TestCase):
+class DBItemTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
 
         cls.category = catalog.models.Category.objects.create(
-            name="Ягоды",
-            slug="berries",
+            name="Test",
+            slug="Test",
         )
         cls.tag = catalog.models.Tag.objects.create(
-            name="Из Египта",
-            slug="from_egypt",
+            name="Test",
+            slug="Test",
         )
 
     @parameterized.parameterized.expand(
@@ -107,11 +107,13 @@ class ItemModelTests(TestCase):
             ("test", "Я превосходно", True),
             ("test", "превосходно Я", True),
             ("test", "превосходно роскошно", True),
+            ("test", "роскошно!", True),
+            ("test", "!роскошно", True),
+            ("test", "!роскошно", True),
+            ("test", "роскошно©", True),
             ("test", "превосходноН", False),
             ("test", "превНосходно", False),
             ("test", "Нпревосходно", False),
-            ("test", "превосходно!", True),
-            ("test", "!превосходно", True),
             ("test", "Я превосх%одно", False),
             ("test", "превосходнороскошно", False),
             ("test" * 38, "превосходно", False),
@@ -149,7 +151,7 @@ class ItemModelTests(TestCase):
             )
 
 
-class TagModelTests(TestCase):
+class DBTagTests(TestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", True),
@@ -167,16 +169,16 @@ class TagModelTests(TestCase):
             ("test", "*abs*", False),
             ("test", "a*bs", False),
             ("test" * 38, "abs", False),
-            ("test", "abs" * 100, False),
+            ("test", "abs" * 67, False),
         ],
     )
-    def test_add_item(self, name, slug, is_valid):
+    def test_add_item(self, name, slug, is_validate):
         item_count = catalog.models.Tag.objects.count()
         self.item = catalog.models.Tag(
             name=name,
             slug=slug,
         )
-        if not is_valid:
+        if not is_validate:
             with self.assertRaises(ValidationError):
                 self.item.full_clean()
                 self.item.save()
@@ -195,27 +197,29 @@ class TagModelTests(TestCase):
             )
 
 
-class CategoryModelTests(TestCase):
+class CategoryTests(TestCase):
     @parameterized.parameterized.expand(
         [
-            ("test", "abs", 0, False),
+            ("test", "abs", 1, True),
             ("test", "1abs2", 1, True),
             ("test", "a12bs", 1, True),
             ("test", "ABS", 1, True),
             ("test", "-abs-", 1, True),
             ("test", "_abs_", 1, True),
-            ("test", "_abs_", 32767, False),
-            ("test", "Я", 0, False),
-            ("test", "Яabs", 0, False),
-            ("test", "Я abs", 0, False),
-            ("test", "aЯbs", 0, False),
-            ("test", "absЯ", 0, False),
-            ("test", "abs Я", 0, False),
-            ("test", "*abs*", 0, False),
-            ("test", "a*bs", 0, False),
-            ("test" * 38, "abs", 0, False),
-            ("test", "abs" * 67, 0, False),
+            ("test", "_abs_", 32767, True),
+            ("test", "Я", 1, False),
+            ("test", "Яabs", 1, False),
+            ("test", "Я abs", 1, False),
+            ("test", "aЯbs", 1, False),
+            ("test", "absЯ", 1, False),
+            ("test", "abs Я", 1, False),
+            ("test", "*abs*", 1, False),
+            ("test", "a*bs", 1, False),
+            ("test" * 38, "abs", 1, False),
+            ("test", "abs" * 67, 1, False),
             ("test", "abs", 32768, False),
+            ("test", "abs", 0, False),
+            ("test", "abs", -1, False),
         ],
     )
     def test_add_item(self, name, slug, weight, is_validate):
@@ -232,7 +236,7 @@ class CategoryModelTests(TestCase):
             self.assertEqual(
                 catalog.models.Item.objects.count(),
                 item_count,
-                msg="add no validate item",
+                msg="validation error",
             )
         else:
             self.item.full_clean()
@@ -240,5 +244,5 @@ class CategoryModelTests(TestCase):
             self.assertEqual(
                 catalog.models.Category.objects.count(),
                 item_count + 1,
-                msg="no add validate item",
+                msg="validation error",
             )
