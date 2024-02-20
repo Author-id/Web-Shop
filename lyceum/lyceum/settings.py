@@ -24,6 +24,7 @@ ALLOW_REVERSE = os.getenv("DJANGO_ALLOW_REVERSE", "True").lower() in [
 ]
 
 INSTALLED_APPS = [
+    "core.apps.CoreConfig",
     "homepage.apps.HomepageConfig",
     "catalog.apps.CatalogConfig",
     "about.apps.AboutConfig",
@@ -106,7 +107,9 @@ if DEBUG:
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
-LANGUAGE_CODE = "en-us"
+# LANGUAGE_CODE = "en-us"
+
+LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "UTC"
 
