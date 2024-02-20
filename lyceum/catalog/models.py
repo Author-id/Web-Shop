@@ -7,7 +7,7 @@ import django.db
 
 def perfect_in_text_validator(value):
     value = value.lower().split()
-    if "превосходно" not in value and "роскошно" not in value:
+    if "превосходно" not in value or "роскошно" not in value:
         raise ValidationError("нет слова превосходно или роскошно в тексте")
 
 
