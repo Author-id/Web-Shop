@@ -7,8 +7,7 @@ from django.db import models
 
 def good_word_validator(value):
     print(value)
-    if not ("превосходно" in value.lower()
-            or "роскошно" in value.lower()):
+    if not ("превосходно" in value.lower() or "роскошно" in value.lower()):
         raise django.core.exceptions.ValidationError(
             "В тексте должно быть слово `превосходно` или `роскошно`"
         )
@@ -25,70 +24,64 @@ def slug_validator(value):
 
 class Tag(AbstractModel):
     slug = models.CharField(
-        verbose_name=u"Слаг",
+        verbose_name="Слаг",
         max_length=200,
         unique=True,
-        validators=[
-            slug_validator
-        ],
-        help_text="help_text"
+        validators=[slug_validator],
+        help_text="help_text",
     )
 
     class Meta:
-        db_table = 'catalog_tag'
-        verbose_name = u'тег'
-        verbose_name_plural = u'теги'
+        db_table = "catalog_tag"
+        verbose_name = "тег"
+        verbose_name_plural = "теги"
 
 
 class Category(AbstractModel):
     slug = models.CharField(
-        verbose_name=u"Слаг",
+        verbose_name="Слаг",
         max_length=200,
         unique=True,
-        validators=[
-            slug_validator
-        ],
-        help_text="help_text"
+        validators=[slug_validator],
+        help_text="help_text",
     )
 
     weight = models.IntegerField(
-        verbose_name=u"Вес",
+        verbose_name="Вес",
         default=100,
         validators=[
             django.core.validators.MinValueValidator(0),
-            django.core.validators.MaxValueValidator(32767)
+            django.core.validators.MaxValueValidator(32767),
         ],
-        help_text="help_text"
+        help_text="help_text",
     )
 
     class Meta:
-        db_table = 'catalog_category'
-        verbose_name = u'категория'
-        verbose_name_plural = u'категории'
+        db_table = "catalog_category"
+        verbose_name = "категория"
+        verbose_name_plural = "категории"
 
 
 class Item(AbstractModel):
     text = models.TextField(
-        verbose_name=u"Текст",
-        validators=[
-            good_word_validator
-        ],
-        help_text="help_text"
+        verbose_name="Текст",
+        validators=[good_word_validator],
+        help_text="help_text",
     )
 
     category = models.ForeignKey(
         "category",
-        verbose_name=u"Категория",
+        verbose_name="Категория",
         on_delete=models.CASCADE,
         default=None,
         blank=True,
         null=True,
-        help_text="help_text"
+        help_text="help_text",
     )
 
     tags = models.ManyToManyField(Tag)
 
     class Meta:
-        db_table = 'catalog_item '
-        verbose_name = u'товар'
-        verbose_name_plural = u'товары'
+        db_table = "catalog_item "
+        verbose_name = "товар"
+        verbose_name_plural = "товары"
