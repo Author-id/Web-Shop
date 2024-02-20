@@ -1,33 +1,26 @@
+from django.core.exceptions import ValidationError
+
 from core.models import AbstractModel
+
 import django.core.validators
-
-from django.db import models
-
-
-def good_word_validator(value):
-    print(value)
-    if not ("превосходно" in value.lower() or "роскошно" in value.lower()):
-        raise django.core.exceptions.ValidationError(
-            "В тексте должно быть слово `превосходно` или `роскошно`"
-        )
+import django.db
 
 
-def slug_validator(value):
-    chars = "0123456789-_abcdefghijklmnopqrstuvwxyz"
-    for c in value:
-        if c.lower() not in chars:
-            raise django.core.exceptions.ValidationError(
-                "Допускаюстя только цифры, буквы латиницы и символы - и _"
-            )
+def perfect_in_text_validator(value):
+    value = value.lower().split()
+    if "превосходно" not in value and "роскошно" not in value:
+        raise ValidationError("нет слова превосходно или роскошно в тексте")
 
 
 class Tag(AbstractModel):
-    slug = models.CharField(
-        verbose_name="Слаг",
+    slug = django.db.models.CharField(
+        "Слаг",
         max_length=200,
         unique=True,
-        validators=[slug_validator],
-        help_text="help_text",
+        validators=[
+            django.core.validators.RegexValidator("^[a-zA-Z0-9+_-]*$")
+        ],
+        help_text="я сам не понял что это",
     )
 
     class Meta:
@@ -37,22 +30,23 @@ class Tag(AbstractModel):
 
 
 class Category(AbstractModel):
-    slug = models.CharField(
-        verbose_name="Слаг",
+    slug = django.db.models.CharField(
+        "Слаг",
         max_length=200,
         unique=True,
-        validators=[slug_validator],
-        help_text="help_text",
+        validators=[
+            django.core.validators.RegexValidator("^[a-zA-Z0-9+_-]*$")
+        ],
+        help_text="сам не знаю что это",
     )
-
-    weight = models.IntegerField(
-        verbose_name="Вес",
+    weight = django.db.models.IntegerField(
+        "Вес",
         default=100,
         validators=[
-            django.core.validators.MinValueValidator(0),
             django.core.validators.MaxValueValidator(32767),
+            django.core.validators.MinValueValidator(0),
         ],
-        help_text="help_text",
+        help_text="ну какой вес то",
     )
 
     class Meta:
@@ -62,25 +56,27 @@ class Category(AbstractModel):
 
 
 class Item(AbstractModel):
-    text = models.TextField(
-        verbose_name="Текст",
-        validators=[good_word_validator],
-        help_text="help_text",
+    text = django.db.models.TextField(
+        "Текст",
+        validators=[
+            perfect_in_text_validator,
+        ],
+        help_text="опишите",
     )
-
-    category = models.ForeignKey(
-        "category",
-        verbose_name="Категория",
-        on_delete=models.CASCADE,
-        default=None,
-        blank=True,
-        null=True,
-        help_text="help_text",
+    category = django.db.models.ForeignKey(
+        Category,
+        on_delete=django.db.models.CASCADE,
+        related_name="items",
+        help_text="выберите категорию",
     )
-
-    tags = models.ManyToManyField(Tag)
+    tags = django.db.models.ManyToManyField(
+        Tag,
+        related_name="items",
+        help_text="выберите теги",
+    )
 
     class Meta:
-        db_table = "catalog_item "
+        db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
+
