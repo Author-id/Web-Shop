@@ -79,4 +79,3 @@ class Item(AbstractModel):
         db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
-
