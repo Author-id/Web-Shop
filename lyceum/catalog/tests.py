@@ -242,4 +242,3 @@ class CategoryModelTests(TestCase):
                 item_count + 1,
                 msg="no add validate item",
             )
-
