@@ -2,79 +2,93 @@ from django.core.exceptions import ValidationError
 from core.models import AbstractModel
 import django.core.validators
 
-import django.db
+from django.db import models
 
 
-def perfect_in_text_validator(value):
-    value = value.lower().split()
-    if "превосходно" not in value and "роскошно" not in value:
-        raise ValidationError("нет слова превосходно или роскошно в тексте")
+def good_word_validator(value):
+    print(value)
+    if not ("превосходно" in value.lower()
+            or "роскошно" in value.lower()):
+        raise django.core.exceptions.ValidationError(
+            "В тексте должно быть слово `превосходно` или `роскошно`"
+        )
+
+
+def slug_validator(value):
+    chars = "0123456789-_abcdefghijklmnopqrstuvwxyz"
+    for c in value:
+        if c.lower() not in chars:
+            raise django.core.exceptions.ValidationError(
+                "Допускаюстя только цифры, буквы латиницы и символы - и _"
+            )
 
 
 class Tag(AbstractModel):
-    slug = django.db.models.CharField(
-        "Слаг",
+    slug = models.CharField(
+        verbose_name=u"Слаг",
         max_length=200,
         unique=True,
         validators=[
-            django.core.validators.RegexValidator("^[a-zA-Z0-9+_-]*$")
+            slug_validator
         ],
-        help_text="я сам не понял что это",
+        help_text="help_text"
     )
 
     class Meta:
-        db_table = "catalog_tag"
-        verbose_name = "тег"
-        verbose_name_plural = "теги"
+        db_table = 'catalog_tag'
+        verbose_name = u'тег'
+        verbose_name_plural = u'теги'
 
 
 class Category(AbstractModel):
-    slug = django.db.models.CharField(
-        "Слаг",
+    slug = models.CharField(
+        verbose_name=u"Слаг",
         max_length=200,
         unique=True,
         validators=[
-            django.core.validators.RegexValidator("^[a-zA-Z0-9+_-]*$")
+            slug_validator
         ],
-        help_text="сам не знаю что это",
+        help_text="help_text"
     )
-    weight = django.db.models.IntegerField(
-        "Вес",
+
+    weight = models.IntegerField(
+        verbose_name=u"Вес",
         default=100,
         validators=[
-            django.core.validators.MaxValueValidator(32767),
             django.core.validators.MinValueValidator(0),
+            django.core.validators.MaxValueValidator(32767)
         ],
-        help_text="ну какой вес то",
+        help_text="help_text"
     )
 
     class Meta:
-        db_table = "catalog_category"
-        verbose_name = "категория"
-        verbose_name_plural = "категории"
+        db_table = 'catalog_category'
+        verbose_name = u'категория'
+        verbose_name_plural = u'категории'
 
 
 class Item(AbstractModel):
-    text = django.db.models.TextField(
-        "Текст",
+    text = models.TextField(
+        verbose_name=u"Текст",
         validators=[
-            perfect_in_text_validator,
+            good_word_validator
         ],
-        help_text="опишите",
-    )
-    category = django.db.models.ForeignKey(
-        Category,
-        on_delete=django.db.models.CASCADE,
-        related_name="items",
-        help_text="выберите категорию",
-    )
-    tags = django.db.models.ManyToManyField(
-        Tag,
-        related_name="tags",
-        help_text="выберите теги",
+        help_text="help_text"
     )
 
+    category = models.ForeignKey(
+        "category",
+        verbose_name=u"Категория",
+        on_delete=models.CASCADE,
+        default=None,
+        blank=True,
+        null=True,
+        help_text="help_text"
+    )
+
+    tags = models.ManyToManyField(Tag)
+
     class Meta:
-        db_table = "catalog_item"
-        verbose_name = "товар"
-        verbose_name_plural = "товары"
+        db_table = 'catalog_item '
+        verbose_name = u'товар'
+        verbose_name_plural = u'товары'
