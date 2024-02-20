@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from core.models import AbstractModel
 import django.core.validators
 
