@@ -27,13 +27,17 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_published",
-                    models.BooleanField(default=True, verbose_name="Опубликовано"),
+                    models.BooleanField(
+                        default=True, verbose_name="Опубликовано"
+                    ),
                 ),
                 (
                     "name",
                     models.CharField(
                         max_length=150,
-                        validators=[django.core.validators.MaxLengthValidator(150)],
+                        validators=[
+                            django.core.validators.MaxLengthValidator(150)
+                        ],
                         verbose_name="Название",
                     ),
                 ),
@@ -81,13 +85,17 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_published",
-                    models.BooleanField(default=True, verbose_name="Опубликовано"),
+                    models.BooleanField(
+                        default=True, verbose_name="Опубликовано"
+                    ),
                 ),
                 (
                     "name",
                     models.CharField(
                         max_length=150,
-                        validators=[django.core.validators.MaxLengthValidator(150)],
+                        validators=[
+                            django.core.validators.MaxLengthValidator(150)
+                        ],
                         verbose_name="Название",
                     ),
                 ),
@@ -124,13 +132,17 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_published",
-                    models.BooleanField(default=True, verbose_name="Опубликовано"),
+                    models.BooleanField(
+                        default=True, verbose_name="Опубликовано"
+                    ),
                 ),
                 (
                     "name",
                     models.CharField(
                         max_length=150,
-                        validators=[django.core.validators.MaxLengthValidator(150)],
+                        validators=[
+                            django.core.validators.MaxLengthValidator(150)
+                        ],
                         verbose_name="Название",
                     ),
                 ),
