@@ -3,32 +3,33 @@ from django.contrib import admin
 from . import models
 
 
-@admin.register(models.Item)
+@admin.register(models.CatalogItem)
 class ItemAdmin(admin.ModelAdmin):
+
     list_display = (
-        "name",
-        "is_published",
+        models.CatalogCategory.name.field.name,
+        models.CatalogCategory.is_published.field.name,
     )
     list_editable = ("is_published",)
     list_display_links = ("name",)
     filter_horizontal = ("tags",)
 
 
-@admin.register(models.Tag)
-class TagAdmin(admin.ModelAdmin):
+@admin.register(models.CatalogCategory)
+class CatalogAdmin(admin.ModelAdmin):
     list_display = (
-        "name",
-        "is_published",
+        models.CatalogCategory.name.field.name,
+        models.CatalogCategory.is_published.field.name,
     )
     list_editable = ("is_published",)
     list_display_links = ("name",)
 
 
-@admin.register(models.Category)
-class CategoryAdmin(admin.ModelAdmin):
+@admin.register(models.CatalogTag)
+class TagAdmin(admin.ModelAdmin):
     list_display = (
-        "name",
-        "is_published",
+        models.CatalogTag.name.field.name,
+        models.CatalogTag.is_published.field.name,
     )
     list_editable = ("is_published",)
     list_display_links = ("name",)
