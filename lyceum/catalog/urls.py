@@ -1,6 +1,6 @@
 from django.urls import path, re_path, register_converter
 
-from . import converters
+from catalog import converters
 from .views import (
     item_detail,
     item_detail_converter,

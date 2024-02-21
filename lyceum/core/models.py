@@ -1,5 +1,5 @@
-import django.db.models
 import django.core.validators
+import django.db.models
 
 
 class AbstractModel(django.db.models.Model):

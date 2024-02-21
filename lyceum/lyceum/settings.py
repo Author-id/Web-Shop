@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "ABOBA")
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true",)
 
 ALLOWED_HOSTS = list(
-    map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(","))
+    map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")),
 )
 
 ALLOW_REVERSE = os.getenv("DJANGO_ALLOW_REVERSE", "True").lower() in [
@@ -72,7 +72,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
 }
 
 
@@ -107,7 +107,6 @@ if DEBUG:
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
-# LANGUAGE_CODE = "en-us"
 
 LANGUAGE_CODE = "ru"
 

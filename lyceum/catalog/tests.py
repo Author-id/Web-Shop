@@ -4,8 +4,9 @@ import itertools
 import django.core.exceptions
 from django.test import Client, TestCase
 
-import catalog.models
 import parameterized
+
+import catalog.models
 
 
 class StaticURLTests(TestCase):
@@ -91,17 +92,17 @@ class ModelsItemTest(TestCase):
     def setUpClass(cls):
         super().setUpClass()
 
-        cls.category = catalog.models.CatalogCategory.objects.create(
-            is_published=True, name="try_test", slug="slug_slug", weight=61
+        cls.category = catalog.models.Category.objects.create(
+            is_published=True, name="try_test", slug="slug_slug", weight=61,
         )
-        cls.tag = catalog.models.CatalogTag.objects.create(
-            is_published=True, name="tag", slug="slug_tag"
+        cls.tag = catalog.models.Tag.objects.create(
+            is_published=True, name="tag", slug="slug_tag",
         )
 
     def test_error(self):
-        item_count = catalog.models.CatalogItem.objects.count()
+        item_count = catalog.models.Item.objects.count()
         with self.assertRaises(django.core.exceptions.ValidationError):
-            self.item = catalog.models.CatalogItem(
+            self.item = catalog.models.Item(
                 name="test",
                 is_published=True,
                 category=self.category,
@@ -111,13 +112,13 @@ class ModelsItemTest(TestCase):
             self.item.save()
             self.item.tag.add(self.tag)
         self.assertEqual(
-            catalog.models.CatalogItem.objects.count(),
+            catalog.models.Item.objects.count(),
             item_count,
         )
 
     def test_add(self):
-        item_count = catalog.models.CatalogItem.objects.count()
-        self.item = catalog.models.CatalogItem(
+        item_count = catalog.models.Item.objects.count()
+        self.item = catalog.models.Item(
             is_published=True,
             name="name",
             category=self.category,
@@ -127,60 +128,60 @@ class ModelsItemTest(TestCase):
         self.item.save()
         self.item.tags.add(self.tag)
         self.assertEqual(
-            catalog.models.CatalogItem.objects.count(),
+            catalog.models.Item.objects.count(),
             item_count + 1,
         )
 
 
 class ModelsTagsTest(TestCase):
     def test_tag(self):
-        item_count = catalog.models.CatalogTag.objects.count()
+        item_count = catalog.models.Tag.objects.count()
         with self.assertRaises(django.core.exceptions.ValidationError):
-            self.item = catalog.models.CatalogTag(
-                name="test", is_published=True, slug="робот"
+            self.item = catalog.models.Tag(
+                name="test", is_published=True, slug="робот",
             )
             self.item.full_clean()
             self.item.save()
         self.assertEqual(
-            catalog.models.CatalogTag.objects.count(),
+            catalog.models.Tag.objects.count(),
             item_count,
         )
 
     def test_create(self):
-        item_count = catalog.models.CatalogTag.objects.count()
-        self.item = catalog.models.CatalogTag(
-            is_published=True, name="name", slug="slug"
+        item_count = catalog.models.Tag.objects.count()
+        self.item = catalog.models.Tag(
+            is_published=True, name="name", slug="slug",
         )
         self.item.full_clean()
         self.item.save()
         self.assertEqual(
-            catalog.models.CatalogTag.objects.count(),
+            catalog.models.Tag.objects.count(),
             item_count + 1,
         )
 
 
 class ModelsCategoryTest(TestCase):
     def test_category(self):
-        item_count = catalog.models.CatalogCategory.objects.count()
+        item_count = catalog.models.Category.objects.count()
         with self.assertRaises(django.core.exceptions.ValidationError):
-            self.item = catalog.models.CatalogCategory(
-                name="test", is_published=True, slug="робот", weight=45
+            self.item = catalog.models.Category(
+                name="test", is_published=True, slug="робот", weight=45,
             )
             self.item.full_clean()
             self.item.save()
         self.assertEqual(
-            catalog.models.CatalogCategory.objects.count(),
+            catalog.models.Category.objects.count(),
             item_count,
         )
 
     def test_create_category(self):
-        item_count = catalog.models.CatalogCategory.objects.count()
-        self.item = catalog.models.CatalogCategory(
-            name="name", is_published=True, slug="sllug123", weight=45
+        item_count = catalog.models.Category.objects.count()
+        self.item = catalog.models.Category(
+            name="name", is_published=True, slug="sllug123", weight=45,
         )
         self.item.full_clean()
         self.item.save()
         self.assertEqual(
-            catalog.models.CatalogCategory.objects.count(),
+            catalog.models.Category.objects.count(),
             item_count + 1,
         )

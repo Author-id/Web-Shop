@@ -1,7 +1,7 @@
 import string
+import django.core.exceptions
 
 import core.models
-import django.core.exceptions
 import django.core.validators
 import django.db
 
@@ -25,9 +25,9 @@ def slug_validator(value):
             )
 
 
-class CatalogTag(core.models.AbstractModel, django.db.models.Model):
+class Tag(core.models.AbstractModel, django.db.models.Model):
     slug = django.db.models.CharField(
-        verbose_name="Слаг",
+        verbose_name="слаг",
         max_length=200,
         unique=True,
         validators=[
@@ -38,16 +38,16 @@ class CatalogTag(core.models.AbstractModel, django.db.models.Model):
 
     class Meta:
         db_table = "catalog_tag"
-        verbose_name = "Тег"
-        verbose_name_plural = "Теги"
+        verbose_name = "тег"
+        verbose_name_plural = "теги"
 
     def __str__(self):
         return self.name[:15]
 
 
-class CatalogCategory(core.models.AbstractModel, django.db.models.Model):
+class Category(core.models.AbstractModel, django.db.models.Model):
     slug = django.db.models.CharField(
-        verbose_name="Слаг",
+        verbose_name="слаг",
         max_length=200,
         unique=True,
         validators=[
@@ -67,30 +67,30 @@ class CatalogCategory(core.models.AbstractModel, django.db.models.Model):
 
     class Meta:
         db_table = "catalog_category"
-        verbose_name = "Категория"
-        verbose_name_plural = "Категории"
+        verbose_name = "категория"
+        verbose_name_plural = "категории"
 
     def __str__(self):
         return self.name[:15]
 
 
-class CatalogItem(core.models.AbstractModel, django.db.models.Model):
+class Item(core.models.AbstractModel, django.db.models.Model):
     category = django.db.models.ForeignKey(
-        CatalogCategory,
+        Category,
         on_delete=django.db.models.CASCADE,
-        verbose_name="Категория",
+        verbose_name="категория",
     )
 
-    tags = django.db.models.ManyToManyField(CatalogTag)
+    tags = django.db.models.ManyToManyField(Tag)
 
     text = django.db.models.TextField(
-        verbose_name="Описание", validators=[perfect_validator]
+        verbose_name="описание", validators=[perfect_validator]
     )
 
     class Meta:
         db_table = "catalog_item"
-        verbose_name = "Товар"
-        verbose_name_plural = "Товары"
+        verbose_name = "товар"
+        verbose_name_plural = "товары"
 
     def __str__(self):
         return self.name[:15]
