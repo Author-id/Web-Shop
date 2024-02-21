@@ -93,10 +93,15 @@ class ModelsItemTest(TestCase):
         super().setUpClass()
 
         cls.category = catalog.models.Category.objects.create(
-            is_published=True, name="try_test", slug="slug_slug", weight=61,
+            is_published=True,
+            name="try_test",
+            slug="slug_slug",
+            weight=61,
         )
         cls.tag = catalog.models.Tag.objects.create(
-            is_published=True, name="tag", slug="slug_tag",
+            is_published=True,
+            name="tag",
+            slug="slug_tag",
         )
 
     def test_error(self):
@@ -138,7 +143,9 @@ class ModelsTagsTest(TestCase):
         item_count = catalog.models.Tag.objects.count()
         with self.assertRaises(django.core.exceptions.ValidationError):
             self.item = catalog.models.Tag(
-                name="test", is_published=True, slug="робот",
+                name="test",
+                is_published=True,
+                slug="робот",
             )
             self.item.full_clean()
             self.item.save()
@@ -150,7 +157,9 @@ class ModelsTagsTest(TestCase):
     def test_create(self):
         item_count = catalog.models.Tag.objects.count()
         self.item = catalog.models.Tag(
-            is_published=True, name="name", slug="slug",
+            is_published=True,
+            name="name",
+            slug="slug",
         )
         self.item.full_clean()
         self.item.save()
@@ -165,7 +174,10 @@ class ModelsCategoryTest(TestCase):
         item_count = catalog.models.Category.objects.count()
         with self.assertRaises(django.core.exceptions.ValidationError):
             self.item = catalog.models.Category(
-                name="test", is_published=True, slug="робот", weight=45,
+                name="test",
+                is_published=True,
+                slug="робот",
+                weight=45,
             )
             self.item.full_clean()
             self.item.save()
@@ -177,7 +189,10 @@ class ModelsCategoryTest(TestCase):
     def test_create_category(self):
         item_count = catalog.models.Category.objects.count()
         self.item = catalog.models.Category(
-            name="name", is_published=True, slug="sllug123", weight=45,
+            name="name",
+            is_published=True,
+            slug="sllug123",
+            weight=45,
         )
         self.item.full_clean()
         self.item.save()
