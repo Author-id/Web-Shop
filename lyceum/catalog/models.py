@@ -57,7 +57,7 @@ class Category(core.models.AbstractModel, django.db.models.Model):
     )
 
     weight = django.db.models.IntegerField(
-        verbose_name="Вес",
+        verbose_name="вес",
         default=100,
         validators=[
             django.core.validators.MinValueValidator(0),
