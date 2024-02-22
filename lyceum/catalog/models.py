@@ -1,19 +1,8 @@
-import re
-
-from django.core.exceptions import ValidationError
 import django.core.validators
 import django.db
 
-
+from catalog.validators import ValidateMustContain
 from core.models import AbstractModel
-
-
-def perfect_in_text_validator(value):
-    if re.findall(r"\bпревосходно\b|\bроскошно\b", value, re.IGNORECASE):
-        return
-    raise ValidationError(
-        "Должно содержаться слово 'превосходно' или 'роскошно'.",
-    )
 
 
 class Tag(AbstractModel):
@@ -21,7 +10,7 @@ class Tag(AbstractModel):
         "слаг",
         max_length=200,
         unique=True,
-        help_text="я сам не понял что это",
+        help_text="Какая-то дичь",
     )
 
     class Meta:
@@ -35,7 +24,7 @@ class Category(AbstractModel):
         "слаг",
         max_length=200,
         unique=True,
-        help_text="я сам не понял что это",
+        help_text="Какая-то дичь",
     )
     weight = django.db.models.IntegerField(
         "вес",
@@ -44,7 +33,7 @@ class Category(AbstractModel):
             django.core.validators.MaxValueValidator(32767),
             django.core.validators.MinValueValidator(1),
         ],
-        help_text="ну какой вес то",
+        help_text="ёмаё введите вес",
     )
 
     class Meta:
@@ -57,9 +46,9 @@ class Item(AbstractModel):
     text = django.db.models.TextField(
         "текст",
         validators=[
-            perfect_in_text_validator,
+            ValidateMustContain("превосходно", "роскошно"),
         ],
-        help_text="опишите",
+        help_text="Описание",
     )
     category = django.db.models.ForeignKey(
         Category,
