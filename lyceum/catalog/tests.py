@@ -1,10 +1,11 @@
-import itertools
 from http import HTTPStatus
+import itertools
 
 from django.core.exceptions import ValidationError
-import parameterized
 
 from django.test import Client, TestCase
+import parameterized
+
 from rest_framework.test import APITestCase
 
 import catalog.models
