@@ -1,70 +1,90 @@
 import itertools
+from http import HTTPStatus
 
 from django.core.exceptions import ValidationError
 import parameterized
-from rest_framework import status
+
+from django.test import Client, TestCase
 from rest_framework.test import APITestCase
 
 import catalog.models
 
 
-class StaticUrlTests(APITestCase):
-    def test_catalog_endpoint(self):
-        response = self.client.get("/catalog/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+class StaticURLTests(TestCase):
+    def test_catalog_items_endpoint(self):
+        status_code = Client().get("/catalog/").status_code
+        self.assertEqual(status_code, HTTPStatus.OK)
 
     @parameterized.parameterized.expand(
         [
-            ("1", status.HTTP_200_OK),
-            ("100", status.HTTP_200_OK),
-            ("0", status.HTTP_200_OK),
-            ("-0", status.HTTP_404_NOT_FOUND),
-            ("-100", status.HTTP_404_NOT_FOUND),
-            ("0.5", status.HTTP_404_NOT_FOUND),
-            ("abc", status.HTTP_404_NOT_FOUND),
-            ("0abc", status.HTTP_404_NOT_FOUND),
-            ("abc0", status.HTTP_404_NOT_FOUND),
-            ("$%^", status.HTTP_404_NOT_FOUND),
-            ("1e5", status.HTTP_404_NOT_FOUND),
+            ("0", HTTPStatus.OK),
+            ("1", HTTPStatus.OK),
+            ("01", HTTPStatus.OK),
+            ("010", HTTPStatus.OK),
+            ("10", HTTPStatus.OK),
+            ("100", HTTPStatus.OK),
+            ("abs", HTTPStatus.NOT_FOUND),
+            ("a4s", HTTPStatus.NOT_FOUND),
+            ("ab4", HTTPStatus.NOT_FOUND),
+            ("4ab", HTTPStatus.NOT_FOUND),
+            ("4.323", HTTPStatus.NOT_FOUND),
+            ("22^1", HTTPStatus.NOT_FOUND),
+            ("$221", HTTPStatus.NOT_FOUND),
+            ("221%", HTTPStatus.NOT_FOUND),
+            ("-0", HTTPStatus.NOT_FOUND),
+            ("-1", HTTPStatus.NOT_FOUND),
         ],
     )
-    def test_catalog_item_endpoint(self, url, expected_status):
-        response = self.client.get(f"/catalog/{url}/")
-        self.assertEqual(response.status_code, expected_status)
+    def test_catalog_item_endpoint(self, param, expected_status):
+        respone_status_code = Client().get(f"/catalog/{param}/").status_code
+        self.assertEqual(
+            respone_status_code,
+            expected_status,
+            msg=f"/catalog/{param}/ get not {expected_status}",
+        )
 
     @parameterized.parameterized.expand(
         (
             (x[0], x[1][0], x[1][1])
             for x in itertools.product(
-                ["converter", "re"],
                 [
-                    ("1", status.HTTP_200_OK),
-                    ("100", status.HTTP_200_OK),
-                    ("0", status.HTTP_200_OK),
-                    ("-0", status.HTTP_404_NOT_FOUND),
-                    ("-100", status.HTTP_404_NOT_FOUND),
-                    ("0.5", status.HTTP_404_NOT_FOUND),
-                    ("abc", status.HTTP_404_NOT_FOUND),
-                    ("0abc", status.HTTP_404_NOT_FOUND),
-                    ("abc0", status.HTTP_404_NOT_FOUND),
-                    ("$%^", status.HTTP_404_NOT_FOUND),
-                    ("1e5", status.HTTP_404_NOT_FOUND),
+                    "re",
+                    "converter",
+                ],
+                [
+                    ("1", HTTPStatus.OK),
+                    ("10", HTTPStatus.OK),
+                    ("100", HTTPStatus.OK),
+                    ("01", HTTPStatus.NOT_FOUND),
+                    ("010", HTTPStatus.NOT_FOUND),
+                    ("0", HTTPStatus.NOT_FOUND),
+                    ("-0", HTTPStatus.NOT_FOUND),
+                    ("-1", HTTPStatus.NOT_FOUND),
+                    ("abs", HTTPStatus.NOT_FOUND),
+                    ("a4s", HTTPStatus.NOT_FOUND),
+                    ("ab4", HTTPStatus.NOT_FOUND),
+                    ("4ab", HTTPStatus.NOT_FOUND),
+                    ("4.323", HTTPStatus.NOT_FOUND),
+                    ("22^1", HTTPStatus.NOT_FOUND),
+                    ("$221", HTTPStatus.NOT_FOUND),
+                    ("221%", HTTPStatus.NOT_FOUND),
                 ],
             )
         ),
     )
-    def test_catalog_item_pint_endpoint(
+    def test_catalog_item_re_converter_endpoint(
         self,
         prefix,
-        url,
+        param,
         expected_status,
     ):
-        full_url = f"/catalog/{prefix}/{url}/"
-        response = self.client.get(full_url)
+        respone_status_code = (
+            Client().get(f"/catalog/{prefix}/{param}/").status_code
+        )
         self.assertEqual(
-            response.status_code,
+            respone_status_code,
             expected_status,
-            f"failed check status request to {full_url}",
+            msg=f"/catalog/{prefix}/{param}/ get not {expected_status}",
         )
 
 
