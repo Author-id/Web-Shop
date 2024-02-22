@@ -1,9 +1,8 @@
 from http import HTTPStatus
 import itertools
 
-import django.core.exceptions
+from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
-
 import parameterized
 
 import catalog.models
@@ -87,116 +86,163 @@ class StaticURLTests(TestCase):
         )
 
 
-class ModelsItemTest(TestCase):
+class DBItemTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
 
         cls.category = catalog.models.Category.objects.create(
-            is_published=True,
-            name="try_test",
-            slug="slug_slug",
-            weight=61,
+            name="Test",
+            slug="Test",
         )
         cls.tag = catalog.models.Tag.objects.create(
-            is_published=True,
-            name="tag",
-            slug="slug_tag",
+            name="Test",
+            slug="Test",
         )
 
-    def test_error(self):
-        item_count = catalog.models.Item.objects.count()
-        with self.assertRaises(django.core.exceptions.ValidationError):
-            self.item = catalog.models.Item(
-                name="test",
-                is_published=True,
-                category=self.category,
-                text="ничего не работает",
-            )
-            self.item.full_clean()
-            self.item.save()
-            self.item.tag.add(self.tag)
-        self.assertEqual(
-            catalog.models.Item.objects.count(),
-            item_count,
-        )
-
-    def test_add(self):
+    @parameterized.parameterized.expand(
+        [
+            ("test", "превосходно", True),
+            ("test", "роскошно", True),
+            ("test", "Я превосходно", True),
+            ("test", "превосходно Я", True),
+            ("test", "превосходно роскошно", True),
+            ("test", "роскошно!", True),
+            ("test", "!роскошно", True),
+            ("test", "!роскошно", True),
+            ("test", "роскошно©", True),
+            ("test", "превосходноН", False),
+            ("test", "превНосходно", False),
+            ("test", "Нпревосходно", False),
+            ("test", "Я превосх%одно", False),
+            ("test", "превосходнороскошно", False),
+            ("test" * 38, "превосходно", False),
+        ],
+    )
+    def test_add_item(self, name, text, is_validate):
         item_count = catalog.models.Item.objects.count()
         self.item = catalog.models.Item(
-            is_published=True,
-            name="name",
+            name=name,
+            text=text,
             category=self.category,
-            text="роскошно и превосходно",
         )
-        self.item.full_clean()
-        self.item.save()
-        self.item.tags.add(self.tag)
-        self.assertEqual(
-            catalog.models.Item.objects.count(),
-            item_count + 1,
-        )
-
-
-class ModelsTagsTest(TestCase):
-    def test_tag(self):
-        item_count = catalog.models.Tag.objects.count()
-        with self.assertRaises(django.core.exceptions.ValidationError):
-            self.item = catalog.models.Tag(
-                name="test",
-                is_published=True,
-                slug="робот",
+        if not is_validate:
+            with self.assertRaises(ValidationError):
+                self.item.full_clean()
+                self.item.save()
+                self.item.tags.add(self.tag)
+                self.item.full_clean()
+                self.item.save()
+            self.assertEqual(
+                catalog.models.Item.objects.count(),
+                item_count,
+                msg="add no validate item",
             )
+        else:
             self.item.full_clean()
             self.item.save()
-        self.assertEqual(
-            catalog.models.Tag.objects.count(),
-            item_count,
-        )
+            self.item.tags.add(self.tag)
+            self.item.full_clean()
+            self.item.save()
+            self.assertEqual(
+                catalog.models.Item.objects.count(),
+                item_count + 1,
+                msg="no add validate item",
+            )
 
-    def test_create(self):
+
+class DBTagTests(TestCase):
+    @parameterized.parameterized.expand(
+        [
+            ("test", "abs", True),
+            ("test", "1abs2", True),
+            ("test", "a12bs", True),
+            ("test", "ABS", True),
+            ("test", "-abs-", True),
+            ("test", "_abs_", True),
+            ("test", "Я", False),
+            ("test", "Яabs", False),
+            ("test", "Я abs", False),
+            ("test", "aЯbs", False),
+            ("test", "absЯ", False),
+            ("test", "abs Я", False),
+            ("test", "*abs*", False),
+            ("test", "a*bs", False),
+            ("test" * 38, "abs", False),
+            ("test", "abs" * 67, False),
+        ],
+    )
+    def test_add_item(self, name, slug, is_validate):
         item_count = catalog.models.Tag.objects.count()
         self.item = catalog.models.Tag(
-            is_published=True,
-            name="name",
-            slug="slug",
+            name=name,
+            slug=slug,
         )
-        self.item.full_clean()
-        self.item.save()
-        self.assertEqual(
-            catalog.models.Tag.objects.count(),
-            item_count + 1,
-        )
-
-
-class ModelsCategoryTest(TestCase):
-    def test_category(self):
-        item_count = catalog.models.Category.objects.count()
-        with self.assertRaises(django.core.exceptions.ValidationError):
-            self.item = catalog.models.Category(
-                name="test",
-                is_published=True,
-                slug="робот",
-                weight=45,
+        if not is_validate:
+            with self.assertRaises(ValidationError):
+                self.item.full_clean()
+                self.item.save()
+            self.assertEqual(
+                catalog.models.Item.objects.count(),
+                item_count,
+                msg="add no validate item",
             )
+        else:
             self.item.full_clean()
             self.item.save()
-        self.assertEqual(
-            catalog.models.Category.objects.count(),
-            item_count,
-        )
+            self.assertEqual(
+                catalog.models.Tag.objects.count(),
+                item_count + 1,
+                msg="no add validate item",
+            )
 
-    def test_create_category(self):
+
+class DBCategoryTests(TestCase):
+    @parameterized.parameterized.expand(
+        [
+            ("test", "abs", 1, True),
+            ("test", "1abs2", 1, True),
+            ("test", "a12bs", 1, True),
+            ("test", "ABS", 1, True),
+            ("test", "-abs-", 1, True),
+            ("test", "_abs_", 1, True),
+            ("test", "_abs_", 32767, True),
+            ("test", "Я", 1, False),
+            ("test", "Яabs", 1, False),
+            ("test", "Я abs", 1, False),
+            ("test", "aЯbs", 1, False),
+            ("test", "absЯ", 1, False),
+            ("test", "abs Я", 1, False),
+            ("test", "*abs*", 1, False),
+            ("test", "a*bs", 1, False),
+            ("test" * 38, "abs", 1, False),
+            ("test", "abs" * 67, 1, False),
+            ("test", "abs", 32768, False),
+            ("test", "abs", 0, False),
+            ("test", "abs", -1, False),
+        ],
+    )
+    def test_add_item(self, name, slug, weight, is_validate):
         item_count = catalog.models.Category.objects.count()
         self.item = catalog.models.Category(
-            name="name",
-            is_published=True,
-            slug="sllug123",
-            weight=45,
+            name=name,
+            slug=slug,
+            weight=weight,
         )
-        self.item.full_clean()
-        self.item.save()
-        self.assertEqual(
-            catalog.models.Category.objects.count(),
-            item_count + 1,
-        )
+        if not is_validate:
+            with self.assertRaises(ValidationError):
+                self.item.full_clean()
+                self.item.save()
+            self.assertEqual(
+                catalog.models.Item.objects.count(),
+                item_count,
+                msg="add no validate item",
+            )
+        else:
+            self.item.full_clean()
+            self.item.save()
+            self.assertEqual(
+                catalog.models.Category.objects.count(),
+                item_count + 1,
+                msg="no add validate item",
+            )
