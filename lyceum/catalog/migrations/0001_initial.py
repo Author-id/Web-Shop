@@ -159,7 +159,8 @@ class Migration(migrations.Migration):
                     "text",
                     models.TextField(
                         help_text="Описание должно быть больше,"
-                        " чем из 2х слов и содержать слова 'превосходно, роскошно'",
+                        " чем из 2х слов и содержать"
+                        " слова 'превосходно, роскошно'",
                         validators=[
                             catalog.validators.ValidateMustContain(
                                 "превосходно", "роскошно"
@@ -183,7 +184,8 @@ class Migration(migrations.Migration):
                 (
                     "tags",
                     models.ManyToManyField(
-                        help_text="Удерживайте 'Control' (или 'Command' на Mac),"
+                        help_text="Удерживайте 'Control'"
+                        " (или 'Command' на Mac),"
                         " чтобы выбрать несколько значений",
                         related_name="tags",
                         to="catalog.tag",
