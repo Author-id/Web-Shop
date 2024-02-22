@@ -1,8 +1,8 @@
 import re
 
 import django.core.exceptions
-import django.db.models
 import django.core.validators
+import django.db.models
 
 
 def normalize_name(name):
