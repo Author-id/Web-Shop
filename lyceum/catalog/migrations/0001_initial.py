@@ -32,12 +32,16 @@ class Migration(migrations.Migration):
                         max_length=150,
                         null=True,
                         unique=True,
-                        validators=[django.core.validators.MaxLengthValidator(150)],
+                        validators=[
+                            django.core.validators.MaxLengthValidator(150)
+                        ],
                     ),
                 ),
                 (
                     "is_published",
-                    models.BooleanField(default=True, verbose_name="опубликовано"),
+                    models.BooleanField(
+                        default=True, verbose_name="опубликовано"
+                    ),
                 ),
                 (
                     "name",
@@ -50,7 +54,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "slug",
-                    models.SlugField(max_length=200, unique=True, verbose_name="слаг"),
+                    models.SlugField(
+                        max_length=200, unique=True, verbose_name="слаг"
+                    ),
                 ),
                 (
                     "weight",
@@ -89,12 +95,16 @@ class Migration(migrations.Migration):
                         max_length=150,
                         null=True,
                         unique=True,
-                        validators=[django.core.validators.MaxLengthValidator(150)],
+                        validators=[
+                            django.core.validators.MaxLengthValidator(150)
+                        ],
                     ),
                 ),
                 (
                     "is_published",
-                    models.BooleanField(default=True, verbose_name="опубликовано"),
+                    models.BooleanField(
+                        default=True, verbose_name="опубликовано"
+                    ),
                 ),
                 (
                     "name",
@@ -107,7 +117,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "slug",
-                    models.SlugField(max_length=200, unique=True, verbose_name="слаг"),
+                    models.SlugField(
+                        max_length=200, unique=True, verbose_name="слаг"
+                    ),
                 ),
             ],
             options={
@@ -130,7 +142,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_published",
-                    models.BooleanField(default=True, verbose_name="опубликовано"),
+                    models.BooleanField(
+                        default=True, verbose_name="опубликовано"
+                    ),
                 ),
                 (
                     "name",
