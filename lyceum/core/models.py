@@ -1,7 +1,7 @@
 import re
 
-import django.db.models
 import django.core.exceptions
+import django.db.models
 import django.core.validators
 
 

@@ -2,11 +2,8 @@ from http import HTTPStatus
 import itertools
 
 from django.core.exceptions import ValidationError
-
 from django.test import Client, TestCase
 import parameterized
-
-from rest_framework.test import APITestCase
 
 import catalog.models
 
@@ -89,7 +86,7 @@ class StaticURLTests(TestCase):
         )
 
 
-class DBItemTests(APITestCase):
+class DBItemTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -155,7 +152,7 @@ class DBItemTests(APITestCase):
                 )
 
 
-class DBTagTests(APITestCase):
+class DBTagTests(TestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", True),
@@ -201,7 +198,7 @@ class DBTagTests(APITestCase):
             )
 
 
-class DBCategoryTests(APITestCase):
+class DBCategoryTests(TestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", 1, True),
@@ -252,7 +249,7 @@ class DBCategoryTests(APITestCase):
             )
 
 
-class DBNormalizeNameTests(APITestCase):
+class DBNormalizeNameTests(TestCase):
     @parameterized.parameterized.expand(
         (
             (x[0], x[1][:-1], x[1][2])
