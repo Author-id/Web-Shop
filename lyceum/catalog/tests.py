@@ -1,92 +1,74 @@
-from http import HTTPStatus
 import itertools
 
 from django.core.exceptions import ValidationError
-from django.test import Client, TestCase
 import parameterized
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 import catalog.models
 
 
-class StaticURLTests(TestCase):
-    def test_catalog_items_endpoint(self):
-        status_code = Client().get("/catalog/").status_code
-        self.assertEqual(status_code, HTTPStatus.OK)
+class StaticUrlTests(APITestCase):
+    def test_catalog_endpoint(self):
+        response = self.client.get("/catalog/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     @parameterized.parameterized.expand(
         [
-            ("0", HTTPStatus.OK),
-            ("1", HTTPStatus.OK),
-            ("01", HTTPStatus.OK),
-            ("010", HTTPStatus.OK),
-            ("10", HTTPStatus.OK),
-            ("100", HTTPStatus.OK),
-            ("abs", HTTPStatus.NOT_FOUND),
-            ("a4s", HTTPStatus.NOT_FOUND),
-            ("ab4", HTTPStatus.NOT_FOUND),
-            ("4ab", HTTPStatus.NOT_FOUND),
-            ("4.323", HTTPStatus.NOT_FOUND),
-            ("22^1", HTTPStatus.NOT_FOUND),
-            ("$221", HTTPStatus.NOT_FOUND),
-            ("221%", HTTPStatus.NOT_FOUND),
-            ("-0", HTTPStatus.NOT_FOUND),
-            ("-1", HTTPStatus.NOT_FOUND),
+            ("1", status.HTTP_200_OK),
+            ("100", status.HTTP_200_OK),
+            ("0", status.HTTP_200_OK),
+            ("-0", status.HTTP_404_NOT_FOUND),
+            ("-100", status.HTTP_404_NOT_FOUND),
+            ("0.5", status.HTTP_404_NOT_FOUND),
+            ("abc", status.HTTP_404_NOT_FOUND),
+            ("0abc", status.HTTP_404_NOT_FOUND),
+            ("abc0", status.HTTP_404_NOT_FOUND),
+            ("$%^", status.HTTP_404_NOT_FOUND),
+            ("1e5", status.HTTP_404_NOT_FOUND),
         ],
     )
-    def test_catalog_item_endpoint(self, param, expected_status):
-        respone_status_code = Client().get(f"/catalog/{param}/").status_code
-        self.assertEqual(
-            respone_status_code,
-            expected_status,
-            msg=f"/catalog/{param}/ get not {expected_status}",
-        )
+    def test_catalog_item_endpoint(self, url, expected_status):
+        response = self.client.get(f"/catalog/{url}/")
+        self.assertEqual(response.status_code, expected_status)
 
     @parameterized.parameterized.expand(
         (
             (x[0], x[1][0], x[1][1])
             for x in itertools.product(
+                ["converter", "re"],
                 [
-                    "re",
-                    "converter",
-                ],
-                [
-                    ("1", HTTPStatus.OK),
-                    ("10", HTTPStatus.OK),
-                    ("100", HTTPStatus.OK),
-                    ("01", HTTPStatus.NOT_FOUND),
-                    ("010", HTTPStatus.NOT_FOUND),
-                    ("0", HTTPStatus.NOT_FOUND),
-                    ("-0", HTTPStatus.NOT_FOUND),
-                    ("-1", HTTPStatus.NOT_FOUND),
-                    ("abs", HTTPStatus.NOT_FOUND),
-                    ("a4s", HTTPStatus.NOT_FOUND),
-                    ("ab4", HTTPStatus.NOT_FOUND),
-                    ("4ab", HTTPStatus.NOT_FOUND),
-                    ("4.323", HTTPStatus.NOT_FOUND),
-                    ("22^1", HTTPStatus.NOT_FOUND),
-                    ("$221", HTTPStatus.NOT_FOUND),
-                    ("221%", HTTPStatus.NOT_FOUND),
+                    ("1", status.HTTP_200_OK),
+                    ("100", status.HTTP_200_OK),
+                    ("0", status.HTTP_200_OK),
+                    ("-0", status.HTTP_404_NOT_FOUND),
+                    ("-100", status.HTTP_404_NOT_FOUND),
+                    ("0.5", status.HTTP_404_NOT_FOUND),
+                    ("abc", status.HTTP_404_NOT_FOUND),
+                    ("0abc", status.HTTP_404_NOT_FOUND),
+                    ("abc0", status.HTTP_404_NOT_FOUND),
+                    ("$%^", status.HTTP_404_NOT_FOUND),
+                    ("1e5", status.HTTP_404_NOT_FOUND),
                 ],
             )
         ),
     )
-    def test_catalog_item_re_converter_endpoint(
+    def test_catalog_item_pint_endpoint(
         self,
         prefix,
-        param,
+        url,
         expected_status,
     ):
-        respone_status_code = (
-            Client().get(f"/catalog/{prefix}/{param}/").status_code
-        )
+        full_url = f"/catalog/{prefix}/{url}/"
+        response = self.client.get(full_url)
         self.assertEqual(
-            respone_status_code,
+            response.status_code,
             expected_status,
-            msg=f"/catalog/{prefix}/{param}/ get not {expected_status}",
+            f"failed check status request to {full_url}",
         )
 
 
-class DBItemTests(TestCase):
+class DBItemTests(APITestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -126,32 +108,33 @@ class DBItemTests(TestCase):
             text=text,
             category=self.category,
         )
-        if not is_validate:
-            with self.assertRaises(ValidationError):
+        with self.subTest(name=name, text=text, is_validate=is_validate):
+            if not is_validate:
+                with self.assertRaises(ValidationError):
+                    self.item.full_clean()
+                    self.item.save()
+                    self.item.tags.add(self.tag)
+                    self.item.full_clean()
+                    self.item.save()
+                self.assertEqual(
+                    catalog.models.Item.objects.count(),
+                    item_count,
+                    msg="add no validate item",
+                )
+            else:
                 self.item.full_clean()
                 self.item.save()
                 self.item.tags.add(self.tag)
                 self.item.full_clean()
                 self.item.save()
-            self.assertEqual(
-                catalog.models.Item.objects.count(),
-                item_count,
-                msg="add no validate item",
-            )
-        else:
-            self.item.full_clean()
-            self.item.save()
-            self.item.tags.add(self.tag)
-            self.item.full_clean()
-            self.item.save()
-            self.assertEqual(
-                catalog.models.Item.objects.count(),
-                item_count + 1,
-                msg="no add validate item",
-            )
+                self.assertEqual(
+                    catalog.models.Item.objects.count(),
+                    item_count + 1,
+                    msg="no add validate item",
+                )
 
 
-class DBTagTests(TestCase):
+class DBTagTests(APITestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", True),
@@ -172,32 +155,32 @@ class DBTagTests(TestCase):
             ("test", "abs" * 67, False),
         ],
     )
-    def test_add_item(self, name, slug, is_validate):
-        item_count = catalog.models.Tag.objects.count()
-        self.item = catalog.models.Tag(
+    def test_add_tag(self, name, slug, is_validate):
+        tag_count = catalog.models.Tag.objects.count()
+        self.tag = catalog.models.Tag(
             name=name,
             slug=slug,
         )
         if not is_validate:
             with self.assertRaises(ValidationError):
-                self.item.full_clean()
-                self.item.save()
+                self.tag.full_clean()
+                self.tag.save()
             self.assertEqual(
-                catalog.models.Item.objects.count(),
-                item_count,
+                catalog.models.Tag.objects.count(),
+                tag_count,
                 msg="add no validate item",
             )
         else:
-            self.item.full_clean()
-            self.item.save()
+            self.tag.full_clean()
+            self.tag.save()
             self.assertEqual(
                 catalog.models.Tag.objects.count(),
-                item_count + 1,
+                tag_count + 1,
                 msg="no add validate item",
             )
 
 
-class DBCategoryTests(TestCase):
+class DBCategoryTests(APITestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", 1, True),
@@ -222,27 +205,83 @@ class DBCategoryTests(TestCase):
             ("test", "abs", -1, False),
         ],
     )
-    def test_add_item(self, name, slug, weight, is_validate):
-        item_count = catalog.models.Category.objects.count()
-        self.item = catalog.models.Category(
+    def test_add_category(self, name, slug, weight, is_validate):
+        category_count = catalog.models.Category.objects.count()
+        self.category = catalog.models.Category(
             name=name,
             slug=slug,
             weight=weight,
         )
         if not is_validate:
             with self.assertRaises(ValidationError):
-                self.item.full_clean()
-                self.item.save()
+                self.category.full_clean()
+                self.category.save()
             self.assertEqual(
-                catalog.models.Item.objects.count(),
-                item_count,
+                catalog.models.Category.objects.count(),
+                category_count,
                 msg="add no validate item",
             )
         else:
-            self.item.full_clean()
-            self.item.save()
+            self.category.full_clean()
+            self.category.save()
             self.assertEqual(
                 catalog.models.Category.objects.count(),
-                item_count + 1,
+                category_count + 1,
+                msg="no add validate item",
+            )
+
+
+class DBNormalizeNameTests(APITestCase):
+    @parameterized.parameterized.expand(
+        (
+            (x[0], x[1][:-1], x[1][2])
+            for x in itertools.product(
+                [
+                    ("test", "1"),
+                ],
+                [
+                    ("test test", "2", True),
+                    ("itfaketest", "2", True),
+                    ("test, test", "2", True),
+                    ("test!test", "2", True),
+                    ("test!", "2", False),
+                    ("!test", "2", False),
+                    ("!test!", "2", False),
+                    (" test ", "2", False),
+                    ("test,", "2", False),
+                    (".test", "2", False),
+                    ("testt", "2", False),
+                    ("te st", "2", False),
+                ],
+            )
+        ),
+    )
+    def test_add_item(self, data1, data2, is_validate):
+        self.tag = catalog.models.Tag(
+            name=data1[0],
+            slug=data1[1],
+        )
+        self.tag.full_clean()
+        self.tag.save()
+        tag_count = catalog.models.Tag.objects.count()
+        self.tag = catalog.models.Tag(
+            name=data2[0],
+            slug=data2[1],
+        )
+        if not is_validate:
+            with self.assertRaises(ValidationError):
+                self.tag.full_clean()
+                self.tag.save()
+            self.assertEqual(
+                catalog.models.Tag.objects.count(),
+                tag_count,
+                msg="add no validate item",
+            )
+        else:
+            self.tag.full_clean()
+            self.tag.save()
+            self.assertEqual(
+                catalog.models.Tag.objects.count(),
+                tag_count + 1,
                 msg="no add validate item",
             )

@@ -1,16 +1,16 @@
+import django.core.exceptions
 import django.core.validators
-import django.db
+import django.db.models
 
-from catalog.validators import ValidateMustContain
-from core.models import AbstractModel
+import catalog.validators
+from core.models import AbstractModel, BaseModel
 
 
-class Tag(AbstractModel):
+class Tag(AbstractModel, BaseModel):
     slug = django.db.models.SlugField(
-        "слаг",
         max_length=200,
         unique=True,
-        help_text="Какая-то дичь",
+        verbose_name="слаг",
     )
 
     class Meta:
@@ -18,22 +18,23 @@ class Tag(AbstractModel):
         verbose_name = "тег"
         verbose_name_plural = "теги"
 
+    def __str__(self):
+        return self.name[:15]
 
-class Category(AbstractModel):
+
+class Category(AbstractModel, BaseModel):
     slug = django.db.models.SlugField(
-        "слаг",
         max_length=200,
         unique=True,
-        help_text="Какая-то дичь",
+        verbose_name="слаг",
     )
     weight = django.db.models.IntegerField(
-        "вес",
         default=100,
         validators=[
             django.core.validators.MaxValueValidator(32767),
             django.core.validators.MinValueValidator(1),
         ],
-        help_text="ёмаё введите вес",
+        verbose_name="вес",
     )
 
     class Meta:
@@ -41,30 +42,40 @@ class Category(AbstractModel):
         verbose_name = "категория"
         verbose_name_plural = "категории"
 
+    def __str__(self):
+        return self.name[:15]
+
 
 class Item(AbstractModel):
     text = django.db.models.TextField(
-        "текст",
         validators=[
-            ValidateMustContain("превосходно", "роскошно"),
+            catalog.validators.ValidateMustContain("превосходно", "роскошно"),
+            django.core.validators.MinLengthValidator(2),
         ],
-        help_text="Описание",
+        verbose_name="текст",
+        help_text="Описание должно быть больше, чем из 2х слов "
+        "и содержать слова 'превосходно, роскошно'",
     )
     category = django.db.models.ForeignKey(
         Category,
         on_delete=django.db.models.CASCADE,
-        verbose_name="категория",
         related_name="items",
-        help_text="выберите категорию",
+        null=True,
+        verbose_name="категория",
+        help_text="Выберите категорию",
     )
     tags = django.db.models.ManyToManyField(
         Tag,
-        verbose_name="теги",
-        related_name="items",
-        help_text="выберите теги",
+        related_name="tags",
+        verbose_name="тег",
+        help_text="Удерживайте 'Control' (или 'Command' "
+        "на Mac), чтобы выбрать несколько значений",
     )
 
     class Meta:
         db_table = "catalog_item"
         verbose_name = "товар"
         verbose_name_plural = "товары"
+
+    def __str__(self):
+        return self.text[:15]
