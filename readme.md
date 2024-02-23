@@ -47,4 +47,6 @@ python3 manage.py runserver
 Then the application will start on http://localhost:8000
 
 
-# The ER-diagram located in file ER.jpg
+## ER-диаграмма базы данных
+
+![ER-диаграмма](/ER.jpg)
