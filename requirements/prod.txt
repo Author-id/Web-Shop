@@ -5,3 +5,4 @@ slugify==0.0.1
 sorl-thumbnail==12.10.0
 Django-tinymce-filebrowser==0.2.1
 django-cleanup==8.1.0
+pillow==10.2.0
