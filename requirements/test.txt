@@ -9,3 +9,5 @@ flake8-import-order==0.18.2
 flake8-quotes==3.3.2
 parameterized==0.9.0
 pep8-naming==0.13.3
+slugify==0.0.1
+sorl-thumbnail==12.10.0

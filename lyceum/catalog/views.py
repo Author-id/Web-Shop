@@ -1,17 +1,25 @@
 from django.http import HttpResponse
+from django.shortcuts import render
+
+__all__ = [
+    "get_from_converter",
+    "get_from_re_path",
+    "item_detail",
+    "item_list",
+]
 
 
 def item_list(request):
-    return HttpResponse("<body>Список элементов</body>")
+    return render(request, "catalog/item_list.html")
 
 
 def item_detail(request, pk):
-    return HttpResponse("<body>Подробно элемент</body>")
+    return render(request, "catalog/item.html")
 
 
-def item_detail_re(request, pk):
-    return HttpResponse("<body>" + str(pk) + "</body>")
+def get_from_re_path(request, pk):
+    return HttpResponse(pk)
 
 
-def item_detail_converter(request, pk):
-    return HttpResponse("<body>" + str(pk) + "</body>")
+def get_from_converter(request, pk):
+    return HttpResponse(pk)

@@ -1,5 +1,7 @@
-from django.http import HttpResponse
+from django.shortcuts import render
+
+__all__ = ["description"]
 
 
 def description(request):
-    return HttpResponse("<body>О проекте</body>")
+    return render(request, "about/description.html")

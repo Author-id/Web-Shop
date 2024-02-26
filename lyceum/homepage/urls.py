@@ -1,8 +1,10 @@
 from django.urls import path
 
-from homepage.views import coffee, home
+from homepage import views
+
+app_name = "homepage"
 
 urlpatterns = [
-    path("", home),
-    path("coffee/", coffee),
+    path("", views.home, name="index"),
+    path("coffee/", views.teapot, name="teapot"),
 ]

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Главная
+{% endblock title %}
+
+{% block content %}
+<h1 class="pb-2 mb-0">Главная страница!</h1>
+<div class="col-6 align-self-center">
+  <img
+          class="img-fluid rounded"
+          alt="красивый кот"
+          src='{% static "img/cat.jpg" %}'
+  >
+</div>
+{% endblock content %}

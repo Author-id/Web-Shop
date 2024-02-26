@@ -1,9 +1,14 @@
+from http import HTTPStatus
+
 from django.http import HttpResponse
+from django.shortcuts import render
+
+__all__ = ["home", "teapot"]
 
 
 def home(request):
-    return HttpResponse("<body>Главная</body>")
+    return render(request, "homepage/index.html")
 
 
-def coffee(request):
-    return HttpResponse("Я чайник", status=418)
+def teapot(request):
+    return HttpResponse("Я чайник", status=HTTPStatus.IM_A_TEAPOT)

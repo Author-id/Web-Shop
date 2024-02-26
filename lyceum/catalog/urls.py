@@ -1,18 +1,22 @@
 from django.urls import path, re_path, register_converter
 
-from catalog import converters
-from catalog.views import (
-    item_detail,
-    item_detail_converter,
-    item_detail_re,
-    item_list,
-)
+from catalog import converters, views
 
-register_converter(converters.PositiveIdConverter, "positive")
+app_name = "catalog"
+
+register_converter(converters.PositiveNumbersConverter, "pos")
 
 urlpatterns = [
-    path("", item_list),
-    path("<int:pk>/", item_detail),
-    re_path(r"^re/(?P<pk>[1-9]\d*/)", item_detail_re),
-    path("converter/<positive:pk>/", item_detail_converter),
+    path("", views.item_list, name="item_list"),
+    path("<int:pk>/", views.item_detail, name="item_detail"),
+    re_path(
+        r"re/(?P<pk>[1-9][0-9]*)/",
+        views.get_from_re_path,
+        name="item_re",
+    ),
+    path(
+        "converter/<pos:pk>/",
+        views.get_from_converter,
+        name="item_converter",
+    ),
 ]

@@ -1,78 +1,87 @@
+from pathlib import Path
 import re
 
-import django.core.exceptions
-import django.core.validators
-import django.db.models
+from django.core.exceptions import ValidationError
+import django.db
+from django.utils.safestring import mark_safe
+import slugify
+import sorl
+
+__all__ = ["AbstractModel", "normalize_str"]
 
 
-def normalize_name(name):
-    name = "".join(name.split())
-    lower_string = name.lower()
-    no_number_string = re.sub(r"\d+", "", lower_string)
-    no_punc_string = re.sub(r"[^\w\s]", "", no_number_string)
-    no_wspace_string = no_punc_string.strip()
-    pattern = r"(.)\1+"
-    repl = r"\1"
-    name = re.sub(pattern, repl, no_wspace_string)
-    similar_chars = {
-        "а": "a",
-        "о": "o",
-        "у": "y",
-        "е": "e",
-        "с": "c",
-        "м": "m",
-        "р": "p",
-        "т": "t",
-        "х": "x",
-        "в": "b",
-        "к": "k",
-        "н": "h",
-        "г": "r",
-    }
-    for word, replacement in similar_chars.items():
-        name = name.replace(word, replacement)
-    return name
-
-
-class BaseModel(django.db.models.Model):
-    normalized_name = django.db.models.CharField(
-        unique=True,
-        editable=False,
-        max_length=150,
-        validators=[
-            django.core.validators.MaxLengthValidator(150),
-        ],
-        null=True,
-    )
-
-    def clean(self) -> None:
-        normalized = normalize_name(self.name)
-        existing = self.__class__.objects.filter(
-            normalized_name=normalized,
-        )
-        if existing:
-            raise django.core.exceptions.ValidationError(
-                {
-                    self.__class__.name.field.name: "Такое имя уже имеется",
-                },
-            )
-        self.normalized_name = normalized
-
-    class Meta:
-        abstract = True
+def normalize_str(value):
+    words = re.findall("[0-9а-яёa-z]+", value.lower())
+    return slugify.slugify("".join(words))
 
 
 class AbstractModel(django.db.models.Model):
-    is_published = django.db.models.BooleanField(
-        default=True,
-        verbose_name="опубликовано",
-    )
+    objects = django.db.models.Manager()
     name = django.db.models.CharField(
+        "название",
         max_length=150,
-        verbose_name="название",
-        help_text="max 150 символов",
         unique=True,
+        help_text="Напишите название",
+    )
+    is_published = django.db.models.BooleanField(
+        "опубликовано",
+        default=True,
+        help_text="поставьте галочку если он опубликован",
+    )
+    normalize_name = django.db.models.CharField(
+        "нормализованное название",
+        max_length=150,
+        unique=True,
+        editable=False,
+        help_text="этот field не редактируется и нормализует field(name)",
     )
 
     class Meta:
+        verbose_name = "абстрактная модель"
+        verbose_name_plural = "абстрактная модели"
         abstract = True
+
+    def clean(self):
+        normalize_name = normalize_str(self.name)
+        found = self.__class__.objects.filter(
+            normalize_name=normalize_name,
+        )
+        if found and found[0] != self:
+            raise ValidationError(
+                {self.__class__.name.field.name: "есть похожое название"},
+            )
+        self.normalize_name = normalize_name
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class BaseImage(django.db.models.Model):
+    image = sorl.thumbnail.ImageField(
+        upload_to="catalog/items/",
+        verbose_name="изображение",
+    )
+
+    def get_image_300x300(self):
+        return sorl.thumbnail.get_thumbnail(
+            self.image,
+            "300x300",
+            crop="center",
+            quality=51,
+        )
+
+    def image_tmb(self):
+        if self.image:
+            tag = f'<img src="{self.get_image_300x300().url}">'
+            return mark_safe(tag)
+        return "изображение отсутствует"
+
+    image_tmb.short_description = "превью"
+    image_tmb.allow_tags = True
+    image_tmb.field_name = "image_tmb"
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return Path(self.image.path).stem
