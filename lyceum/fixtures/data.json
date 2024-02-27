@@ -1,179 +1,150 @@
 [
 {
-   "model": "catalog.tag",
-   "pk": 1,
-   "fields": {
-      "name": "Мужское",
-      "is_published": true,
-      "normalize_name": "muzhskoe",
-      "slug": "muzhskoe"
-   }
+  "model": "catalog.tag",
+  "pk": 1,
+  "fields": {
+    "normalized_name": "фpyktы",
+    "is_published": true,
+    "name": "фрукты",
+    "slug": "b1"
+  }
 },
 {
-   "model": "catalog.tag",
-   "pk": 2,
-   "fields": {
-      "name": "Женское",
-      "is_published": true,
-      "normalize_name": "zhenskoe",
-      "slug": "zhenskoe"
-   }
+  "model": "catalog.tag",
+  "pk": 2,
+  "fields": {
+    "normalized_name": "oboщи",
+    "is_published": true,
+    "name": "овощи",
+    "slug": "b2"
+  }
 },
 {
-   "model": "catalog.tag",
-   "pk": 3,
-   "fields": {
-      "name": "Детское",
-      "is_published": true,
-      "normalize_name": "detskoe",
-      "slug": "detskoe"
-   }
+  "model": "catalog.tag",
+  "pk": 3,
+  "fields": {
+    "normalized_name": "cmaptфoh",
+    "is_published": true,
+    "name": "смартфон",
+    "slug": "b3"
+  }
 },
 {
-   "model": "catalog.tag",
-   "pk": 4,
-   "fields": {
-      "name": "Подрастковое",
-      "is_published": true,
-      "normalize_name": "podrastkovoe",
-      "slug": "podrastkovoe"
-   }
+  "model": "catalog.tag",
+  "pk": 4,
+  "fields": {
+    "normalized_name": "kpobatь",
+    "is_published": true,
+    "name": "кровать",
+    "slug": "b4"
+  }
 },
 {
-   "model": "catalog.tag",
-   "pk": 5,
-   "fields": {
-      "name": "Взрослое",
-      "is_published": true,
-      "normalize_name": "vzrosloe",
-      "slug": "vzrosloe"
-   }
+  "model": "catalog.tag",
+  "pk": 5,
+  "fields": {
+    "normalized_name": "шkaф",
+    "is_published": true,
+    "name": "шкаф",
+    "slug": "b5"
+  }
 },
 {
-   "model": "catalog.category",
-   "pk": 1,
-   "fields": {
-      "name": "Одежда",
-      "is_published": true,
-      "normalize_name": "odezhda",
-      "slug": "odezhda",
-      "weight": 100
-   }
+  "model": "catalog.category",
+  "pk": 1,
+  "fields": {
+    "normalized_name": "eдa",
+    "is_published": true,
+    "name": "еда",
+    "slug": "a1",
+    "weight": 100
+  }
 },
 {
-   "model": "catalog.category",
-   "pk": 2,
-   "fields": {
-      "name": "Техника",
-      "is_published": true,
-      "normalize_name": "tekhnika",
-      "slug": "tekhnika",
-      "weight": 100
-   }
+  "model": "catalog.category",
+  "pk": 2,
+  "fields": {
+    "normalized_name": "texhиka",
+    "is_published": true,
+    "name": "техника",
+    "slug": "a2",
+    "weight": 100
+  }
 },
 {
-   "model": "catalog.item",
-   "pk": 1,
-   "fields": {
-      "name": "Юбка",
-      "is_published": true,
-      "normalize_name": "iubka",
-      "text": "превосходно",
-      "category": 1,
-      "tags": [
-         1
-      ]
-   }
+  "model": "catalog.category",
+  "pk": 3,
+  "fields": {
+    "normalized_name": "meбeль",
+    "is_published": true,
+    "name": "мебель",
+    "slug": "a3",
+    "weight": 100
+  }
 },
 {
-   "model": "catalog.item",
-   "pk": 2,
-   "fields": {
-      "name": "Кросовок",
-      "is_published": true,
-      "normalize_name": "krosovok",
-      "text": "превосходно",
-      "category": 1,
-      "tags": [
-         1
-      ]
-   }
+  "model": "catalog.item",
+  "pk": 1,
+  "fields": {
+    "is_published": true,
+    "name": "apple iphone 11",
+    "text": "крутой превосходно",
+    "category": 2,
+    "tags": [
+      3
+    ]
+  }
 },
 {
-   "model": "catalog.item",
-   "pk": 3,
-   "fields": {
-      "name": "Компьютер",
-      "is_published": true,
-      "normalize_name": "komp'iuter",
-      "text": "превосходно",
-      "category": 2,
-      "tags": [
-         1,
-         2
-      ]
-   }
+  "model": "catalog.item",
+  "pk": 2,
+  "fields": {
+    "is_published": true,
+    "name": "банан",
+    "text": "вкусный роскошно",
+    "category": 1,
+    "tags": [
+      1
+    ]
+  }
 },
 {
-   "model": "catalog.item",
-   "pk": 4,
-   "fields": {
-      "name": "Холодильник",
-      "is_published": true,
-      "normalize_name": "kholodilnik",
-      "text": "превосходно",
-      "category": 2,
-      "tags": [
-         1
-      ]
-   }
+  "model": "catalog.item",
+  "pk": 3,
+  "fields": {
+    "is_published": true,
+    "name": "огурец",
+    "text": "вкусный роскошно",
+    "category": 1,
+    "tags": [
+      2
+    ]
+  }
 },
 {
-   "model": "catalog.item",
-   "pk": 5,
-   "fields": {
-      "name": "Футболка",
-      "is_published": true,
-      "normalize_name": "futbolka",
-      "text": "превосходно",
-      "category": 1,
-      "tags": [
-         1,
-         3,
-         4
-      ]
-   }
+  "model": "catalog.item",
+  "pk": 4,
+  "fields": {
+    "is_published": true,
+    "name": "ксяоми редми",
+    "text": "удобный превосходно",
+    "category": 2,
+    "tags": [
+      3
+    ]
+  }
 },
 {
-   "model": "catalog.itemmainimage",
-   "pk": 2,
-   "fields": {
-      "image": "catalog/items/DSCF9149.JPG",
-      "item": 5
-   }
-},
-{
-   "model": "catalog.itemmainimage",
-   "pk": 3,
-   "fields": {
-      "image": "catalog/items/hol.jpg",
-      "item": 4
-   }
-},
-{
-   "model": "catalog.itemsecondaryimage",
-   "pk": 1,
-   "fields": {
-      "image": "catalog/items/1.webp",
-      "item": 5
-   }
-},
-{
-   "model": "catalog.itemsecondaryimage",
-   "pk": 2,
-   "fields": {
-      "image": "catalog/items/images.jpeg",
-      "item": 5
-   }
+  "model": "catalog.item",
+  "pk": 5,
+  "fields": {
+    "is_published": true,
+    "name": "шкаф IKEA",
+    "text": "красивый превосходно",
+    "category": 3,
+    "tags": [
+      5
+    ]
+  }
 }
 ]
