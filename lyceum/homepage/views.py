@@ -3,12 +3,14 @@ from http import HTTPStatus
 from django.http import HttpResponse
 from django.shortcuts import render
 
-__all__ = ["home", "teapot"]
+__all__ = ["coffee", "home"]
 
 
 def home(request):
-    return render(request, "homepage/index.html")
+    template = "homepage/index.html"
+    context = {}
+    return render(request, template, context)
 
 
-def teapot(request):
+def coffee(request):
     return HttpResponse("Я чайник", status=HTTPStatus.IM_A_TEAPOT)

@@ -4,7 +4,7 @@ import re
 from django.core.exceptions import ValidationError
 import django.db
 from django.utils.safestring import mark_safe
-import slugify
+from slugify import slugify
 import sorl
 
 __all__ = ["AbstractModel", "normalize_str"]
@@ -12,7 +12,7 @@ __all__ = ["AbstractModel", "normalize_str"]
 
 def normalize_str(value):
     words = re.findall("[0-9а-яёa-z]+", value.lower())
-    return slugify.slugify("".join(words))
+    return slugify("".join(words))
 
 
 class AbstractModel(django.db.models.Model):

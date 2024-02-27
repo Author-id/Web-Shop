@@ -1,8 +1,7 @@
-__all__ = ["PositiveNumbersConverter"]
+__all__ = ["PositiveIntegerConverter"]
 
 
-class PositiveNumbersConverter:
-
+class PositiveIntegerConverter:
     regex = r"[1-9]\d*"
 
     def to_python(self, value):

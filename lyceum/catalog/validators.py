@@ -3,6 +3,8 @@ import re
 from django.core.exceptions import ValidationError
 import django.utils.deconstruct
 
+__all__ = ["ValidateMustContain"]
+
 
 @django.utils.deconstruct.deconstructible
 class ValidateMustContain:
@@ -15,5 +17,5 @@ class ValidateMustContain:
             return
         str_words = " ".join(self.words)
         raise ValidationError(
-            f"Должно содержаться одно из слов: {str_words}",
+            f"должно содержаться одно из слов: {str_words}",
         )

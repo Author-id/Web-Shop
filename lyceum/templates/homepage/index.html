@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  Главная
+{% trans "Главная" %}
 {% endblock title %}
 
 {% block content %}
-<h1 class="pb-2 mb-0">Главная страница!</h1>
+<h1 class="pb-2 mb-0">{% trans "Главная страница!" %}</h1>
 <div class="col-6 align-self-center">
   <img
           class="img-fluid rounded"
-          alt="красивый кот"
+          alt='{% trans "красивый кот" %}'
           src='{% static "img/cat.jpg" %}'
   >
 </div>

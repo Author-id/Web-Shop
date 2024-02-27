@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}
-  О проекте
+{% trans "О проекте" %}
 {% endblock title %}
 
 {% block content %}
-  <h1 class="pb-2 mb-0">О проекте</h1>
+  <h1 class="pb-2 mb-0">{% trans "О проекте" %}</h1>
   <p>
-    Очень убедительное описание, которое заставит вас сюда вернуться
+    {% trans "Очень убедительное описание, которое заставит вас сюда вернуться" %}
   </p>
 {% endblock content %}

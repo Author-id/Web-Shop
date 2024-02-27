@@ -1,41 +1,47 @@
 import os
 from pathlib import Path
 
+from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+__all__ = ["true_load"]
 
 load_dotenv()
 
+
+def true_load(value: str, defoult: bool) -> bool:
+    env_value = os.getenv(value, str(defoult)).lower()
+    return env_value in ("", "true", "yes", "1", "y")
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "ABOBA")
 
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true",)
+DEBUG = true_load("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = list(
     map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")),
 )
 
-ALLOW_REVERSE = os.getenv("DJANGO_ALLOW_REVERSE", "True").lower() in [
-    "",
-    "true",
-    "yes",
-    "1",
-    "y",
-]
+ALLOW_REVERSE = true_load("DJANGO_ALLOW_REVERSE", True)
 
 INSTALLED_APPS = [
-    "core.apps.CoreConfig",
-    "homepage.apps.HomepageConfig",
-    "catalog.apps.CatalogConfig",
-    "about.apps.AboutConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "about.apps.AboutConfig",
+    "catalog.apps.CatalogConfig",
+    "core.apps.CoreConfig",
+    "homepage.apps.HomepageConfig",
     "sorl.thumbnail",
     "django_cleanup.apps.CleanupConfig",
+    "tinymce",
 ]
 
 MIDDLEWARE = [
@@ -46,7 +52,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "lyceum.middleware.ReverseMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "lyceum.middleware.ReverseResponseMiddleware",
 ]
 
 ROOT_URLCONF = "lyceum.urls"
@@ -80,29 +87,25 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": (
-            "django.contrib.auth.password_validation"
-            ".UserAttributeSimilarityValidator"
-        ),
+        "NAME": "django.contrib."
+        "auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation.MinimumLengthValidator"
-        ),
+        "NAME": "django.contrib.auth."
+        "password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation"
-            ".CommonPasswordValidator"
-        ),
+        "NAME": "django.contrib.auth."
+        "password_validation."
+        "CommonPasswordValidator",
     },
     {
-        "NAME": (
-            "django.contrib.auth.password_validation"
-            ".NumericPasswordValidator"
-        ),
+        "NAME": "django.contrib."
+        "auth.password_validation."
+        "NumericPasswordValidator",
     },
 ]
+
 
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
@@ -110,14 +113,22 @@ if DEBUG:
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 
-LANGUAGE_CODE = "ru"
+LANGUAGE_CODE = os.getenv("DJANGO_LANGUAGE_CODE", "ru")
 
-TIME_ZONE = "Europe/Moscow"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
+LANGUAGES = [
+    ("ru", _("Russian")),
+    ("en", _("English")),
+]
+
+LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
 
 STATIC_URL = "static/"
 
@@ -125,7 +136,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static_dev",
 ]
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

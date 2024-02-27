@@ -1,6 +1,6 @@
 import django.core.validators
 import django.db
-import slugify
+from slugify import slugify
 import tinymce.models
 
 from catalog.validators import ValidateMustContain
@@ -21,7 +21,7 @@ class Tag(AbstractModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify.slugify(self.name)
+            self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
     class Meta:
@@ -50,7 +50,7 @@ class Category(AbstractModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify.slugify(self.name)
+            self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
     class Meta:

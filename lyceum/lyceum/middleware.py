@@ -2,15 +2,20 @@ import re
 
 from django.conf import settings
 
+__all__ = ["ReverseResponseMiddleware"]
 
-class ReverseMiddleware:
+
+class ReverseResponseMiddleware:
     count = 0
 
-    def __init__(self, get_response):
+    def __init__(
+        self,
+        get_response,
+    ):
         self.get_response = get_response
 
     @staticmethod
-    def reverse_russian_words(content: str) -> str:
+    def reverse_russian_words(content):
         russian_words = re.findall("[а-яА-ЯёЁ]+", content)
         for word in russian_words:
             content = content.replace(word, word[::-1])
