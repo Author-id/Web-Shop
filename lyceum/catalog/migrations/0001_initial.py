@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         editable=False,
                         help_text="этот field не"
-                                  " редактируется и нормализует field(name)",
+                        " редактируется и нормализует field(name)",
                         max_length=150,
                         unique=True,
                         verbose_name="нормализованное название",
@@ -59,8 +59,8 @@ class Migration(migrations.Migration):
                     models.SlugField(
                         blank=True,
                         help_text="строка идентификатор"
-                                  "(заполните чтобы изменить"
-                                  " автоматический слаг)",
+                        "(заполните чтобы изменить"
+                        " автоматический слаг)",
                         max_length=200,
                         unique=True,
                         verbose_name="слаг",
@@ -118,7 +118,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         editable=False,
                         help_text="этот field не редактируется"
-                                  " и нормализует field(name)",
+                        " и нормализует field(name)",
                         max_length=150,
                         unique=True,
                         verbose_name="нормализованное название",
@@ -186,7 +186,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         editable=False,
                         help_text="этот field не редактируется"
-                                  " и нормализует field(name)",
+                        " и нормализует field(name)",
                         max_length=150,
                         unique=True,
                         verbose_name="нормализованное название",
@@ -197,8 +197,8 @@ class Migration(migrations.Migration):
                     models.SlugField(
                         blank=True,
                         help_text="строка идентификатор"
-                                  "(заполните чтобы изменить"
-                                  " автоматический слаг)",
+                        "(заполните чтобы изменить"
+                        " автоматический слаг)",
                         max_length=200,
                         unique=True,
                         verbose_name="слаг",
