@@ -1,52 +1,123 @@
+# Django project
+
+## By Semyanov Andrey
+
 [![pipeline status](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/-/commits/main)
 
-# How to run it on windows
-1. Clone this repo and prepare workplace:  
-git clone https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112  
-cd 249419-semyanovandrew-course-1112  
-python -m venv venv  
-venv\scripts\activate  
+### Prerequisites
 
-2. Rename .env.example to .env to set test environment variables:
-ren ".env.example" ".env"  
+1. Install Python:3.10
+    * download link
 
-3. Install requirements:  
-pip install --upgrade pip  
-pip install -r requirements\prod.txt  
-pip install -r requirements\test.txt  
-pip install -r requirements\dev.txt  
+    ```url
+    https://www.python.org/downloads/release/python-3100/
+    ```
 
-4. Run it by this command:  
-cd lyceum  
-python manage.py runserver  
+2. Create virtual environment
+    * python
 
-Then the application will start on http://localhost:8000
+    ```bash
+    python -m venv venv
+    ```
 
+3. Activate virtual environment
+    * windows
 
-# How to run it on Linux OS
+    ```bash
+    .\venv\Scripts\activate
+    ```
 
-1. Clone this repo and prepare workplace:  
-git clone https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112  
-cd 249419-semyanovandrew-course-1112  
-python3 -m venv venv  
-venv/bin/activate  
+    * linux
 
-2. Rename .env.example to .env to set test environment variables:  
-mv .env.example .env  
+    ```bash
+    source venv/bin/activate
+    ```
 
-3. Install requirements  
-pip3 install --upgrade pip  
-pip3 install -r requirements/prod.txt  
-pip3 install -r requirements/test.txt  
-pip3 install -r requirements/dev.txt  
+4. Upgrade pip
+    * python
 
-4. Run it by this command:  
-cd lyceum  
-python3 manage.py runserver  
+    ```bash
+    python -m pip install --upgrade pip
+    ```
 
-Then the application will start on http://localhost:8000
+### Installation
 
+1. Clone the repo
 
-## ER-диаграмма базы данных
+   ```bash
+   git clone git@gitlab.crja72.ru:django/2024/spring/course/students/199049-sahbievdg-course-1112.git
+   ```
 
-![ER-диаграмма](/ER.jpg)
+2. Install requirements
+    * production
+
+    ```bash
+    pip install -r requirements/prod.txt
+    ```
+
+    * test
+
+    ```bash
+    pip install -r requirements/test.txt
+    ```
+
+    * development
+
+    ```bash
+    pip install -r requirements/dev.txt
+    ```
+
+3. Use your configuration in .env.example
+    * windows
+
+    ```bash
+    copy .env.example .env
+    ```
+
+    * linux
+
+    ```bash
+    cp .env.example .env
+    ```
+
+4. Migrate db.sqllite3
+    * python
+
+    ```bash
+    python manage.py makemigrations catalog
+    python manage.py migrate
+    ```
+
+5. Load fixtures
+    * python
+
+    ```bash
+    python manage.py loaddata fixtures/data.json
+    ```
+
+### Make translation
+
+1. Create translation
+
+    ```bash
+    django-admin makemessage -l "language"
+    ```
+
+2. Edit translation file using a text editor: "lyceum/locale/language/LC_MESSAGES/django.po"
+
+3. Сompile translation file
+
+    ```bash
+    django-admin compilemessages
+    ```
+
+### Start
+
+```bash
+сd lyceum
+python manage.py runserver
+```
+
+### DB ER Diogram
+
+![image info](ER.jpg)
