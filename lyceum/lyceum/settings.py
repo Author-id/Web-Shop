@@ -56,6 +56,11 @@ MIDDLEWARE = [
     "lyceum.middleware.ReverseResponseMiddleware",
 ]
 
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    INTERNAL_IPS = ["127.0.0.1", "localhost"]
+
 ROOT_URLCONF = "lyceum.urls"
 
 TEMPLATES = [
@@ -87,30 +92,22 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib."
-        "auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation"
+        ".UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth."
-        "password_validation.MinimumLengthValidator",
+        "NAME": "django.contrib.auth.password_validation"
+        ".MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth."
-        "password_validation."
-        "CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+        ".CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib."
-        "auth.password_validation."
-        "NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation"
+        ".NumericPasswordValidator",
     },
 ]
-
-
-if DEBUG:
-    INSTALLED_APPS.append("debug_toolbar")
-    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
 
 LANGUAGE_CODE = os.getenv("DJANGO_LANGUAGE_CODE", "ru")

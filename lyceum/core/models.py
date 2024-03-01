@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from slugify import slugify
 import sorl
 
-__all__ = ["AbstractModel", "normalize_str"]
+__all__ = ["AbstractModel", "BaseImage"]
 
 
 def normalize_str(value):
@@ -52,8 +52,8 @@ class AbstractModel(django.db.models.Model):
             )
         self.normalize_name = normalize_name
 
-    def __str__(self) -> str:
-        return self.name
+    def __str__(self):
+        return self.name[:15]
 
 
 class BaseImage(django.db.models.Model):
@@ -84,4 +84,4 @@ class BaseImage(django.db.models.Model):
         abstract = True
 
     def __str__(self):
-        return Path(self.image.path).stem
+        return Path(self.image.path).stem[:15]

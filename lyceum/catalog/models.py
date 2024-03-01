@@ -6,7 +6,7 @@ import tinymce.models
 from catalog.validators import ValidateMustContain
 from core.models import AbstractModel, BaseImage
 
-__all__ = ["Category", "Item", "Tag"]
+__all__ = ["Category", "Item", "Tag", "ItemMainImage", "ItemSecondaryImage"]
 
 
 class Tag(AbstractModel):
@@ -45,7 +45,7 @@ class Category(AbstractModel):
             django.core.validators.MaxValueValidator(32767),
             django.core.validators.MinValueValidator(1),
         ],
-        help_text="ну какой вес то",
+        help_text="укажите вес",
     )
 
     def save(self, *args, **kwargs):
@@ -64,7 +64,7 @@ class Item(AbstractModel):
         validators=[
             ValidateMustContain("превосходно", "роскошно"),
         ],
-        help_text="опишите",
+        help_text="опишите объект",
     )
     category = django.db.models.ForeignKey(
         Category,

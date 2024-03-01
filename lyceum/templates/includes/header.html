@@ -15,12 +15,12 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if view_name == 'about:main' %} active {% endif %}" href="{% url 'about:main' %}">
+            <a class="nav-link {% if view_name == 'about:description' %} active {% endif %}" href="{% url 'about:description' %}">
               {% trans "О проекте" %}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if view_name == 'catalog:main' %} active {% endif %}" href="{% url 'catalog:main' %}">
+            <a class="nav-link {% if view_name == 'catalog:item-list' %} active {% endif %}" href="{% url 'catalog:item-list' %}">
               {% trans "Список товаров" %}
             </a>
           </li>

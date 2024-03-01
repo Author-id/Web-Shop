@@ -2,7 +2,4 @@
 application-import-names = about, catalog, core, homepage, lyceum
 import-order-style = google
 inline-quotes = double
-exclude = venv
-
-per-file-ignores =
-    */migrations/*:I100, I201, Q000, C812
+exclude = .venv,venv,*/migrations/*,.git,__pycache__
