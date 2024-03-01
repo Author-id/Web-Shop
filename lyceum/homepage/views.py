@@ -8,7 +8,8 @@ __all__ = ["coffee", "home"]
 
 def home(request):
     template = "homepage/index.html"
-    return render(request, template)
+    context = {}
+    return render(request, template, context)
 
 
 def coffee(request):
