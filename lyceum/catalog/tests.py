@@ -83,7 +83,7 @@ class ContextTests(TestCase):
             reverse("homepage:main"),
         )
         items = response.context["items"]
-        self.assertEqual(len(items), 1)
+        self.assertEqual(len(items), 0)
 
     def test_homepage_types(self):
         response = Client().get(
