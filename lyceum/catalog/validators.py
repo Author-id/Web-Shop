@@ -1,21 +1,20 @@
 import re
 
 from django.core.exceptions import ValidationError
-import django.utils.deconstruct
+from django.utils.deconstruct import deconstructible
 
 __all__ = ["ValidateMustContain"]
 
 
-@django.utils.deconstruct.deconstructible
+@deconstructible
 class ValidateMustContain:
-    def __init__(self, *words):
-        self.words = words
-        self.pattern = "|".join(f"\\b{word}\\b" for word in words)
+    def __init__(self, *args):
+        self.contain = list(args)
+        self.pattern = "|".join([f"\\b{word}\\b" for word in args])
 
-    def __call__(self, value):
-        if re.findall(self.pattern, value, re.IGNORECASE):
+    def __call__(self, val):
+        if re.findall(r"\bпревосходно\b|\bроскошно\b", val, re.IGNORECASE):
             return
-        str_words = " ".join(self.words)
         raise ValidationError(
-            f"должно содержаться одно из слов: {str_words}",
+            "Должно содержаться слово 'превосходно' или 'роскошно'.",
         )

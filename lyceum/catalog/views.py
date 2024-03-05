@@ -1,15 +1,55 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+import django.shortcuts
 
-__all__ = ["item_detail", "item_list"]
+import catalog.models
+
+__all__ = [
+    "item_list",
+    "item_detail",
+    "extract_number",
+]
 
 
-def item_list(request):
-    template = "catalog/item_list.html"
-    context = {}
-    return render(request, template, context)
+def item_list(request: HttpResponse) -> HttpResponse:
+    items = catalog.models.Item.objects.published()
+    return django.shortcuts.render(
+        request,
+        "catalog/catalog.html",
+        {"items": items},
+    )
 
 
-def item_detail(request, pk):
-    template = "catalog/item_detail.html"
-    context = {}
-    return render(request, template, context)
+def item_detail(request: HttpResponse, pk: int) -> HttpResponse:
+    item = django.shortcuts.get_object_or_404(
+        catalog.models.Item.objects.published()
+        .select_related("category", "main_image")
+        .prefetch_related(
+            django.db.models.Prefetch(
+                "tags",
+                queryset=catalog.models.Tag.objects.filter(
+                    is_published=True,
+                ).only(
+                    "name",
+                ),
+            ),
+            "images",
+        )
+        .only(
+            "name",
+            "category__name",
+            "text",
+            "main_image__image",
+            "tags__name",
+            "images__image",
+        ),
+        pk=pk,
+    )
+    return django.shortcuts.render(
+        request,
+        "catalog/catalog_pk.html",
+        {"item": item},
+    )
+
+
+def extract_number(request: HttpResponse, number: int) -> HttpResponse:
+    return HttpResponse(number)

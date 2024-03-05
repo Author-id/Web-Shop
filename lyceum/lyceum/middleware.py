@@ -2,34 +2,24 @@ import re
 
 from django.conf import settings
 
-__all__ = ["ReverseResponseMiddleware"]
+__all__ = ["ReverseRussianWordsMiddleware"]
 
 
-class ReverseResponseMiddleware:
-    count = 0
-
-    def __init__(
-        self,
-        get_response,
-    ):
+class ReverseRussianWordsMiddleware:
+    def __init__(self, get_response):
         self.get_response = get_response
-
-    @staticmethod
-    def reverse_russian_words(content):
-        russian_words = re.findall("[а-яА-ЯёЁ]+", content)
-        for word in russian_words:
-            content = content.replace(word, word[::-1])
-        return content
 
     def __call__(self, request):
         response = self.get_response(request)
-        if self.__class__.count == 9:
-            if settings.ALLOW_REVERSE:
-                content = response.content.decode("utf-8")
-                response.content = self.reverse_russian_words(content).encode(
-                    "utf-8",
-                )
-            self.__class__.count = 0
-            return response
-        self.__class__.count += 1
+        settings.COUNT += 1
+        if settings.COUNT % 10 == 0 and settings.ALLOW_REVERSE:
+            response.content = self.reverse_russian_words(response.content)
         return response
+
+    def reverse_russian_words(self, content):
+        content = content.decode("utf-8")
+        words_and_tags = re.findall(r"(<.*?>|\b\w+\b)", content)
+        return " ".join(
+            word[::-1] if not word.startswith("<") else word
+            for word in words_and_tags
+        )

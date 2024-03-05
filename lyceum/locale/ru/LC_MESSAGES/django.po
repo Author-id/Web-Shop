@@ -8,91 +8,50 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-26 20:22+0300\n"
+"POT-Creation-Date: 2024-02-28 22:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
-
-#: lyceum/settings.py:127
+#: .\lyceum\settings.py:74
 msgid "Russian"
 msgstr "Русский"
 
-#: lyceum/settings.py:128
+#: .\lyceum\settings.py:75
 msgid "English"
 msgstr "Английский"
 
-#: templates/about/description.html:5 templates/about/description.html:9
-#: templates/includes/header.html:19
+#: .\templates\about\list.html:4 .\templates\about\list.html:10
+#: .\templates\includes\header.html:14
 msgid "О проекте"
 msgstr ""
 
-#: templates/about/description.html:11
-msgid "Очень убедительное описание, которое заставит вас сюда вернуться"
+#: .\templates\about\list.html:11
+msgid "Офигенное описание"
 msgstr ""
 
-#: templates/catalog/item_detail.html:6
-msgid "О товаре"
+#: .\templates\catalog\catalog.html:4 .\templates\catalog\catalog_pk.html:4
+msgid "Каталог"
 msgstr ""
 
-#: templates/catalog/item_detail.html:10 templates/catalog/item_list.html:21
-msgid "Клубника"
+#: .\templates\catalog\catalog.html:10
+msgid "Товары:"
 msgstr ""
 
-#: templates/catalog/item_detail.html:13
-msgid "Описание"
+#: .\templates\catalog\catalog_pk.html:9
+msgid "Список элементов"
 msgstr ""
 
-#: templates/catalog/item_detail.html:14 templates/catalog/item_list.html:23
-msgid "Будет роскошно смотреться на любом столе, это мы гарантируем!"
-msgstr ""
-
-#: templates/catalog/item_detail.html:21 templates/catalog/item_list.html:18
-msgid "сочная клубника"
-msgstr ""
-
-#: templates/catalog/item_list.html:6
-msgid "Каталог товаров"
-msgstr ""
-
-#: templates/catalog/item_list.html:10 templates/includes/header.html:24
-msgid "Список товаров"
-msgstr ""
-
-#: templates/catalog/item_list.html:26 templates/catalog/item_list.html:45
-msgid "Подробнее"
-msgstr ""
-
-#: templates/catalog/item_list.html:37
-msgid "не очень вкусные шампиньоны"
-msgstr ""
-
-#: templates/catalog/item_list.html:40
-msgid "Шампиньоны"
-msgstr ""
-
-#: templates/catalog/item_list.html:42
-msgid "Может быть даже вкусные!"
-msgstr ""
-
-#: templates/homepage/index.html:6 templates/includes/header.html:14
+#: .\templates\homepage\home.html:4 .\templates\homepage\home.html:10
+#: .\templates\includes\header.html:9
 msgid "Главная"
 msgstr ""
 
-#: templates/homepage/index.html:10
-msgid "Главная страница!"
-msgstr ""
-
-#: templates/homepage/index.html:12
-msgid "красивый кот"
-msgstr ""
-
-#: templates/includes/header.html:8
-msgid "Супер-бренд"
+#: .\templates\includes\header.html:19
+msgid "Список товаров"
 msgstr ""

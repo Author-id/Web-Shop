@@ -4,29 +4,28 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
-
-__all__ = ["true_load"]
-
-load_dotenv()
-
-
-def true_load(value: str, defoult: bool) -> bool:
-    env_value = os.getenv(value, str(defoult)).lower()
-    return env_value in ("", "true", "yes", "1", "y")
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv("../.env-example")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", default="NORMALNO-SREM")
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "ABOBA")
+COUNT = 0
 
-DEBUG = true_load("DJANGO_DEBUG", False)
+DEBUG_ENV = os.getenv("DJANGO_DEBUG", default="false").lower()
+DEBUG = DEBUG_ENV in ("true", "yes", "1", "y", "t")
 
-ALLOWED_HOSTS = list(
-    map(str.strip, os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")),
+ALLOWED_HOSTS_STRING = os.environ.get("DJANGO_ALLOWED_HOSTS", "*")
+ALLOWED_HOSTS = list(map(str.strip, ALLOWED_HOSTS_STRING.split(",")))
+ALLOW_REVERSE = os.environ.get(
+    "DJANGO_ALLOW_REVERSE",
+    default="true",
+).lower() in (
+    "true",
+    "yes",
+    "1",
+    "y",
+    "t",
 )
-
-ALLOW_REVERSE = true_load("DJANGO_ALLOW_REVERSE", True)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -35,14 +34,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "about.apps.AboutConfig",
-    "catalog.apps.CatalogConfig",
-    "core.apps.CoreConfig",
     "homepage.apps.HomepageConfig",
-    "sorl.thumbnail",
+    "catalog.apps.CatalogConfig",
+    "about.apps.AboutConfig",
+    "core.apps.CoreConfig",
     "django_cleanup.apps.CleanupConfig",
+    "sorl.thumbnail",
     "tinymce",
 ]
+
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -51,17 +53,37 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    "lyceum.middleware.ReverseResponseMiddleware",
 ]
 
 if DEBUG:
-    INSTALLED_APPS.append("debug_toolbar")
-    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = ["127.0.0.1", "localhost"]
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+
+if ALLOW_REVERSE:
+    MIDDLEWARE.append("lyceum.middleware.ReverseRussianWordsMiddleware")
+
+INTERNAL_IPS = ["127.0.0.1"]
 
 ROOT_URLCONF = "lyceum.urls"
+
+LANGUAGE_CODE = "ru"
+
+USE_I18N = True
+
+LANGUAGES = [
+    ("ru", _("Russian")),
+    ("en", _("English")),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
+
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static_dev",
+]
 
 TEMPLATES = [
     {
@@ -81,7 +103,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "lyceum.wsgi.application"
 
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -89,51 +110,34 @@ DATABASES = {
     },
 }
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".UserAttributeSimilarityValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".MinimumLengthValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation.MinimumLengthValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".CommonPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation"
-        ".NumericPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        ),
     },
 ]
-
-
-LANGUAGE_CODE = os.getenv("DJANGO_LANGUAGE_CODE", "ru")
 
 TIME_ZONE = "UTC"
 
-USE_I18N = True
-
-USE_L10N = True
-
 USE_TZ = True
-
-LANGUAGES = [
-    ("ru", _("Russian")),
-    ("en", _("English")),
-]
-
-LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
-
-STATIC_URL = "static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static_dev",
-]
-
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

@@ -3,10 +3,11 @@ from http import HTTPStatus
 from django.test import Client, override_settings, TestCase
 from django.urls import reverse
 
-__all__ = ["StaticURLTests"]
+
+__all__ = ["StaticURLTest"]
 
 
-class StaticURLTests(TestCase):
+class StaticURLTest(TestCase):
     def test_homepage_endpoint(self):
         status_code = Client().get(reverse("homepage:main")).status_code
         self.assertEqual(status_code, HTTPStatus.OK)

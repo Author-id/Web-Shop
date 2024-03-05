@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block title %}
+{% trans "Главная" %}
+{% endblock title %}
+{% block content %}
+<div class="mx-auto" style="width: 150px;">
+  <h1 class="pb-2 mb-0">{% trans "Главная" %}</h1>
+</div>
+<div class="mt-5 mb-5" style="text-align: center;">
+  <img class="img-fluid rounded" src="{% static 'img/cat.jpg' %}" width="1000" height="400">
+</div>
+<div class="pt-5 my-5">
+  {% include "includes/item_card.html" %}
+</div>
+{% endblock %}

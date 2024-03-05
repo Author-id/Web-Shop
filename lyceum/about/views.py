@@ -1,9 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
 __all__ = ["description"]
 
 
-def description(request):
-    template = "about/description.html"
-    context = {}
-    return render(request, template, context)
+def description(request: HttpResponse) -> HttpResponse:
+    return render(request, "about/list.html", {})
