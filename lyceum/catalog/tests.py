@@ -20,82 +20,118 @@ __all__ = [
 
 class ContextTests(TestCase):
     @classmethod
-    def setUpClass(cls) -> None:
+    def setUpClass(cls):
         super().setUpClass()
-        cls.published_category = catalog.models.Category.objects.create(
+
+        cls.category_published = catalog.models.Category.objects.create(
             is_published=True,
-            name="Test category",
-            slug="publ_category",
-            weight=100,
+            name="Тестовая опубликованная категория",
+            slug="published-category",
         )
-        cls.unpublished_category = catalog.models.Category.objects.create(
-            is_published=False,
-            name="Test category unp",
-            slug="unpubl_category",
-            weight=100,
-        )
-        cls.published_tag = catalog.models.Tag.objects.create(
+        cls.category_published.full_clean()
+        cls.category_published.save()
+
+        cls.tag_published = catalog.models.Tag.objects.create(
             is_published=True,
-            name="Test publ tag",
-            slug="publ_tag",
+            name="Тестовый опубликованный тег",
+            slug="published-tag",
         )
-        cls.unpublished_tag = catalog.models.Tag.objects.create(
-            is_published=False,
-            name="Test unpubl tag",
-            slug="unpubl_tag",
-        )
-        cls.published_item = catalog.models.Item.objects.create(
+        cls.tag_published.full_clean()
+        cls.tag_published.save()
+
+        cls.item_published = catalog.models.Item.objects.create(
             is_published=True,
-            name="Test publ item",
-            category=cls.published_category,
-            text="роскошно",
-        )
-        cls.unpublished_item = catalog.models.Item.objects.create(
-            is_published=False,
-            name="Test unpubl item",
-            category=cls.unpublished_category,
+            name="Тестовый опубликованный предмет",
             text="превосходно",
+            category=cls.category_published,
+        )
+        cls.item_published.full_clean()
+        cls.item_published.save()
+
+        cls.item_on_main = catalog.models.Item.objects.create(
+            is_published=True,
+            is_on_main=True,
+            name="Тестовый предмет на главной странице",
+            text="превосходно",
+            category=cls.category_published,
+        )
+        cls.item_on_main.full_clean()
+        cls.item_on_main.save()
+
+        cls.item_unpublished = catalog.models.Item.objects.create(
+            is_published=False,
+            name="Тестовый неопубликованный предмет",
+            text="превосходно",
+            category=cls.category_published,
         )
 
-        cls.published_category.save()
-        cls.unpublished_category.save()
+        cls.item_unpublished.full_clean()
+        cls.item_unpublished.save()
 
-        cls.published_tag.save()
-        cls.unpublished_tag.save()
+        cls.item_published.tags.add(cls.tag_published)
+        cls.item_on_main.tags.add(cls.tag_published)
+        cls.item_published.tags.add(cls.tag_published)
 
-        cls.published_item.clean()
-        cls.published_item.save()
-
-        cls.unpublished_item.clean()
-        cls.unpublished_item.save()
-
-        cls.published_item.tags.add(cls.published_tag.pk)
-        cls.published_item.tags.add(cls.unpublished_tag.pk)
-
-    def test_homepage_context(self):
-        response = Client().get(
-            reverse("homepage:main"),
-        )
+    def test_home_page_correct_context(self):
+        response = self.client.get(reverse("homepage:main"))
         self.assertIn("items", response.context)
 
-    def test_homepage_items(self):
-        response = Client().get(
-            reverse("homepage:main"),
-        )
-        items = response.context["items"]
-        self.assertEqual(len(items), 1)
+    def test_item_list_page_correct_context(self):
+        response = self.client.get(reverse("catalog:main"))
+        self.assertIn("items", response.context)
 
-    def test_homepage_types(self):
-        response = Client().get(
-            reverse("homepage:main"),
-        )
-        self.assertIsInstance(response.context, list)
+    def test_home_count_item(self):
+        response = self.client.get(reverse("homepage:main"))
+        self.assertEqual(len(response.context["items"]), 1)
+
+    def test_item_list_count_item(self):
+        response = self.client.get(reverse("catalog:main"))
+        self.assertEqual(len(response.context["items"]), 2)
+
+    def test_item_type(self):
+        response = self.client.get(reverse("catalog:main"))
+        items = response.context["items"]
+        self.assertIsInstance(items.first(), catalog.models.Item)
 
     @parameterized.parameterized.expand(
-        ("is_published",),
+        (
+            "is_published",
+            "normalize_name",
+            "created",
+            "updated",
+        ),
     )
-    def test_prefetch(self, field_name):
+    def test_filds_item_main(self, field_name):
+        response = self.client.get(reverse("homepage:main"))
+        self.assertNotIn(
+            field_name,
+            response.context["items"].first().__dict__,
+            msg=f"find useless field '{field_name}' in main query",
+        )
+
+    @parameterized.parameterized.expand(
+        (
+            "is_published",
+            "normalize_name",
+            "created",
+            "updated",
+        ),
+    )
+    def test_filds_item_list(self, field_name):
         response = self.client.get(reverse("catalog:main"))
+        self.assertNotIn(
+            field_name,
+            response.context["items"].first().__dict__,
+            msg=f"find useless field '{field_name}' in main query",
+        )
+
+    def test_filds_tags_main(self):
+        correct_fields = [
+            "_state",
+            "id",
+            "name",
+        ]
+        response = self.client.get(reverse("homepage:main"))
         tag = (
             response.context["items"]
             .first()
@@ -104,8 +140,8 @@ class ContextTests(TestCase):
         )
         self.assertQuerySetEqual(
             tag.__dict__,
-            ["_state", "id", "name"],
-            msg="bruh",
+            correct_fields,
+            msg="not correct use field in main item.tags query",
         )
 
 
