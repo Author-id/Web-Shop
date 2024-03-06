@@ -20,35 +20,14 @@ def item_list(request: HttpResponse) -> HttpResponse:
 
 
 def item_detail(request: HttpResponse, pk: int) -> HttpResponse:
+    template = "catalog/catalog_pk.html"
     item = django.shortcuts.get_object_or_404(
         catalog.models.Item.objects.published()
-        .select_related("category", "main_image")
-        .prefetch_related(
-            django.db.models.Prefetch(
-                "tags",
-                queryset=catalog.models.Tag.objects.filter(
-                    is_published=True,
-                ).only(
-                    "name",
-                ),
-            ),
-            "images",
-        )
-        .only(
-            "name",
-            "category__name",
-            "text",
-            "main_image__image",
-            "tags__name",
-            "images__image",
-        ),
-        pk=pk,
     )
-    return django.shortcuts.render(
-        request,
-        "catalog/catalog_pk.html",
-        {"item": item},
-    )
+    context = {
+        "item": item,
+    }
+    return django.shortcuts.render(request, template, context)
 
 
 def extract_number(request: HttpResponse, number: int) -> HttpResponse:

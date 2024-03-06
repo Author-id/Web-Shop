@@ -39,15 +39,15 @@ class ItemManager(django.db.models.Manager):
         return (
             self.get_queryset()
             .filter(is_published=True)
-            .exclude(category__is_published=False)
+            .filter(category__is_published=True)
             .select_related("category")
             .select_related("main_image")
             .prefetch_related(
                 django.db.models.Prefetch(
                     "tags",
-                    queryset=Tag.objects.all()
-                    .filter(is_published=True)
-                    .only("name"),
+                    queryset=Tag.objects.filter(is_published=True).only(
+                        "name",
+                    ),
                 ),
             )
             .only(
