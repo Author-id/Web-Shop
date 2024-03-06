@@ -8,7 +8,7 @@ __all__ = ["home", "coffee"]
 
 def home(request: HttpResponse) -> HttpResponse:
     items = catalog.models.Item.objects.on_main()
-    return render(request, "homepage/home.html", {"items": items})
+    return render(request, "homepage/index.html", {"items": items})
 
 
 def coffee(request: HttpResponse) -> HttpResponse:

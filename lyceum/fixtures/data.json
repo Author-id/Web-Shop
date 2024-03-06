@@ -1,1 +1,233 @@
-[{"model": "catalog.tag", "pk": 1, "fields": {"name": "Процессор", "is_published": true, "slug": "processor"}}, {"model": "catalog.tag", "pk": 2, "fields": {"name": "Видеокарта", "is_published": false, "slug": "GPU"}}, {"model": "catalog.tag", "pk": 3, "fields": {"name": "Монитор", "is_published": true, "slug": "monitor"}}, {"model": "catalog.tag", "pk": 4, "fields": {"name": "Мышь", "is_published": true, "slug": "mouse"}}, {"model": "catalog.tag", "pk": 5, "fields": {"name": "Телефон", "is_published": false, "slug": "phone"}}, {"model": "catalog.item", "pk": 1, "fields": {"name": "Процессор", "is_published": false, "is_on_main": false, "text": "<p>Роскошно</p>", "category": 1, "tags": [1]}}, {"model": "catalog.item", "pk": 2, "fields": {"name": "Видеокарта", "is_published": true, "is_on_main": true, "text": "<p>Превосходно a a a a a a a a a a a a a a a a a a a a a a a a a a</p>", "category": 1, "tags": [2]}}, {"model": "catalog.item", "pk": 3, "fields": {"name": "Монитор", "is_published": true, "is_on_main": true, "text": "<p>Превосходно</p>", "category": 2, "tags": [3]}}, {"model": "catalog.item", "pk": 4, "fields": {"name": "Клавиатура", "is_published": false, "is_on_main": true, "text": "<p>Превосходно</p>", "category": 2, "tags": [4]}}, {"model": "catalog.item", "pk": 5, "fields": {"name": "Телефон", "is_published": true, "is_on_main": true, "text": "<p>Превосходно</p>", "category": 3, "tags": [5]}}, {"model": "catalog.mainimage", "pk": 1, "fields": {"image": "catalog/items/PROCESOR-XEON-QC-E5507-2-26GHZ-LGA1366-SLBKC-GW-FV.jpg", "item": 1}}, {"model": "catalog.mainimage", "pk": 2, "fields": {"image": "catalog/items/59047142e2fe8305fc9c28495ce48062.jpg", "item": 2}}, {"model": "catalog.mainimage", "pk": 3, "fields": {"image": "catalog/items/87190-large_default.jpg", "item": 3}}, {"model": "catalog.mainimage", "pk": 4, "fields": {"image": "catalog/items/1014329654.jpg", "item": 4}}, {"model": "catalog.mainimage", "pk": 5, "fields": {"image": "catalog/items/222222.jpg", "item": 5}}, {"model": "catalog.category", "pk": 1, "fields": {"name": "Комплектующие", "is_published": true, "slug": "components", "weight": 10}}, {"model": "catalog.category", "pk": 2, "fields": {"name": "Периферия", "is_published": false, "slug": "enviroment", "weight": 100}}, {"model": "catalog.category", "pk": 3, "fields": {"name": "Смартфон", "is_published": true, "slug": "phone", "weight": 100}}]
+[
+{
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+        "name": "кофта",
+        "is_published": true,
+        "slug": "b1"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+        "name": "кроссовки",
+        "is_published": true,
+        "slug": "b2"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+        "name": "носки",
+        "is_published": true,
+        "slug": "b3"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+        "name": "шорты",
+        "is_published": true,
+        "slug": "b4"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+        "name": "рюкзак",
+        "is_published": true,
+        "slug": "b5"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "Одежда",
+        "is_published": true,
+        "slug": "a1",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": "Обувь",
+        "is_published": true,
+        "slug": "a2",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+        "name": "зип-худи",
+        "is_published": true,
+        "is_on_main": true,
+        "text": "<p>превосходно&nbsp;</p>",
+        "category": 1,
+        "tags": [
+            1
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+        "name": "носки Nike",
+        "is_published": true,
+        "is_on_main": true,
+        "text": "<p>роскошно</p>",
+        "category": 1,
+        "tags": [
+            3
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+        "name": "кеды Nike",
+        "is_published": true,
+        "is_on_main": true,
+        "text": "<p>превосходно</p>",
+        "category": 2,
+        "tags": [
+            2
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+        "name": "футболка vlone",
+        "is_published": true,
+        "is_on_main": true,
+        "text": "<p>превосходно</p>",
+        "category": 1,
+        "tags": [
+            1
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+        "name": "куртка Nike",
+        "is_published": true,
+        "is_on_main": true,
+        "text": "<p>роскошно</p>",
+        "category": 1,
+        "tags": [
+            1
+        ]
+    }
+},
+{
+    "model": "catalog.images",
+    "pk": 1,
+    "fields": {
+        "image": "catalog/items/худак.webp",
+        "item": 1
+    }
+},
+{
+    "model": "catalog.images",
+    "pk": 2,
+    "fields": {
+        "image": "catalog/items/i_3.webp",
+        "item": 1
+    }
+},
+{
+    "model": "catalog.images",
+    "pk": 3,
+    "fields": {
+        "image": "catalog/items/начи2.webp",
+        "item": 2
+    }
+},
+{
+    "model": "catalog.images",
+    "pk": 4,
+    "fields": {
+        "image": "catalog/items/данки2.webp",
+        "item": 3
+    }
+},
+{
+    "model": "catalog.images",
+    "pk": 5,
+    "fields": {
+        "image": "catalog/items/данки.webp",
+        "item": 3
+    }
+},
+{
+    "model": "catalog.images",
+    "pk": 6,
+    "fields": {
+        "image": "catalog/items/вилон2.webp",
+        "item": 4
+    }
+},
+{
+    "model": "catalog.images",
+    "pk": 7,
+    "fields": {
+        "image": "catalog/items/куртка2.webp",
+        "item": 5
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 1,
+    "fields": {
+        "image": "catalog/items/i_2.webp",
+        "item": 1
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 2,
+    "fields": {
+        "image": "catalog/items/начи.webp",
+        "item": 2
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 3,
+    "fields": {
+        "image": "catalog/items/данки111.webp",
+        "item": 3
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 4,
+    "fields": {
+        "image": "catalog/items/вилон_главная.webp",
+        "item": 4
+    }
+},
+{
+    "model": "catalog.mainimage",
+    "pk": 5,
+    "fields": {
+        "image": "catalog/items/куртка_главная.webp",
+        "item": 5
+    }
+}
+]

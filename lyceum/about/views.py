@@ -5,4 +5,4 @@ __all__ = ["description"]
 
 
 def description(request: HttpResponse) -> HttpResponse:
-    return render(request, "about/list.html", {})
+    return render(request, "about/description.html", {})

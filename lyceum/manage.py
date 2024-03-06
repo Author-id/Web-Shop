@@ -1,11 +1,13 @@
 #!/usr/bin/env python
+
 import os
 import sys
 
 __all__ = ["main"]
 
 
-def main() -> None:
+def main():
+    """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lyceum.settings")
     try:
         from django.core.management import execute_from_command_line

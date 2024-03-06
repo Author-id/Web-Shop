@@ -47,7 +47,7 @@ def item_detail(request: HttpResponse, pk: int) -> HttpResponse:
     )
     return django.shortcuts.render(
         request,
-        "catalog/catalog_pk.html",
+        "catalog/item_detail.html",
         {"item": item},
     )
 
