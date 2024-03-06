@@ -1,13 +1,28 @@
 from pathlib import Path
+import re
+import uuid
 
+from django.core.exceptions import ValidationError
 import django.db
 from django.utils.safestring import mark_safe
+from slugify import slugify
 import sorl
 
-__all__ = ["AbstractModel", "BaseImage", "SlugFieldModel"]
+__all__ = []
+
+
+def normalize_str(value):
+    words = re.findall("[0-9а-яёa-z]+", value.lower())
+    return slugify("".join(words))
+
+
+def get_path_image(instance, filename):
+    ext = filename.split(".")[-1]
+    return f"catalog/{uuid.uuid4()}.{ext}"
 
 
 class AbstractModel(django.db.models.Model):
+    objects = django.db.models.Manager()
     name = django.db.models.CharField(
         "название",
         max_length=150,
@@ -19,32 +34,37 @@ class AbstractModel(django.db.models.Model):
         default=True,
         help_text="поставьте галочку если он опубликован",
     )
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return self.name
-
-
-class SlugFieldModel(django.db.models.Model):
-    slug = django.db.models.SlugField(
-        "слаг",
-        max_length=200,
-        unique=True,
-        help_text="Какая-то дичь",
+    normalize_name = django.db.models.CharField(
+        "нормализованное название",
+        max_length=150,
+        editable=False,
+        help_text="этот field не редактируется и нормализует field(name)",
     )
 
     class Meta:
+        verbose_name = "абстрактная модель"
+        verbose_name_plural = "абстрактная модели"
         abstract = True
 
-    def __str__(self):
+    def clean(self):
+        normalize_name = normalize_str(self.name)
+        found = self.__class__.objects.filter(
+            ~django.db.models.Q(id=self.id),
+            normalize_name=normalize_name,
+        )
+        if found:
+            raise ValidationError(
+                {self.__class__.name.field.name: "есть похожое название"},
+            )
+        self.normalize_name = normalize_name
+
+    def __str__(self) -> str:
         return self.name
 
 
 class BaseImage(django.db.models.Model):
     image = sorl.thumbnail.ImageField(
-        upload_to="catalog/items/",
+        upload_to=get_path_image,
         verbose_name="изображение",
     )
 
@@ -52,6 +72,22 @@ class BaseImage(django.db.models.Model):
         return sorl.thumbnail.get_thumbnail(
             self.image,
             "300x300",
+            crop="center",
+            quality=51,
+        )
+
+    def get_image_413x413(self):
+        return sorl.thumbnail.get_thumbnail(
+            self.image,
+            "413x413",
+            crop="center",
+            quality=51,
+        )
+
+    def get_image_108x108(self):
+        return sorl.thumbnail.get_thumbnail(
+            self.image,
+            "108x108",
             crop="center",
             quality=51,
         )

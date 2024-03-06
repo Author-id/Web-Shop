@@ -1,33 +1,49 @@
 {% load static %}
 {% load i18n %}
-{% load thumbnail %}
-<div class="row">
-  {% for item in items %}
-  <div class="col-6 col-md-2 my-1">
-    <div class="card" style="width: 18rem;">
-      <img
-        class="img-fluid card-img-top"
-        width="100"
-        {% thumbnail item.main_image "300x300" crop="center" as im %}
-        src="{{ im.url }}"
-        {% endthumbnail %}
-        alt={% trans item.name %}
-      >
-      <div class="card-body d-flex flex-column">
-        <h5 class="card-title">{% trans item.name %}</h5>
-        <p class="card-text">
-          {% trans item.text|truncatewords_html:10|safe %}
-        </p>
-        <p class="card-category">
-          Категория: {% trans item.category.name|safe %}
-        </p>
-        <p class="card-tag">
-          {% for tag in item.tags.all %}
-          <p>Теги: {{ tag.name }}</p>
-          {% endfor %}
-        </p>
-      </div>
+<div class="col-6 col-md-4 my-1 d-flex align-items-stretch">
+  <div class="card">
+    <img
+      class="img-fluid card-img-top"
+      {% if item.main_image %}
+            src="{{ item.main_image.get_image_413x413.url }}"
+      {% else %}
+        src="{% static 'img/image-holder.png' %}"
+      {% endif %}
+      alt={% trans "сочная клубника" %} 
+    >
+    <div class="card-body d-flex flex-column">
+      <h5 class="card-title">{{ item.name }}</h5>
+      <span class="border mb-3 rounded">
+        <div class="card-header">
+                {% trans "Категория" %}
+        </div>
+        <ul class="list-group list-group-flush rounded">
+            <li class="list-group-item">{{ item.category.name }}</li>
+        </ul>
+      </span>
+      <span class="border mb-3 rounded">
+        <div class="card-header">
+                {% trans "Описание" %}
+        </div>
+        <ul class="list-group list-group-flush rounded">
+            <li class="list-group-item">{{ item.text|safe|truncatewords_html:10 }}</li>
+        </ul>
+      </span>
+      <span class="border mb-3 rounded">
+        <div class="card-header">
+                {% trans "Теги" %}
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for tag in item.tags.all %}
+                {% if forloop.last %}
+                  <li class="list-group-item rounded-bottom">{{ tag.name }}</li>
+                {% else %}
+                  <li class="list-group-item">{{ tag.name }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+      </span>
+      <a href={% url 'catalog:item_detail' pk=item.id %} class="mt-auto btn btn-md btn-block btn-primary">{% trans "Подробнее" %}</a>
     </div>
   </div>
-  {% endfor %}
 </div>

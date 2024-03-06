@@ -7,6 +7,24 @@
 {% endblock %}
 
 {% block content %}
+  <nav>
+    {% with request.resolver_match.view_name as view_name %}
+    <ul class="pagination pagination-lg">
+      <li class="page-item {% if view_name == 'catalog:main' %}active{% endif %}">
+        <a class="page-link" href="{% url 'catalog:main' %}" tabindex="-1">{% trans "Список товаров" %}</a>
+      </li>
+      <li class="page-item {% if view_name == 'catalog:new' %}active{% endif %}">
+        <a class="page-link" href="{% url 'catalog:new' %}">{% trans "Новинки" %}</a>
+      </li>
+      <li class="page-item {% if view_name == 'catalog:friday' %}active{% endif %}">
+        <a class="page-link" href="{% url 'catalog:friday' %}">{% trans "Пятница" %}</a>
+      </li>
+      <li class="page-item {% if view_name == 'catalog:unverified' %}active{% endif %}">
+        <a class="page-link" href="{% url 'catalog:unverified' %}">{% trans "Непроверенное" %}</a>
+      </li>
+    </ul>
+    {% endwith %}
+  </nav>
   <h1 class="pb-2 mb-3">{{ chapter }}</h1>
     {% for item in items %}
         {% ifchanged item.category.name %}

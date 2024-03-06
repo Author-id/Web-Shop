@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 
-__all__ = ["true_load"]
+__all__ = []
 
 load_dotenv()
 
@@ -16,7 +16,6 @@ def true_load(value: str, defoult: bool) -> bool:
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "ABOBA")
 
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     "about.apps.AboutConfig",
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
+    "download.apps.DownloadConfig",
     "homepage.apps.HomepageConfig",
     "sorl.thumbnail",
     "django_cleanup.apps.CleanupConfig",
@@ -76,14 +76,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "lyceum.wsgi.application"
 
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     },
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -106,12 +104,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
-    INTERNAL_IPS = ["127.0.0.1", "localhost"]
-
+    INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS", "127.0.0.1").split(",")
 
 LANGUAGE_CODE = os.getenv("DJANGO_LANGUAGE_CODE", "ru")
 
@@ -128,7 +124,7 @@ LANGUAGES = [
     ("en", _("English")),
 ]
 
-LOCALE_PATHS = (os.path.join(BASE_DIR, "locale"),)
+LOCALE_PATHS = (BASE_DIR / "locale",)
 
 STATIC_URL = "static/"
 

@@ -1,8 +1,7 @@
+from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-
-from lyceum import settings
 
 
 urlpatterns = [
@@ -27,8 +26,17 @@ urlpatterns = [
         name="admin",
     ),
     path(
+        "download/",
+        include(("download.urls")),
+        name="download",
+    ),
+    path(
         "tinymce/",
         include("tinymce.urls"),
+    ),
+    path(
+        "i18n/",
+        include("django.conf.urls.i18n"),
     ),
 ]
 

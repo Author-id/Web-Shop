@@ -1,4 +1,5 @@
 from http import HTTPStatus
+import itertools
 
 from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
@@ -7,209 +8,25 @@ import parameterized
 
 import catalog.models
 
-__all__ = [
-    "StaticURLTest",
-    "RegexEndpointTest",
-    "ConverterEndpointTest",
-    "DBItemTests",
-    "DBTagTests",
-    "CategoryTests",
-    "ContextTests",
-]
+__all__ = []
 
 
-class ContextTests(TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        cls.published_category = catalog.models.Category.objects.create(
-            is_published=True,
-            name="Test category",
-            slug="publ_category",
-            weight=100,
-        )
-        cls.unpublished_category = catalog.models.Category.objects.create(
-            is_published=False,
-            name="Test category unp",
-            slug="unpubl_category",
-            weight=100,
-        )
-        cls.published_tag = catalog.models.Tag.objects.create(
-            is_published=True,
-            name="Test publ tag",
-            slug="publ_tag",
-        )
-        cls.unpublished_tag = catalog.models.Tag.objects.create(
-            is_published=False,
-            name="Test unpubl tag",
-            slug="unpubl_tag",
-        )
-        cls.published_item = catalog.models.Item.objects.create(
-            is_published=True,
-            name="Test publ item",
-            category=cls.published_category,
-            text="роскошно",
-        )
-        cls.unpublished_item = catalog.models.Item.objects.create(
-            is_published=False,
-            name="Test unpubl item",
-            category=cls.unpublished_category,
-            text="превосходно",
-        )
-        cls.item_on_main = catalog.models.Item.objects.create(
-            is_published=True,
-            is_on_main=True,
-            name="Test main item",
-            text="превосходно",
-            category=cls.published_category,
-        )
-        cls.item_on_main.full_clean()
-        cls.item_on_main.save()
-
-        cls.published_category.save()
-        cls.unpublished_category.save()
-
-        cls.published_tag.save()
-        cls.unpublished_tag.save()
-
-        cls.published_item.clean()
-        cls.published_item.save()
-
-        cls.unpublished_item.clean()
-        cls.unpublished_item.save()
-
-        cls.published_item.tags.add(cls.published_tag)
-        cls.item_on_main.tags.add(cls.published_tag)
-        cls.published_item.tags.add(cls.published_tag)
-
-    def test_home_page_correct_context(self):
-        response = self.client.get(reverse("homepage:main"))
-        self.assertIn("items", response.context)
-
-    def test_item_list_page_correct_context(self):
-        response = self.client.get(reverse("catalog:main"))
-        self.assertIn("items", response.context)
-
-    def test_home_count_item(self):
-        response = self.client.get(reverse("homepage:main"))
-        self.assertEqual(len(response.context["items"]), 1)
-
-    def test_item_list_count_item(self):
-        response = self.client.get(reverse("catalog:main"))
-        self.assertEqual(len(response.context["items"]), 2)
-
-    def test_item_type(self):
-        response = self.client.get(reverse("catalog:main"))
-        items = response.context["items"]
-        self.assertIsInstance(items.first(), catalog.models.Item)
-
-    @parameterized.parameterized.expand(
-        (
-            "is_published",
-            "normalize_name",
-            "created",
-            "updated",
-        ),
-    )
-    def test_fields_item_main(self, field_name):
-        response = self.client.get(reverse("homepage:main"))
-        self.assertNotIn(
-            field_name,
-            response.context["items"].first().__dict__,
-            msg=f"find useless field '{field_name}' in main query",
-        )
-
-    @parameterized.parameterized.expand(
-        (
-            "is_published",
-            "normalize_name",
-            "created",
-            "updated",
-        ),
-    )
-    def test_fields_item_list(self, field_name):
-        response = self.client.get(reverse("catalog:main"))
-        self.assertNotIn(
-            field_name,
-            response.context["items"].first().__dict__,
-            msg=f"find useless field '{field_name}' in main query",
-        )
-
-    def test_fields_tags_main(self):
-        correct_fields = [
-            "_state",
-            "id",
-            "name",
-        ]
-        response = self.client.get(reverse("homepage:main"))
-        tag = (
-            response.context["items"]
-            .first()
-            ._prefetched_objects_cache["tags"]
-            .first()
-        )
-        self.assertQuerySetEqual(
-            tag.__dict__,
-            correct_fields,
-            msg="not correct use field in main item.tags query",
-        )
-
-
-class StaticURLTest(TestCase):
+class StaticURLTests(TestCase):
     def test_catalog_items_endpoint(self):
         status_code = Client().get(reverse("catalog:main")).status_code
         self.assertEqual(status_code, HTTPStatus.OK)
 
-    @parameterized.parameterized.expand(
-        [
-            ("/catalog/10/", 404),
-            ("/catalog/1.5/", 404),
-            ("/catalog/-1/", 404),
-            ("/catalog/0/", 404),
-            ("/catalog/-0/", 404),
-            ("/catalog/10/", 404),
-        ],
-    )
-    def test_catalog_item_endpoint(self, endpoint, error_code):
-        response = Client().get(endpoint)
-        self.assertEqual(response.status_code, error_code)
+    def test_catalog_friday_endpoint(self):
+        status_code = Client().get(reverse("catalog:friday")).status_code
+        self.assertEqual(status_code, HTTPStatus.OK)
 
+    def test_catalog_new_endpoint(self):
+        status_code = Client().get(reverse("catalog:new")).status_code
+        self.assertEqual(status_code, HTTPStatus.OK)
 
-class RegexEndpointTest(TestCase):
-
-    @parameterized.parameterized.expand(
-        [
-            ("/catalog/re/invalid/", None, 404),
-            ("/catalog/re/121/", "121", 200),
-            ("/catalog/re/asd/", None, 404),
-            ("/catalog/re/-12/", None, 404),
-            ("/catalog/re/0/", None, 404),
-            ("/catalog/re/-0/", None, 404),
-        ],
-    )
-    def test_regex_endpoint(self, endpoint, message, error_code):
-        response = self.client.get(endpoint)
-        self.assertEqual(response.status_code, error_code)
-        if message:
-            self.assertEqual(response.content.decode(), message)
-
-
-class ConverterEndpointTest(TestCase):
-    @parameterized.parameterized.expand(
-        [
-            ("/catalog/converter/invalid/", None, 404),
-            ("/catalog/converter/121/", "121", 200),
-            ("/catalog/converter/asd/", None, 404),
-            ("/catalog/converter/-12/", None, 404),
-            ("/catalog/converter/0/", None, 404),
-            ("/catalog/converter/-0/", None, 404),
-        ],
-    )
-    def test_converter_endpoint(self, endpoint, message, error_code):
-        response = self.client.get(endpoint)
-        self.assertEqual(response.status_code, error_code)
-        if message:
-            self.assertEqual(response.content.decode(), message)
+    def test_catalog_unverified_endpoint(self):
+        status_code = Client().get(reverse("catalog:unverified")).status_code
+        self.assertEqual(status_code, HTTPStatus.OK)
 
 
 class DBItemTests(TestCase):
@@ -219,11 +36,9 @@ class DBItemTests(TestCase):
 
         cls.category = catalog.models.Category.objects.create(
             name="Test",
-            slug="Test",
         )
         cls.tag = catalog.models.Tag.objects.create(
             name="Test",
-            slug="Test",
         )
 
     @parameterized.parameterized.expand(
@@ -262,18 +77,16 @@ class DBItemTests(TestCase):
             self.assertEqual(
                 catalog.models.Item.objects.count(),
                 item_count,
-                msg="Validation error",
+                msg="add no validate item",
             )
         else:
             self.item.full_clean()
             self.item.save()
             self.item.tags.add(self.tag)
-            self.item.full_clean()
-            self.item.save()
             self.assertEqual(
                 catalog.models.Item.objects.count(),
                 item_count + 1,
-                msg="Validation error",
+                msg="no add validate item",
             )
 
 
@@ -298,32 +111,32 @@ class DBTagTests(TestCase):
             ("test", "abs" * 67, False),
         ],
     )
-    def test_add_item(self, name, slug, is_validate):
-        item_count = catalog.models.Tag.objects.count()
-        self.item = catalog.models.Tag(
+    def test_add_tag(self, name, slug, is_validate):
+        tag_count = catalog.models.Tag.objects.count()
+        self.tag = catalog.models.Tag(
             name=name,
             slug=slug,
         )
         if not is_validate:
             with self.assertRaises(ValidationError):
-                self.item.full_clean()
-                self.item.save()
+                self.tag.full_clean()
+                self.tag.save()
             self.assertEqual(
                 catalog.models.Item.objects.count(),
-                item_count,
+                tag_count,
                 msg="add no validate item",
             )
         else:
-            self.item.full_clean()
-            self.item.save()
+            self.tag.full_clean()
+            self.tag.save()
             self.assertEqual(
                 catalog.models.Tag.objects.count(),
-                item_count + 1,
+                tag_count + 1,
                 msg="no add validate item",
             )
 
 
-class CategoryTests(TestCase):
+class DBCategoryTests(TestCase):
     @parameterized.parameterized.expand(
         [
             ("test", "abs", 1, True),
@@ -348,27 +161,223 @@ class CategoryTests(TestCase):
             ("test", "abs", -1, False),
         ],
     )
-    def test_add_item(self, name, slug, weight, is_validate):
-        item_count = catalog.models.Category.objects.count()
-        self.item = catalog.models.Category(
+    def test_add_category(
+        self,
+        name,
+        slug,
+        weight,
+        is_validate,
+    ):
+        category_count = catalog.models.Category.objects.count()
+        self.category = catalog.models.Category(
             name=name,
             slug=slug,
             weight=weight,
         )
         if not is_validate:
             with self.assertRaises(ValidationError):
-                self.item.full_clean()
-                self.item.save()
+                self.category.full_clean()
+                self.category.save()
             self.assertEqual(
                 catalog.models.Item.objects.count(),
-                item_count,
-                msg="validation error",
+                category_count,
+                msg="add no validate item",
             )
         else:
-            self.item.full_clean()
-            self.item.save()
+            self.category.full_clean()
+            self.category.save()
             self.assertEqual(
                 catalog.models.Category.objects.count(),
-                item_count + 1,
-                msg="validation error",
+                category_count + 1,
+                msg="no add validate item",
             )
+
+
+class DBNormalizeNameTests(TestCase):
+    @parameterized.parameterized.expand(
+        (
+            (test_value[0], *test_value[1])
+            for test_value in itertools.product(
+                [
+                    ("test"),
+                    ("Тest"),
+                    ("tЕst"),
+                ],
+                [
+                    ("test test", True),
+                    ("itfaketest", True),
+                    ("test, test", True),
+                    ("test!test", True),
+                    ("testt", True),
+                    ("test!", False),
+                    ("!test", False),
+                    ("!test!", False),
+                    (" test ", False),
+                    ("test,", False),
+                    (".test", False),
+                    ("te st", False),
+                    ("te sТ", False),
+                    ("tеst", False),
+                ],
+            )
+        ),
+    )
+    def test_add_tag(self, name1, name2, is_validate):
+        tag_count = catalog.models.Category.objects.count()
+        self.tag1 = catalog.models.Tag(
+            name=name1,
+        )
+        self.tag2 = catalog.models.Tag(
+            name=name2,
+        )
+        if not is_validate:
+            with self.assertRaises(
+                ValidationError,
+                msg=f"add {name2} but we have {name1}",
+            ):
+                self.tag1.full_clean()
+                self.tag1.save()
+                self.tag2.full_clean()
+                self.tag2.save()
+            self.assertEqual(
+                catalog.models.Tag.objects.count(),
+                tag_count + 1,
+                msg="add no validate item",
+            )
+        else:
+            self.tag1.full_clean()
+            self.tag1.save()
+            self.tag2.full_clean()
+            self.tag2.save()
+            self.assertEqual(
+                catalog.models.Tag.objects.count(),
+                tag_count + 2,
+                msg="no add validate item",
+            )
+
+
+class CatalogContentTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        cls.category_published = catalog.models.Category.objects.create(
+            is_published=True,
+            name="Тестовая опубликованная категория",
+            slug="published-category",
+        )
+        cls.category_published.full_clean()
+        cls.category_published.save()
+
+        cls.tag_published = catalog.models.Tag.objects.create(
+            is_published=True,
+            name="Тестовый опубликованный тег",
+            slug="published-tag",
+        )
+        cls.tag_published.full_clean()
+        cls.tag_published.save()
+
+        cls.item_published = catalog.models.Item.objects.create(
+            is_published=True,
+            name="Тестовый опубликованный предмет",
+            text="превосходно",
+            category=cls.category_published,
+        )
+        cls.item_published.full_clean()
+        cls.item_published.save()
+
+        cls.item_on_main = catalog.models.Item.objects.create(
+            is_published=True,
+            is_on_main=True,
+            name="Тестовый предмет на главной странице",
+            text="превосходно",
+            category=cls.category_published,
+        )
+        cls.item_on_main.full_clean()
+        cls.item_on_main.save()
+
+        cls.item_unpublished = catalog.models.Item.objects.create(
+            is_published=False,
+            name="Тестовый неопубликованный предмет",
+            text="превосходно",
+            category=cls.category_published,
+        )
+
+        cls.item_unpublished.full_clean()
+        cls.item_unpublished.save()
+
+        cls.item_published.tags.add(cls.tag_published)
+        cls.item_on_main.tags.add(cls.tag_published)
+        cls.item_published.tags.add(cls.tag_published)
+
+    def test_home_page_correct_context(self):
+        response = self.client.get(reverse("homepage:main"))
+        self.assertIn("items", response.context)
+
+    def test_item_list_page_correct_context(self):
+        response = self.client.get(reverse("catalog:main"))
+        self.assertIn("items", response.context)
+
+    def test_home_count_item(self):
+        response = self.client.get(reverse("homepage:main"))
+        self.assertEqual(len(response.context["items"]), 1)
+
+    def test_item_list_count_item(self):
+        response = self.client.get(reverse("catalog:main"))
+        self.assertEqual(len(response.context["items"]), 2)
+
+    def test_item_type(self):
+        response = self.client.get(reverse("catalog:main"))
+        items = response.context["items"]
+        self.assertIsInstance(items.first(), catalog.models.Item)
+
+    @parameterized.parameterized.expand(
+        (
+            "is_published",
+            "normalize_name",
+            "created",
+            "updated",
+        ),
+    )
+    def test_filds_item_main(self, field_name):
+        response = self.client.get(reverse("homepage:main"))
+        self.assertNotIn(
+            field_name,
+            response.context["items"].first().__dict__,
+            msg=f"find useless field '{field_name}' in main query",
+        )
+
+    @parameterized.parameterized.expand(
+        (
+            "is_published",
+            "normalize_name",
+            "created",
+            "updated",
+        ),
+    )
+    def test_filds_item_list(self, field_name):
+        response = self.client.get(reverse("catalog:main"))
+        self.assertNotIn(
+            field_name,
+            response.context["items"].first().__dict__,
+            msg=f"find useless field '{field_name}' in main query",
+        )
+
+    def test_filds_tags_main(self):
+        correct_fields = [
+            "_state",
+            "id",
+            "name",
+        ]
+        response = self.client.get(reverse("homepage:main"))
+        tag = (
+            response.context["items"]
+            .first()
+            ._prefetched_objects_cache["tags"]
+            .first()
+        )
+        self.assertQuerySetEqual(
+            tag.__dict__,
+            correct_fields,
+            msg="not correct use field in main item.tags query",
+        )

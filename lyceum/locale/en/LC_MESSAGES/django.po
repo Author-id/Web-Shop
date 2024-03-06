@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-26 20:22+0300\n"
+"POT-Creation-Date: 2024-03-05 16:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lyceum/settings.py:127
+#: catalog/views.py:20 templates/catalog/item_list.html:14
+#: templates/includes/header.html:24
+msgid "Список товаров"
+msgstr "List of products"
+
+#: catalog/views.py:47 templates/catalog/item_list.html:17
+msgid "Новинки"
+msgstr "New"
+
+#: catalog/views.py:63 templates/catalog/item_list.html:20
+msgid "Пятница"
+msgstr "Friday"
+
+#: catalog/views.py:79 templates/catalog/item_list.html:23
+msgid "Непроверенное"
+msgstr "Unverified"
+
+#: lyceum/settings.py:123
 msgid "Russian"
 msgstr ""
 
-#: lyceum/settings.py:128
+#: lyceum/settings.py:124
 msgid "English"
 msgstr ""
 
@@ -41,45 +58,17 @@ msgstr "A very compelling description that will keep you coming back"
 msgid "О товаре"
 msgstr "List of products"
 
-#: templates/catalog/item_detail.html:10 templates/catalog/item_list.html:21
-msgid "Клубника"
-msgstr "Strawberry"
-
-#: templates/catalog/item_detail.html:13
+#: templates/catalog/item_detail.html:18 templates/includes/item_card.html:26
 msgid "Описание"
 msgstr "Description"
-
-#: templates/catalog/item_detail.html:14 templates/catalog/item_list.html:23
-msgid "Будет роскошно смотреться на любом столе, это мы гарантируем!"
-msgstr "It will look luxurious on any table, we guarantee it!"
-
-#: templates/catalog/item_detail.html:21 templates/catalog/item_list.html:18
-msgid "сочная клубника"
-msgstr "juicy strawberry"
 
 #: templates/catalog/item_list.html:6
 msgid "Каталог товаров"
 msgstr "Catalog"
 
-#: templates/catalog/item_list.html:10 templates/includes/header.html:24
-msgid "Список товаров"
-msgstr "List of products"
-
-#: templates/catalog/item_list.html:26 templates/catalog/item_list.html:45
-msgid "Подробнее"
-msgstr "More details"
-
-#: templates/catalog/item_list.html:37
-msgid "не очень вкусные шампиньоны"
-msgstr "not very tasty champignons"
-
-#: templates/catalog/item_list.html:40
-msgid "Шампиньоны"
-msgstr "Champignon"
-
-#: templates/catalog/item_list.html:42
-msgid "Может быть даже вкусные!"
-msgstr "Maybe even delicious!"
+#: templates/catalog/item_list.html:44 templates/homepage/index.html:18
+msgid "Пусто"
+msgstr "Empty"
 
 #: templates/homepage/index.html:6 templates/includes/header.html:14
 msgid "Главная"
@@ -89,18 +78,52 @@ msgstr "Home"
 msgid "Главная страница!"
 msgstr "Home page!"
 
-#: templates/homepage/index.html:12
-msgid "красивый кот"
-msgstr "beautiful cat"
-
 #: templates/includes/header.html:8
 msgid "Супер-бренд"
 msgstr "Super-brand"
+
+#: templates/includes/header.html:31
+msgid "Админка"
+msgstr ""
+
+#: templates/includes/item_card.html:12
+msgid "сочная клубника"
+msgstr "juicy strawberry"
+
+#: templates/includes/item_card.html:18
+msgid "Категория"
+msgstr "Category"
+
+#: templates/includes/item_card.html:34
+msgid "Теги"
+msgstr "Tags"
+
+#: templates/includes/item_card.html:42
+msgid "Подробнее"
+msgstr "More details"
 
 #, fuzzy
 #~| msgid "Каталог товаров"
 #~ msgid "Каталог"
 #~ msgstr "Catalog"
+
+#~ msgid "Клубника"
+#~ msgstr "Strawberry"
+
+#~ msgid "Будет роскошно смотреться на любом столе, это мы гарантируем!"
+#~ msgstr "It will look luxurious on any table, we guarantee it!"
+
+#~ msgid "Шампиньоны"
+#~ msgstr "Champignon"
+
+#~ msgid "Может быть даже вкусные!"
+#~ msgstr "Maybe even delicious!"
+
+#~ msgid "не очень вкусные шампиньоны"
+#~ msgstr "not very tasty champignons"
+
+#~ msgid "красивый кот"
+#~ msgstr "beautiful cat"
 
 #~ msgid "Корень"
 #~ msgstr "Core"

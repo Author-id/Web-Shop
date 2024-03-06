@@ -10,20 +10,29 @@
       {% with request.resolver_match.view_name as view_name %}
         <ul class="nav  nav-pills">
           <li class="nav-item">
-            <a class="nav-link {% if view_name == 'homepage:main' %} active {% endif %}" href="{% url 'homepage:main' %}">
+            <a class="nav-link {% if view_name == 'homepage:main' %}active{% endif %}" href="{% url 'homepage:main' %}">
               {% trans "Главная" %}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if view_name == 'about:main' %} active {% endif %}" href="{% url 'about:main' %}">
+            <a class="nav-link {% if view_name == 'about:main' %}active{% endif %}" href="{% url 'about:main' %}">
               {% trans "О проекте" %}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {% if view_name == 'catalog:main' %} active {% endif %}" href="{% url 'catalog:main' %}">
+            <a class="nav-link {% if view_name in 'catalog:maincatalog:newcatalog:fridaycatalog:unverified' %}active{% endif %}" href="{% url 'catalog:main' %}">
               {% trans "Список товаров" %}
             </a>
           </li>
+          {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">
+                  {% trans "Админка" %}
+                </a>
+              </li>
+            {% endif %}
+          {% endif %}
         </ul>
       {% endwith %}
     </div>

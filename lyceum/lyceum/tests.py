@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from lyceum import settings
 
-__all__ = ["ReverseResponseMiddlewareTests"]
+__all__ = []
 
 
 class ReverseResponseMiddlewareTests(TestCase):

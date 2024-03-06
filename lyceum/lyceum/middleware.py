@@ -2,7 +2,7 @@ import re
 
 from django.conf import settings
 
-__all__ = ["ReverseResponseMiddleware"]
+__all__ = []
 
 
 class ReverseResponseMiddleware:
@@ -23,13 +23,13 @@ class ReverseResponseMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if self.__class__.count == 9:
+        if ReverseResponseMiddleware.count == 9:
             if settings.ALLOW_REVERSE:
                 content = response.content.decode("utf-8")
                 response.content = self.reverse_russian_words(content).encode(
                     "utf-8",
                 )
-            self.__class__.count = 0
+            ReverseResponseMiddleware.count = 0
             return response
-        self.__class__.count += 1
+        ReverseResponseMiddleware.count += 1
         return response
