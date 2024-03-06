@@ -22,7 +22,7 @@ def item_list(request: HttpResponse) -> HttpResponse:
 def item_detail(request: HttpResponse, pk: int) -> HttpResponse:
     template = "catalog/catalog_pk.html"
     item = django.shortcuts.get_object_or_404(
-        catalog.models.Item.objects.published()
+        catalog.models.Item.objects.published(),
     )
     context = {
         "item": item,
