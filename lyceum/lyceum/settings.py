@@ -4,6 +4,16 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
+__all__ = [
+    "load_value",
+]
+
+
+def load_value(value: str, default: str) -> bool:
+    env = os.getenv(value, default=default).lower()
+    return env in ("", "true", "yes", "1", "y")
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv("../.env-example")
@@ -11,21 +21,11 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", default="NORMALNO-SREM")
 
 COUNT = 0
 
-DEBUG_ENV = os.getenv("DJANGO_DEBUG", default="false").lower()
-DEBUG = DEBUG_ENV in ("true", "yes", "1", "y", "t")
+DEBUG = load_value("DJANGO_DEBUG", "false")
 
 ALLOWED_HOSTS_STRING = os.environ.get("DJANGO_ALLOWED_HOSTS", "*")
 ALLOWED_HOSTS = list(map(str.strip, ALLOWED_HOSTS_STRING.split(",")))
-ALLOW_REVERSE = os.environ.get(
-    "DJANGO_ALLOW_REVERSE",
-    default="true",
-).lower() in (
-    "true",
-    "yes",
-    "1",
-    "y",
-    "t",
-)
+ALLOW_REVERSE = load_value("DJANGO_ALLOW_REVERSE", "true")
 
 INSTALLED_APPS = [
     "django.contrib.admin",

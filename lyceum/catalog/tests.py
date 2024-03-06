@@ -20,57 +20,67 @@ __all__ = [
 
 class ContextTests(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         super().setUpClass()
-
-        cls.category_published = catalog.models.Category.objects.create(
+        cls.published_category = catalog.models.Category.objects.create(
             is_published=True,
-            name="Тестовая опубликованная категория",
-            slug="published-category",
+            name="Test category",
+            slug="publ_category",
+            weight=100,
         )
-        cls.category_published.full_clean()
-        cls.category_published.save()
-
-        cls.tag_published = catalog.models.Tag.objects.create(
-            is_published=True,
-            name="Тестовый опубликованный тег",
-            slug="published-tag",
+        cls.unpublished_category = catalog.models.Category.objects.create(
+            is_published=False,
+            name="Test category unp",
+            slug="unpubl_category",
+            weight=100,
         )
-        cls.tag_published.full_clean()
-        cls.tag_published.save()
-
-        cls.item_published = catalog.models.Item.objects.create(
+        cls.published_tag = catalog.models.Tag.objects.create(
             is_published=True,
-            name="Тестовый опубликованный предмет",
+            name="Test publ tag",
+            slug="publ_tag",
+        )
+        cls.unpublished_tag = catalog.models.Tag.objects.create(
+            is_published=False,
+            name="Test unpubl tag",
+            slug="unpubl_tag",
+        )
+        cls.published_item = catalog.models.Item.objects.create(
+            is_published=True,
+            name="Test publ item",
+            category=cls.published_category,
+            text="роскошно",
+        )
+        cls.unpublished_item = catalog.models.Item.objects.create(
+            is_published=False,
+            name="Test unpubl item",
+            category=cls.unpublished_category,
             text="превосходно",
-            category=cls.category_published,
         )
-        cls.item_published.full_clean()
-        cls.item_published.save()
-
         cls.item_on_main = catalog.models.Item.objects.create(
             is_published=True,
             is_on_main=True,
-            name="Тестовый предмет на главной странице",
+            name="Test main item",
             text="превосходно",
-            category=cls.category_published,
+            category=cls.published_category,
         )
         cls.item_on_main.full_clean()
         cls.item_on_main.save()
 
-        cls.item_unpublished = catalog.models.Item.objects.create(
-            is_published=False,
-            name="Тестовый неопубликованный предмет",
-            text="превосходно",
-            category=cls.category_published,
-        )
+        cls.published_category.save()
+        cls.unpublished_category.save()
 
-        cls.item_unpublished.full_clean()
-        cls.item_unpublished.save()
+        cls.published_tag.save()
+        cls.unpublished_tag.save()
 
-        cls.item_published.tags.add(cls.tag_published)
-        cls.item_on_main.tags.add(cls.tag_published)
-        cls.item_published.tags.add(cls.tag_published)
+        cls.published_item.clean()
+        cls.published_item.save()
+
+        cls.unpublished_item.clean()
+        cls.unpublished_item.save()
+
+        cls.published_item.tags.add(cls.published_tag)
+        cls.item_on_main.tags.add(cls.published_tag)
+        cls.published_item.tags.add(cls.published_tag)
 
     def test_home_page_correct_context(self):
         response = self.client.get(reverse("homepage:main"))
@@ -101,7 +111,7 @@ class ContextTests(TestCase):
             "updated",
         ),
     )
-    def test_filds_item_main(self, field_name):
+    def test_fields_item_main(self, field_name):
         response = self.client.get(reverse("homepage:main"))
         self.assertNotIn(
             field_name,
@@ -117,7 +127,7 @@ class ContextTests(TestCase):
             "updated",
         ),
     )
-    def test_filds_item_list(self, field_name):
+    def test_fields_item_list(self, field_name):
         response = self.client.get(reverse("catalog:main"))
         self.assertNotIn(
             field_name,
@@ -125,7 +135,7 @@ class ContextTests(TestCase):
             msg=f"find useless field '{field_name}' in main query",
         )
 
-    def test_filds_tags_main(self):
+    def test_fields_tags_main(self):
         correct_fields = [
             "_state",
             "id",
