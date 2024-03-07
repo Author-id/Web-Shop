@@ -1,210 +1,247 @@
 [
 {
-   "model": "catalog.tag",
-   "pk": 1,
-   "fields": {
-      "name": "Мужское",
-      "is_published": true,
-      "normalize_name": "muzhskoe",
-      "slug": "muzhskoe"
-   }
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+        "name": "шорты",
+        "is_published": true,
+        "normalize_name": "shorty",
+        "slug": "b1"
+    }
 },
 {
-   "model": "catalog.tag",
-   "pk": 2,
-   "fields": {
-      "name": "Женское",
-      "is_published": true,
-      "normalize_name": "zhenskoe",
-      "slug": "zhenskoe"
-   }
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+        "name": "футболка",
+        "is_published": true,
+        "normalize_name": "futbolka",
+        "slug": "b2"
+    }
 },
 {
-   "model": "catalog.tag",
-   "pk": 3,
-   "fields": {
-      "name": "Детское",
-      "is_published": true,
-      "normalize_name": "detskoe",
-      "slug": "detskoe"
-   }
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+        "name": "кофта",
+        "is_published": true,
+        "normalize_name": "kofta",
+        "slug": "b3"
+    }
 },
 {
-   "model": "catalog.tag",
-   "pk": 4,
-   "fields": {
-      "name": "Подростковое",
-      "is_published": true,
-      "normalize_name": "podrostkovoe",
-      "slug": "podrostkovoe"
-   }
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+        "name": "носки",
+        "is_published": true,
+        "normalize_name": "noski",
+        "slug": "b4"
+    }
 },
 {
-   "model": "catalog.tag",
-   "pk": 5,
-   "fields": {
-      "name": "Взрослое",
-      "is_published": true,
-      "normalize_name": "vzrosloe",
-      "slug": "vzrosloe"
-   }
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+        "name": "кроссовки",
+        "is_published": true,
+        "normalize_name": "krossovki",
+        "slug": "b5"
+    }
 },
 {
-   "model": "catalog.category",
-   "pk": 1,
-   "fields": {
-      "name": "Одежда",
-      "is_published": true,
-      "normalize_name": "odezhda",
-      "slug": "odezhda",
-      "weight": 100
-   }
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "Одежда",
+        "is_published": true,
+        "normalize_name": "odezhda",
+        "slug": "a1",
+        "weight": 100
+    }
 },
 {
-   "model": "catalog.category",
-   "pk": 2,
-   "fields": {
-      "name": "Техника",
-      "is_published": true,
-      "normalize_name": "tekhnika",
-      "slug": "tekhnika",
-      "weight": 100
-   }
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": "Обувь",
+        "is_published": true,
+        "normalize_name": "obuv",
+        "slug": "a2",
+        "weight": 100
+    }
 },
 {
-   "model": "catalog.item",
-   "pk": 1,
-   "fields": {
-      "name": "Юбка",
-      "is_published": true,
-      "normalize_name": "iubka",
-      "is_on_main": true,
-      "text": "<p>превосходно</p>",
-      "category": 1,
-      "created": "2024-03-05T09:51:06.625Z",
-      "updated": "2024-03-05T13:07:10.015Z",
-      "tags": [
-         2
-      ]
-   }
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+        "name": "футболка VLONE",
+        "is_published": true,
+        "normalize_name": "futbolkavlone",
+        "is_on_main": true,
+        "text": "<p>превосходно</p>",
+        "category": 1,
+        "created": "2024-03-07T14:33:45.119Z",
+        "updated": "2024-03-07T14:33:45.119Z",
+        "tags": [
+            2
+        ]
+    }
 },
 {
-   "model": "catalog.item",
-   "pk": 2,
-   "fields": {
-      "name": "Кросовок",
-      "is_published": true,
-      "normalize_name": "krosovok",
-      "is_on_main": true,
-      "text": "<p>превосходно</p>",
-      "category": 1,
-      "created": "2024-03-05T09:51:06.625Z",
-      "updated": "2024-03-05T09:51:06.625Z",
-      "tags": [
-         1
-      ]
-   }
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+        "name": "зип-худи Stussy",
+        "is_published": true,
+        "normalize_name": "zipkhudistussy",
+        "is_on_main": true,
+        "text": "<p>роскошно</p>",
+        "category": 1,
+        "created": "2024-03-07T14:40:41.296Z",
+        "updated": null,
+        "tags": [
+            3
+        ]
+    }
 },
 {
-   "model": "catalog.item",
-   "pk": 3,
-   "fields": {
-      "name": "Компьютер",
-      "is_published": true,
-      "normalize_name": "kompiuter",
-      "is_on_main": true,
-      "text": "<p>превосходно</p>",
-      "category": 2,
-      "created": "2024-03-05T09:51:06.625Z",
-      "updated": "2024-03-05T09:51:06.625Z",
-      "tags": [
-         1,
-         2
-      ]
-   }
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+        "name": "кеды NIke sb dunk low",
+        "is_published": true,
+        "normalize_name": "kedynikesbdunklow",
+        "is_on_main": true,
+        "text": "<p>превосходно</p>",
+        "category": 2,
+        "created": "2024-03-07T14:42:49.599Z",
+        "updated": "2024-03-07T14:42:49.599Z",
+        "tags": [
+            5
+        ]
+    }
 },
 {
-   "model": "catalog.item",
-   "pk": 4,
-   "fields": {
-      "name": "Холодильник",
-      "is_published": true,
-      "normalize_name": "kholodilnik",
-      "is_on_main": true,
-      "text": "<p>превосходно</p>",
-      "category": 2,
-      "created": "2024-03-05T09:51:06.625Z",
-      "updated": "2024-03-05T09:51:06.625Z",
-      "tags": [
-         1
-      ]
-   }
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+        "name": "носки NIke",
+        "is_published": true,
+        "normalize_name": "noskinike",
+        "is_on_main": false,
+        "text": "<p>превосходно</p>",
+        "category": 1,
+        "created": "2024-03-07T14:43:38.983Z",
+        "updated": null,
+        "tags": [
+            4
+        ]
+    }
 },
 {
-   "model": "catalog.item",
-   "pk": 5,
-   "fields": {
-      "name": "Футболка",
-      "is_published": true,
-      "normalize_name": "futbolka",
-      "is_on_main": false,
-      "text": "<p><span style=\"background-color: #e67e23;\"><strong>превосходно</strong></span></p>",
-      "category": 1,
-      "created": "2024-03-05T09:51:06.625Z",
-      "updated": "2024-03-05T09:51:06.625Z",
-      "tags": [
-         1,
-         3,
-         4
-      ]
-   }
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+        "name": "куртка NIke windrunner",
+        "is_published": true,
+        "normalize_name": "kurtkanikewindrunner",
+        "is_on_main": false,
+        "text": "<p>превосходно</p>",
+        "category": 1,
+        "created": "2024-03-07T14:44:31.197Z",
+        "updated": null,
+        "tags": [
+            3
+        ]
+    }
 },
 {
-   "model": "catalog.itemmainimage",
-   "pk": 4,
-   "fields": {
-      "image": "catalog/abcd0057-93d7-48fe-bba5-6459a1897d77.jpg",
-      "item": 5
-   }
+    "model": "catalog.itemmainimage",
+    "pk": 1,
+    "fields": {
+        "image": "catalog/c30d4fc6-c19a-48c4-8f24-4a0f1fd90e2f.webp",
+        "item": 1
+    }
 },
 {
-   "model": "catalog.itemmainimage",
-   "pk": 5,
-   "fields": {
-      "image": "catalog/2850a773-3b1f-4794-9dce-38537ccf54c6.jpg",
-      "item": 4
-   }
+    "model": "catalog.itemmainimage",
+    "pk": 2,
+    "fields": {
+        "image": "catalog/494ac10e-a97b-4058-815b-7ba5e6757b73.webp",
+        "item": 2
+    }
 },
 {
-   "model": "catalog.itemmainimage",
-   "pk": 6,
-   "fields": {
-      "image": "catalog/962ccbd2-2741-47f5-8d89-16a01a4d7088.jpg",
-      "item": 1
-   }
+    "model": "catalog.itemmainimage",
+    "pk": 3,
+    "fields": {
+        "image": "catalog/716c9479-d14e-41e7-a24b-17b708193f45.webp",
+        "item": 3
+    }
 },
 {
-   "model": "catalog.itemsecondaryimage",
-   "pk": 3,
-   "fields": {
-      "image": "catalog/5704cf8a-d131-42d9-9492-bec2d0d64156.JPG",
-      "item": 5
-   }
+    "model": "catalog.itemmainimage",
+    "pk": 4,
+    "fields": {
+        "image": "catalog/fd38db69-804a-444e-b9d4-72af4406bcc7.webp",
+        "item": 4
+    }
 },
 {
-   "model": "catalog.itemsecondaryimage",
-   "pk": 4,
-   "fields": {
-      "image": "catalog/91bb79eb-4904-4929-9ba3-c140cb1b5288.webp",
-      "item": 5
-   }
+    "model": "catalog.itemmainimage",
+    "pk": 5,
+    "fields": {
+        "image": "catalog/ec2d5007-4109-4d19-849c-2b201ebba7a1.webp",
+        "item": 5
+    }
 },
 {
-   "model": "catalog.itemsecondaryimage",
-   "pk": 5,
-   "fields": {
-      "image": "catalog/cc1f0bfc-8c0b-47ca-ae83-e49881ab1985.jpg",
-      "item": 5
-   }
+    "model": "catalog.itemsecondaryimage",
+    "pk": 1,
+    "fields": {
+        "image": "catalog/4d576f4e-e4d0-4594-97a7-e1ab7f2b67cc.webp",
+        "item": 1
+    }
+},
+{
+    "model": "catalog.itemsecondaryimage",
+    "pk": 2,
+    "fields": {
+        "image": "catalog/edfb0b73-737a-4bcf-88d3-c5eb19d75b54.webp",
+        "item": 2
+    }
+},
+{
+    "model": "catalog.itemsecondaryimage",
+    "pk": 3,
+    "fields": {
+        "image": "catalog/63677fe0-801c-4cc7-92a5-f0ca54b0ba06.webp",
+        "item": 3
+    }
+},
+{
+    "model": "catalog.itemsecondaryimage",
+    "pk": 4,
+    "fields": {
+        "image": "catalog/14bce1a2-6c55-484d-95c7-ce2e37c553b7.webp",
+        "item": 3
+    }
+},
+{
+    "model": "catalog.itemsecondaryimage",
+    "pk": 5,
+    "fields": {
+        "image": "catalog/1cadf01e-cc9b-4045-b0cf-a9429f0ef35d.webp",
+        "item": 4
+    }
+},
+{
+    "model": "catalog.itemsecondaryimage",
+    "pk": 6,
+    "fields": {
+        "image": "catalog/0f3e1077-3b90-4801-987d-7e5482e79936.webp",
+        "item": 5
+    }
 }
 ]
