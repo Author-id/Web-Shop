@@ -210,3 +210,4 @@ class ItemSecondaryImage(BaseImage):
     class Meta:
         verbose_name = "дополнительное изображение"
         verbose_name_plural = "дополнительные изображения"
+
