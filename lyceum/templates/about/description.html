@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}
 {% trans "О проекте" %}
@@ -7,7 +8,9 @@
 
 {% block content %}
   <h1 class="pb-2 mb-0">{% trans "О проекте" %}</h1>
+  <hr>
   <p>
     {% trans "Очень убедительное описание, которое заставит вас сюда вернуться" %}
   </p>
+  <img src="{% static "img/cat.jpg" %}" class="img-fluid" alt="Responsive image">
 {% endblock content %}

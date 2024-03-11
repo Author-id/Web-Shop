@@ -74,6 +74,7 @@ class DBItemTests(TestCase):
                 self.item.tags.add(self.tag)
                 self.item.full_clean()
                 self.item.save()
+
             self.assertEqual(
                 catalog.models.Item.objects.count(),
                 item_count,
@@ -121,6 +122,7 @@ class DBTagTests(TestCase):
             with self.assertRaises(ValidationError):
                 self.tag.full_clean()
                 self.tag.save()
+
             self.assertEqual(
                 catalog.models.Item.objects.count(),
                 tag_count,
@@ -178,6 +180,7 @@ class DBCategoryTests(TestCase):
             with self.assertRaises(ValidationError):
                 self.category.full_clean()
                 self.category.save()
+
             self.assertEqual(
                 catalog.models.Item.objects.count(),
                 category_count,
@@ -239,6 +242,7 @@ class DBNormalizeNameTests(TestCase):
                 self.tag1.save()
                 self.tag2.full_clean()
                 self.tag2.save()
+
             self.assertEqual(
                 catalog.models.Tag.objects.count(),
                 tag_count + 1,
@@ -370,12 +374,8 @@ class CatalogContentTest(TestCase):
             "name",
         ]
         response = self.client.get(reverse("homepage:main"))
-        tag = (
-            response.context["items"]
-            .first()
-            ._prefetched_objects_cache["tags"]
-            .first()
-        )
+        item = response.context["items"].first()
+        tag = item._prefetched_objects_cache["tags"].first()
         self.assertQuerySetEqual(
             tag.__dict__,
             correct_fields,

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-05 16:51+0300\n"
+"POT-Creation-Date: 2024-03-10 20:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: catalog/views.py:20 templates/catalog/item_list.html:14
-#: templates/includes/header.html:24
+#: templates/includes/header.html:27
 msgid "Список товаров"
 msgstr "List of products"
 
-#: catalog/views.py:47 templates/catalog/item_list.html:17
+#: catalog/views.py:48 templates/catalog/item_list.html:17
 msgid "Новинки"
 msgstr "New"
 
@@ -31,24 +31,28 @@ msgstr "New"
 msgid "Пятница"
 msgstr "Friday"
 
-#: catalog/views.py:79 templates/catalog/item_list.html:23
+#: catalog/views.py:76 templates/catalog/item_list.html:23
 msgid "Непроверенное"
 msgstr "Unverified"
 
-#: lyceum/settings.py:123
+#: feedback/views.py:23
+msgid "Форма успешно отправлена!"
+msgstr "The form has been successfully submitted!"
+
+#: lyceum/settings.py:124
 msgid "Russian"
 msgstr ""
 
-#: lyceum/settings.py:124
+#: lyceum/settings.py:125
 msgid "English"
 msgstr ""
 
-#: templates/about/description.html:5 templates/about/description.html:9
-#: templates/includes/header.html:19
+#: templates/about/description.html:6 templates/about/description.html:10
+#: templates/includes/header.html:22
 msgid "О проекте"
 msgstr "About"
 
-#: templates/about/description.html:11
+#: templates/about/description.html:13
 msgid "Очень убедительное описание, которое заставит вас сюда вернуться"
 msgstr "A very compelling description that will keep you coming back"
 
@@ -62,15 +66,29 @@ msgstr "List of products"
 msgid "Описание"
 msgstr "Description"
 
+#: templates/catalog/item_detail.html:32 templates/includes/item_card.html:12
+#, fuzzy
+#| msgid "Каталог товаров"
+msgid "картинка товара"
+msgstr "Catalog"
+
 #: templates/catalog/item_list.html:6
 msgid "Каталог товаров"
 msgstr "Catalog"
 
-#: templates/catalog/item_list.html:44 templates/homepage/index.html:18
+#: templates/catalog/item_list.html:46 templates/homepage/index.html:19
 msgid "Пусто"
 msgstr "Empty"
 
-#: templates/homepage/index.html:6 templates/includes/header.html:14
+#: templates/feedback/feedback.html:6 templates/includes/header.html:32
+msgid "Обратная связь"
+msgstr "Feedback"
+
+#: templates/feedback/feedback.html:45 templates/homepage/echo.html:9
+msgid "Отправить"
+msgstr "Submit"
+
+#: templates/homepage/index.html:6 templates/includes/header.html:17
 msgid "Главная"
 msgstr "Home"
 
@@ -78,17 +96,13 @@ msgstr "Home"
 msgid "Главная страница!"
 msgstr "Home page!"
 
-#: templates/includes/header.html:8
+#: templates/includes/header.html:7
 msgid "Супер-бренд"
 msgstr "Super-brand"
 
-#: templates/includes/header.html:31
+#: templates/includes/header.html:39
 msgid "Админка"
 msgstr ""
-
-#: templates/includes/item_card.html:12
-msgid "сочная клубника"
-msgstr "juicy strawberry"
 
 #: templates/includes/item_card.html:18
 msgid "Категория"
@@ -98,9 +112,12 @@ msgstr "Category"
 msgid "Теги"
 msgstr "Tags"
 
-#: templates/includes/item_card.html:42
+#: templates/includes/item_card.html:46
 msgid "Подробнее"
 msgstr "More details"
+
+#~ msgid "сочная клубника"
+#~ msgstr "juicy strawberry"
 
 #, fuzzy
 #~| msgid "Каталог товаров"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-05 16:51+0300\n"
+"POT-Creation-Date: 2024-03-10 20:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,11 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: catalog/views.py:20 templates/catalog/item_list.html:14
-#: templates/includes/header.html:24
+#: templates/includes/header.html:27
 msgid "Список товаров"
 msgstr ""
 
-#: catalog/views.py:47 templates/catalog/item_list.html:17
+#: catalog/views.py:48 templates/catalog/item_list.html:17
 msgid "Новинки"
 msgstr ""
 
@@ -33,24 +33,28 @@ msgstr ""
 msgid "Пятница"
 msgstr ""
 
-#: catalog/views.py:79 templates/catalog/item_list.html:23
+#: catalog/views.py:76 templates/catalog/item_list.html:23
 msgid "Непроверенное"
 msgstr ""
 
-#: lyceum/settings.py:123
+#: feedback/views.py:23
+msgid "Форма успешно отправлена!"
+msgstr ""
+
+#: lyceum/settings.py:124
 msgid "Russian"
 msgstr "Русский"
 
-#: lyceum/settings.py:124
+#: lyceum/settings.py:125
 msgid "English"
 msgstr "Английский"
 
-#: templates/about/description.html:5 templates/about/description.html:9
-#: templates/includes/header.html:19
+#: templates/about/description.html:6 templates/about/description.html:10
+#: templates/includes/header.html:22
 msgid "О проекте"
 msgstr ""
 
-#: templates/about/description.html:11
+#: templates/about/description.html:13
 msgid "Очень убедительное описание, которое заставит вас сюда вернуться"
 msgstr ""
 
@@ -62,15 +66,27 @@ msgstr ""
 msgid "Описание"
 msgstr ""
 
+#: templates/catalog/item_detail.html:32 templates/includes/item_card.html:12
+msgid "картинка товара"
+msgstr ""
+
 #: templates/catalog/item_list.html:6
 msgid "Каталог товаров"
 msgstr ""
 
-#: templates/catalog/item_list.html:44 templates/homepage/index.html:18
+#: templates/catalog/item_list.html:46 templates/homepage/index.html:19
 msgid "Пусто"
 msgstr ""
 
-#: templates/homepage/index.html:6 templates/includes/header.html:14
+#: templates/feedback/feedback.html:6 templates/includes/header.html:32
+msgid "Обратная связь"
+msgstr ""
+
+#: templates/feedback/feedback.html:45 templates/homepage/echo.html:9
+msgid "Отправить"
+msgstr ""
+
+#: templates/homepage/index.html:6 templates/includes/header.html:17
 msgid "Главная"
 msgstr ""
 
@@ -78,16 +94,12 @@ msgstr ""
 msgid "Главная страница!"
 msgstr ""
 
-#: templates/includes/header.html:8
+#: templates/includes/header.html:7
 msgid "Супер-бренд"
 msgstr ""
 
-#: templates/includes/header.html:31
+#: templates/includes/header.html:39
 msgid "Админка"
-msgstr ""
-
-#: templates/includes/item_card.html:12
-msgid "сочная клубника"
 msgstr ""
 
 #: templates/includes/item_card.html:18
@@ -98,6 +110,6 @@ msgstr ""
 msgid "Теги"
 msgstr ""
 
-#: templates/includes/item_card.html:42
+#: templates/includes/item_card.html:46
 msgid "Подробнее"
 msgstr ""

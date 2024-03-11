@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "download.apps.DownloadConfig",
+    "feedback.apps.FeedbackConfig",
     "homepage.apps.HomepageConfig",
     "sorl.thumbnail",
     "django_cleanup.apps.CleanupConfig",
@@ -134,5 +135,11 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+
+EMAIL_FILE_PATH = BASE_DIR / "send_mail"
+
+EMAIL_HOST = os.getenv("DJANGO_MAIL")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

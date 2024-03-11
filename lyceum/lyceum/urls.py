@@ -21,6 +21,11 @@ urlpatterns = [
         name="catalog",
     ),
     path(
+        "feedback/",
+        include(("feedback.urls")),
+        name="feedback",
+    ),
+    path(
         "admin/",
         admin.site.urls,
         name="admin",

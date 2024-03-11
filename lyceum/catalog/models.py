@@ -23,6 +23,7 @@ class Tag(AbstractModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+
         super().save(*args, **kwargs)
 
     class Meta:
@@ -52,6 +53,7 @@ class Category(AbstractModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+
         return super().save(*args, **kwargs)
 
     class Meta:
@@ -61,56 +63,71 @@ class Category(AbstractModel):
 
 class ItemManager(django.db.models.Manager):
     def published(self):
-        return (
+        queryset = (
             self.get_queryset()
-            .filter(is_published=True, category__is_published=True)
-            .select_related("category", "main_image")
+            .filter(
+                is_published=True,
+                category__is_published=True,
+            )
+            .select_related(
+                Item.category.field.name,
+                Item.main_image.related.name,
+            )
             .prefetch_related(
                 django.db.models.Prefetch(
-                    "tags",
+                    Item.tags.field.name,
                     queryset=Tag.objects.filter(is_published=True).only(
-                        "name",
+                        Tag.name.field.name,
                     ),
                 ),
-            )
-            .only(
-                "name",
-                "category__name",
-                "text",
-                "tags__name",
-                "main_image__image",
             )
         )
+        return queryset.only(
+            Item.name.field.name,
+            f"{Item.category.field.name}__{Category.name.field.name}",
+            Item.text.field.name,
+            f"{Item.tags.field.name}__{Tag.name.field.name}",
+            f"{Item.main_image.related.name}__"
+            f"{ItemMainImage.image.field.name}",
+        ).order_by(f"{Item.category.field.name}__{Category.name.field.name}")
 
     def on_main(self):
-        return self.published().filter(is_on_main=True).order_by("name")
+        return (
+            self.published()
+            .filter(is_on_main=True)
+            .order_by(Item.name.field.name)
+        )
 
     def get_item(self):
-        return (
+        queryset = (
             self.get_queryset()
             .filter(is_published=True, category__is_published=True)
-            .select_related("category", "main_image")
+            .select_related(
+                Item.category.field.name,
+                Item.main_image.related.name,
+            )
             .prefetch_related(
                 django.db.models.Prefetch(
-                    "tags",
+                    Item.tags.field.name,
                     queryset=Tag.objects.filter(is_published=True).only(
-                        "name",
+                        Tag.name.field.name,
                     ),
                 ),
                 django.db.models.Prefetch(
-                    "images",
+                    Item.images.field._related_name,
                     queryset=ItemSecondaryImage.objects.all(),
                 ),
             )
-            .only(
-                "id",
-                "name",
-                "category__name",
-                "text",
-                "tags__name",
-                "main_image__image",
-                "images__image",
-            )
+        )
+        return queryset.only(
+            Item.name.field.name,
+            f"{Item.category.field.name}__{Category.name.field.name}",
+            Item.text.field.name,
+            f"{Item.tags.field.name}__{Tag.name.field.name}",
+            f"{Item.main_image.related.name}__"
+            f"{ItemMainImage.image.field.name}",
+            f"{Item.images.field._related_name}__"
+            f"{ItemSecondaryImage.image.field.name}",
         )
 
 
@@ -145,11 +162,13 @@ class Item(AbstractModel):
     )
     created = django.db.models.DateTimeField(
         verbose_name="создано",
+        help_text="дата и время создания",
         auto_now_add=True,
         null=True,
     )
     updated = django.db.models.DateTimeField(
         verbose_name="обновлено",
+        help_text="дата и время обновления",
         editable=False,
         null=True,
     )
@@ -159,6 +178,7 @@ class Item(AbstractModel):
             self.updated = self.created
         else:
             self.updated = timezone.now()
+
         super().save(*args, **kwargs)
 
     class Meta:

@@ -1,11 +1,11 @@
 from http import HTTPStatus
-from pathlib import Path
 
-from django.conf import settings
-from django.http import FileResponse, HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render
+from django.urls import reverse
 
 import catalog.models
+import homepage.forms
 
 __all__ = []
 
@@ -21,8 +21,16 @@ def coffee(request):
     return HttpResponse("Я чайник", status=HTTPStatus.IM_A_TEAPOT)
 
 
-def download(request, path):
-    return FileResponse(
-        open(settings.MEDIA_ROOT / Path(path), "rb"),
-        as_attachment=True,
-    )
+def echo(request):
+    form = homepage.forms.EchoForm(request.POST or None)
+    if request.path == reverse("homepage:echo_submit"):
+        if request.method == "POST" and form.is_valid():
+            return HttpResponse(form.cleaned_data["text"])
+
+        return HttpResponseNotAllowed(permitted_methods=["POST"])
+
+    if request.method == "GET":
+        context = {"form": form}
+        return render(request, "homepage/echo.html", context)
+
+    return HttpResponseNotAllowed(permitted_methods=["GET"])

@@ -7,20 +7,20 @@
 {% endblock %}
 
 {% block content %}
-  <nav>
+  <nav class="navbar">
     {% with request.resolver_match.view_name as view_name %}
-    <ul class="pagination pagination-lg">
-      <li class="page-item {% if view_name == 'catalog:main' %}active{% endif %}">
-        <a class="page-link" href="{% url 'catalog:main' %}" tabindex="-1">{% trans "Список товаров" %}</a>
+    <ul class="pagination pagination-lg d-flex flex-wrap w-100">
+      <li class="page-item col-6 col-md-3 {% if view_name == 'catalog:main' %}active{% endif %}">
+        <a class="page-link fs-6" href="{% url 'catalog:main' %}" tabindex="-1">{% trans "Список товаров" %}</a>
       </li>
-      <li class="page-item {% if view_name == 'catalog:new' %}active{% endif %}">
-        <a class="page-link" href="{% url 'catalog:new' %}">{% trans "Новинки" %}</a>
+      <li class="page-item col-6 col-md-3 {% if view_name == 'catalog:new' %}active{% endif %}">
+        <a class="page-link fs-6" href="{% url 'catalog:new' %}">{% trans "Новинки" %}</a>
       </li>
-      <li class="page-item {% if view_name == 'catalog:friday' %}active{% endif %}">
-        <a class="page-link" href="{% url 'catalog:friday' %}">{% trans "Пятница" %}</a>
+      <li class="page-item col-6 col-md-3 {% if view_name == 'catalog:friday' %}active{% endif %}">
+        <a class="page-link fs-6" href="{% url 'catalog:friday' %}">{% trans "Пятница" %}</a>
       </li>
-      <li class="page-item {% if view_name == 'catalog:unverified' %}active{% endif %}">
-        <a class="page-link" href="{% url 'catalog:unverified' %}">{% trans "Непроверенное" %}</a>
+      <li class="page-item col-6 col-md-3 {% if view_name == 'catalog:unverified' %}active{% endif %}">
+        <a class="page-link fs-6" href="{% url 'catalog:unverified' %}">{% trans "Непроверенное" %}</a>
       </li>
     </ul>
     {% endwith %}
@@ -31,9 +31,11 @@
           {% if not forloop.first %}
             </div>
           {% endif %}
+          <hr>
           <div class="card-header py-3">
-            <h4 class="my-0 fw-normal">{{ item.category.name }}</h4>
+            <h3 class="my-0 fw-bold text-center">{{ item.category.name }}</h3>
           </div>
+          <hr>
           <div class="row">
         {% endifchanged %}
         {% include "includes/item_card.html" %}

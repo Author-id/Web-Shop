@@ -27,7 +27,8 @@ class ReverseResponseMiddlewareTests(TestCase):
                 filter(lambda content: content == "Я кинйач", contents),
             )
             index_first = contents.index(content_first)
-            index_second = 20 - contents[-1::-1].index(content_second) - 1
+            index_second_reverse = contents[-1::-1].index(content_second)
+            index_second = 20 - index_second_reverse - 1
             self.assertEqual(
                 index_second - index_first,
                 10,
@@ -60,7 +61,8 @@ class ReverseResponseMiddlewareTests(TestCase):
             filter(lambda content: content == "Я кинйач", contents),
         )
         index_first = contents.index(content_first)
-        index_second = 20 - contents[-1::-1].index(content_second) - 1
+        index_second_reverse = contents[-1::-1].index(content_second)
+        index_second = 20 - index_second_reverse - 1
         self.assertEqual(
             index_second - index_first,
             10,

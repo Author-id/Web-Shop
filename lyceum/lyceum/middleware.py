@@ -16,10 +16,17 @@ class ReverseResponseMiddleware:
 
     @staticmethod
     def reverse_russian_words(content):
-        russian_words = re.findall("[а-яА-ЯёЁ]+", content)
-        for word in russian_words:
-            content = content.replace(word, word[::-1])
-        return content
+        pattern = re.compile(
+            r"\b[а-яё]+\b",
+            re.IGNORECASE,
+        )
+        text = content
+        for m in re.finditer(string=text, pattern=pattern):
+            s = m.start()
+            e = m.end()
+            text = text[:s] + text[s:e][::-1] + text[e:]
+
+        return text
 
     def __call__(self, request):
         response = self.get_response(request)
@@ -29,7 +36,9 @@ class ReverseResponseMiddleware:
                 response.content = self.reverse_russian_words(content).encode(
                     "utf-8",
                 )
+
             ReverseResponseMiddleware.count = 0
             return response
+
         ReverseResponseMiddleware.count += 1
         return response

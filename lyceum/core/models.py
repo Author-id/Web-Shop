@@ -56,6 +56,7 @@ class AbstractModel(django.db.models.Model):
             raise ValidationError(
                 {self.__class__.name.field.name: "есть похожое название"},
             )
+
         self.normalize_name = normalize_name
 
     def __str__(self) -> str:
@@ -96,6 +97,7 @@ class BaseImage(django.db.models.Model):
         if self.image:
             tag = f'<img src="{self.get_image_300x300().url}">'
             return mark_safe(tag)
+
         return "изображение отсутствует"
 
     image_tmb.short_description = "превью"

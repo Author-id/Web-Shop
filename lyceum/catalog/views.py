@@ -13,9 +13,7 @@ __all__ = []
 
 def item_list(request):
     template = "catalog/item_list.html"
-    items = catalog.models.Item.objects.published().order_by(
-        "category__name",
-    )
+    items = catalog.models.Item.objects.published()
     context = {
         "chapter": _("Список товаров"),
         "items": items,
@@ -33,10 +31,11 @@ def item_detail(request, pk):
 
 def item_new(request):
     template = "catalog/item_list.html"
+    queryset = catalog.models.Item.objects.published()
     items = list(
-        catalog.models.Item.objects.published()
-        .filter(created__gt=timezone.now() - datetime.timedelta(hours=24 * 7))
-        .all(),
+        queryset.filter(
+            created__gt=timezone.now() - datetime.timedelta(hours=24 * 7),
+        ).all(),
     )
     ln_items = len(items)
     random_items = sorted(
@@ -52,11 +51,12 @@ def item_new(request):
 
 def item_friday(request):
     template = "catalog/item_list.html"
+    queryset = catalog.models.Item.objects.published()
+    item_category = catalog.models.Item.category.field.name
+    category_name = catalog.models.Category.name.field.name
     items = reversed(
-        catalog.models.Item.objects.published()
-        .filter(updated__week_day=6)
-        .order_by(
-            "-category__name",
+        queryset.filter(updated__week_day=6).order_by(
+            f"-{item_category}__{category_name}",
         )[:5],
     )
     context = {
@@ -68,13 +68,8 @@ def item_friday(request):
 
 def item_unverified(request):
     template = "catalog/item_list.html"
-    items = (
-        catalog.models.Item.objects.published()
-        .filter(updated=F("created"))
-        .order_by(
-            "category__name",
-        )
-    )
+    queryset = catalog.models.Item.objects.published()
+    items = queryset.filter(updated=F("created"))
     context = {
         "chapter": _("Непроверенное"),
         "items": items,
