@@ -83,4 +83,3 @@ class StatusLog(django.db.models.Model):
 
     def __str__(self) -> str:
         return f"состояние ({self.id})"
-
