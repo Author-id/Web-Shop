@@ -3,4 +3,3 @@ application-import-names = about, catalog, core, homepage, lyceum, feedback
 import-order-style = google
 inline-quotes = double
 exclude = .venv,venv,*/migrations/*,.git,__pycache__
-select = B,C,E,F,W,T4,B9
