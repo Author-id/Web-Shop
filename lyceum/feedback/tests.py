@@ -144,4 +144,3 @@ class FormTests(TestCase):
         self.assertEqual(len(files), 1, "Wrong count of files created")
         with (MEDIA_TEST / files[0].file.name).open("rb") as f:
             self.assertEqual(f.read(), content, "Wrong file content")
-
