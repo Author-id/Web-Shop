@@ -55,4 +55,4 @@ class FeedbackFileForm(django.forms.Form):
         for field in self.visible_fields():
             field.field.widget.attrs["class"] = "form-control"
 
-    files = MultipleFileField(required=False, label="Файлы")
+    files = MultipleFileField(required=False, label="Фыайлы")
