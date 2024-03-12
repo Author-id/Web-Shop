@@ -1,77 +1,153 @@
-from http import HTTPStatus
+from pathlib import Path
+import shutil
 
-from django.test import TestCase
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import override_settings, TestCase
 from django.urls import reverse
+from django.utils.translation import gettext
+from parameterized import parameterized
 
-import feedback.models
+from feedback.forms import FeedbackAuthorForm, FeedbackFileForm, FeedbackForm
+from feedback.models import Feedback
 
 
 __all__ = []
 
 
-class PostMethodTest(TestCase):
+MEDIA_TEST: Path = settings.BASE_DIR / "media_test"
+
+
+class FormTests(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.form = FeedbackForm()
+        cls.form_author = FeedbackAuthorForm()
+
+    def test_mail_label(self):
+        mail_label = FormTests.form_author.fields["mail"].label
+        self.assertEqual(mail_label, "Почта")
+
+    def test_text_label(self):
+        text_label = FormTests.form.fields["text"].label
+        self.assertEqual(text_label, "Текст")
+
+    def test_mail_help_text(self):
+        mail_help_text = FormTests.form_author.fields["mail"].help_text
+        self.assertEqual(
+            mail_help_text,
+            gettext("почтовый адрес"),
+        )
+
+    def test_text_help_text(self):
+        text_help_text = FormTests.form.fields["text"].help_text
+        self.assertEqual(text_help_text, "напишите текст сообщения")
+
+    @parameterized.expand(
+        [
+            ("content", FeedbackForm),
+            ("author", FeedbackAuthorForm),
+            ("files", FeedbackFileForm),
+        ],
+    )
+    def test_correct_context(
+        self,
+        form_name,
+        form_type,
+    ):
+        with self.subTest(form_name=form_name, form_type=form_type):
+            response = self.client.get(reverse("feedback:feedback"))
+            self.assertIn(form_name, response.context)
+            form = response.context[form_name]
+            self.assertIsInstance(form, form_type)
+
+    @parameterized.expand(
+        [
+            ({"text": "some text", "name": "", "mail": "test@test.com"},),
+            ({"text": "some text", "name": "Vasya", "mail": "test@test.com"},),
+        ],
+    )
+    def test_from(self, data):
+        with self.subTest(data=data):
+            feedback_count = Feedback.objects.count()
+            response = self.client.post(
+                reverse("feedback:feedback"),
+                data=data,
+                follow=True,
+            )
+
+            self.assertRedirects(response, reverse("feedback:feedback"))
+            self.assertEqual(
+                Feedback.objects.count(),
+                feedback_count + 1,
+                "Feedback not created",
+            )
+            self.assertTrue(
+                Feedback.objects.filter(
+                    author__mail=data["mail"],
+                    author__name=data["name"] or None,
+                    text=data["text"],
+                ).exists(),
+                "Uncorrect feedback created",
+            )
+
     def test_form_errors(self):
+        data = {"text": "some text", "mail": "wrong email"}
+        feedback_count = Feedback.objects.count()
         response = self.client.post(
             reverse("feedback:feedback"),
-            data={"text": "some test text", "mail": "not an email"},
+            data=data,
+            follow=True,
         )
-        form = response.context["form"]
-        self.assertFalse(form.is_valid())
         self.assertFormError(
-            form,
+            response,
+            "author",
             "mail",
             "Введите правильный адрес электронной почты.",
         )
-
-    def test_form_in_context(self):
-        response = self.client.get(reverse("feedback:feedback"))
-        self.assertIn("form", response.context)
-
-    def test_form_labels(self):
-        response = self.client.get(reverse("feedback:feedback"))
-        form = response.context["form"]
-        self.assertEqual(form.fields["text"].label, "Текст")
-        self.assertEqual(form.fields["mail"].label, "Почта")
-
-    def test_form_help_texts(self):
-        response = self.client.get(reverse("feedback:feedback"))
-        form = response.context["form"]
         self.assertEqual(
-            form.fields["text"].help_text,
-            "напишите текст сообщения",
-        )
-        self.assertEqual(
-            form.fields["mail"].help_text,
-            "почтовый адрес",
+            Feedback.objects.count(),
+            feedback_count,
+            "Feedback created while validation failed",
         )
 
-    def test_submit_redirect(self):
-        item_count = feedback.models.Feedback.objects.count()
+    @override_settings(MEDIA_ROOT=MEDIA_TEST)
+    def test_form_file_upload(self):
+        content = "Test file content".encode()
+        file_upload = SimpleUploadedFile(
+            "file.txt",
+            content,
+            content_type="text/plain",
+        )
+        data = {
+            "text": "some text",
+            "mail": "test@test.com",
+            "files": [file_upload],
+        }
+        feedback_count = Feedback.objects.count()
         response = self.client.post(
             reverse("feedback:feedback"),
-            data={
-                "name": "test",
-                "text": "some test text",
-                "mail": "test@test.com",
-            },
+            data=data,
+            format="multipart",
             follow=True,
         )
-        self.assertRedirects(
-            response,
-            reverse("feedback:feedback"),
-            status_code=HTTPStatus.FOUND,
-            target_status_code=HTTPStatus.OK,
-        )
-        self.assertIn("form", response.context)
-        form = response.context["form"]
-        self.assertEqual(form.fields["text"].label, "Текст")
-        self.assertEqual(form.fields["mail"].label, "Почта")
+
+        self.assertRedirects(response, reverse("feedback:feedback"))
         self.assertEqual(
-            feedback.models.Feedback.objects.count(),
-            item_count + 1,
+            Feedback.objects.count(),
+            feedback_count + 1,
+            "Feedback not created",
         )
-        self.assertTrue(
-            feedback.models.Feedback.objects.filter(
-                mail="test@test.com",
-            ).exists(),
-        )
+        feedback = Feedback.objects.filter(
+            author__mail=data["mail"],
+            text=data["text"],
+        ).get()
+        files = list(feedback.files.all())
+        self.assertEqual(len(files), 1, "Wrong count of files created")
+        with (MEDIA_TEST / files[0].file.name).open("rb") as f:
+            self.assertEqual(f.read(), content, "Wrong file content")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(MEDIA_TEST)

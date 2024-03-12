@@ -12,13 +12,6 @@ class Status(django.db.models.TextChoices):
 
 
 class Feedback(django.db.models.Model):
-    name = django.db.models.CharField(
-        "имя",
-        max_length=150,
-        help_text="напишите имя",
-        null=True,
-        blank=True,
-    )
     text = django.db.models.TextField(
         "текст",
         help_text="напишите текст сообщения",
@@ -28,10 +21,6 @@ class Feedback(django.db.models.Model):
         help_text="дата и время создания",
         auto_now_add=True,
         null=True,
-    )
-    mail = django.db.models.EmailField(
-        verbose_name="почта",
-        help_text="почтовый адрес",
     )
     status = django.db.models.CharField(
         choices=Status.choices,
@@ -83,3 +72,48 @@ class StatusLog(django.db.models.Model):
 
     def __str__(self) -> str:
         return f"состояние ({self.id})"
+
+
+class FeedbackFile(django.db.models.Model):
+    def upload_to(self, filename):
+        return f"uploads/{self.feedback_id}/{filename}"
+
+    feedback = django.db.models.ForeignKey(
+        Feedback,
+        on_delete=django.db.models.CASCADE,
+        verbose_name="обратная связь",
+        related_name="files",
+        related_query_name="files",
+        help_text="файлы",
+    )
+    file = django.db.models.FileField(
+        upload_to=upload_to,
+    )
+
+    class Meta:
+        verbose_name = "файлы обратной связи"
+        verbose_name_plural = "файлы обратных связей"
+
+
+class FeedbackAuthor(django.db.models.Model):
+    name = django.db.models.CharField(
+        "имя",
+        max_length=150,
+        help_text="напишите имя",
+        null=True,
+        blank=True,
+    )
+    mail = django.db.models.EmailField(
+        verbose_name="почта",
+        help_text="почтовый адрес",
+    )
+    feedback = django.db.models.OneToOneField(
+        Feedback,
+        on_delete=django.db.models.CASCADE,
+        related_name="author",
+        related_query_name="author",
+    )
+
+    class Meta:
+        verbose_name = "данные автора"
+        verbose_name_plural = "данные авторов"
