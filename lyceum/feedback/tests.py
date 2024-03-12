@@ -1,5 +1,4 @@
 from pathlib import Path
-import shutil
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -10,6 +9,9 @@ from parameterized import parameterized
 
 from feedback.forms import FeedbackAuthorForm, FeedbackFileForm, FeedbackForm
 from feedback.models import Feedback
+
+
+__all__ = []
 
 
 MEDIA_TEST: Path = settings.BASE_DIR / "media_test"
