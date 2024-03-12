@@ -12,9 +12,6 @@ from feedback.forms import FeedbackAuthorForm, FeedbackFileForm, FeedbackForm
 from feedback.models import Feedback
 
 
-__all__ = []
-
-
 MEDIA_TEST: Path = settings.BASE_DIR / "media_test"
 
 
@@ -148,6 +145,3 @@ class FormTests(TestCase):
         with (MEDIA_TEST / files[0].file.name).open("rb") as f:
             self.assertEqual(f.read(), content, "Wrong file content")
 
-    @classmethod
-    def tearDownClass(cls):
-        shutil.rmtree(MEDIA_TEST)
