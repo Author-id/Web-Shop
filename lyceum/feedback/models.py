@@ -13,7 +13,7 @@ class Status(django.db.models.TextChoices):
 
 class Feedback(django.db.models.Model):
     text = django.db.models.TextField(
-        "текст",
+        verbose_name="текст",
         help_text="напишите текст сообщения",
     )
     created_on = django.db.models.DateTimeField(
@@ -58,12 +58,12 @@ class StatusLog(django.db.models.Model):
         choices=Status.choices,
         db_column="from",
         max_length=11,
-        verbose_name="от",
+        verbose_name="с",
     )
     to = django.db.models.CharField(
         choices=Status.choices,
         max_length=11,
-        verbose_name="от",
+        verbose_name="на",
     )
 
     class Meta:
@@ -97,7 +97,7 @@ class FeedbackFile(django.db.models.Model):
 
 class FeedbackAuthor(django.db.models.Model):
     name = django.db.models.CharField(
-        "имя",
+        verbose_name="имя",
         max_length=150,
         help_text="напишите имя",
         null=True,

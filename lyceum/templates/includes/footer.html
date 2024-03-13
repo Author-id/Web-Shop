@@ -15,4 +15,13 @@
     </select>
     <input class="mt-auto btn btn-md btn-block btn-primary" type="submit" value="Go">
   </form>
+  <script>
+      const curdate = Date("{% now "Y-m-d\TH:i:s\Z" %}");
+      const curryearElement = document.getElementById("curryear");
+      currDate = new Date();
+      const dateDiff = Math.abs((curdate - currDate) / (3600 * 1000));
+      if (dateDiff < 24) {
+          curryearElement.textContent = String(currDate.getFullYear());
+      }
+    </script>
 </footer>

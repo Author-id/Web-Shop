@@ -150,4 +150,5 @@ class FormTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super().setUpClass()
         shutil.rmtree(MEDIA_TEST)

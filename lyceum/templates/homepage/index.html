@@ -3,18 +3,18 @@
 {% load i18n %}
 
 {% block title %}
-{% trans "Главная" %}
+{% trans "Main_title" %}
 {% endblock title %}
 
 {% block content %}
-  <h1 class="pb-2 mb-3">{% trans "Главная страница!" %}</h1>
+  <h1 class="pb-2 mb-3">{% trans "homepage_title" %}</h1>
   {% if items %}
     <div class="row">
-      {% for item in items%}
+      {% for item in items %}
         {% include "includes/item_card.html" %}
       {% endfor %}
     </div>
   {% else %}
-    <h1 class="pb-2 mb-0">{% trans "Пусто" %}</h1>
+    <h1 class="pb-2 mb-0">{% trans "Empty_title" %}</h1>
   {% endif %}
 {% endblock content %}

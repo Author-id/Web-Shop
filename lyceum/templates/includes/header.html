@@ -28,15 +28,13 @@
           <a class="nav-link {% if view_name == 'feedback:feedback' %}active{% endif %}" href="{% url 'feedback:feedback' %}">
             {% trans "Обратная связь" %}
           </a>
-        </li>
-          {% if user.is_authenticated %}
-            {% if user.is_superuser %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'admin:index' %}">
-                  {% trans "Админка" %}
-                </a>
-              </li>
-            {% endif %}
+          </li>
+          {% if request.user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:index' %}">
+                {% trans "Админка" %}
+              </a>
+            </li>
           {% endif %}
         </ul>
       {% endwith %}

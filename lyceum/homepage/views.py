@@ -11,6 +11,7 @@ __all__ = []
 
 
 def home(request):
+    homepage_title = "Главная страница!"
     template = "homepage/index.html"
     items = catalog.models.Item.objects.on_main()
     context = {"items": items}
