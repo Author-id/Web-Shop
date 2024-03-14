@@ -54,7 +54,7 @@ class StatusLog(django.db.models.Model):
         auto_now_add=True,
         null=True,
     )
-    _from = django.db.models.CharField(
+    from_status = django.db.models.CharField(
         choices=Status.choices,
         db_column="from",
         max_length=11,

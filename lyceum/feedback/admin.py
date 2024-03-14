@@ -51,13 +51,13 @@ class StatusLogAdmin(admin.ModelAdmin):
     list_display = (
         feedback.models.StatusLog.user.field.name,
         feedback.models.StatusLog.timestamp.field.name,
-        feedback.models.StatusLog._from.field.name,
+        feedback.models.StatusLog.from_status.field.name,
         feedback.models.StatusLog.to.field.name,
     )
     readonly_fields = (
         feedback.models.StatusLog.user.field.name,
         feedback.models.StatusLog.timestamp.field.name,
-        feedback.models.StatusLog._from.field.name,
+        feedback.models.StatusLog.from_status.field.name,
         feedback.models.StatusLog.to.field.name,
         feedback.models.StatusLog.feedback.field.name,
     )
