@@ -3,7 +3,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-
 urlpatterns = [
     path(
         "",
@@ -37,11 +36,19 @@ urlpatterns = [
     ),
     path(
         "tinymce/",
-        include("tinymce.urls"),
+        include(("tinymce.urls")),
     ),
     path(
         "i18n/",
-        include("django.conf.urls.i18n"),
+        include(("django.conf.urls.i18n")),
+    ),
+    path(
+        "auth/",
+        include(("users.urls")),
+    ),
+    path(
+        "auth/",
+        include(("auth.urls")),
     ),
 ]
 
