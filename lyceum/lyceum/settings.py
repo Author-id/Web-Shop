@@ -29,7 +29,7 @@ ALLOW_REVERSE = true_load("DJANGO_ALLOW_REVERSE", True)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
-    "django.contrib.users",
+    "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -68,6 +69,7 @@ TEMPLATES = [
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
         },
@@ -86,20 +88,20 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib."
-        "users.password_validation.UserAttributeSimilarityValidator",
+        "auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.users."
+        "NAME": "django.contrib.auth."
         "password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.users."
+        "NAME": "django.contrib.auth."
         "password_validation."
         "CommonPasswordValidator",
     },
     {
         "NAME": "django.contrib."
-        "users.password_validation."
+        "auth.password_validation."
         "NumericPasswordValidator",
     },
 ]
@@ -142,3 +144,5 @@ EMAIL_FILE_PATH = BASE_DIR / "send_mail"
 EMAIL_HOST = os.getenv("DJANGO_MAIL")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_REDIRECT_URL = "main"

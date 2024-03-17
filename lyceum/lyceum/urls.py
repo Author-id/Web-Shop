@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from users import views
 
 urlpatterns = [
     path(
@@ -43,13 +44,10 @@ urlpatterns = [
         include(("django.conf.urls.i18n")),
     ),
     path(
-        "auth/",
-        include(("users.urls")),
-    ),
-    path(
-        "auth/",
-        include(("auth.urls")),
-    ),
+        "reg/",
+        views.register,
+        name="reg",
+    )
 ]
 
 if settings.DEBUG:
