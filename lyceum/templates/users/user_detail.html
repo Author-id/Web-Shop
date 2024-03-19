@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ user.username }}</h1>
+  <p>Почта: {{ user.email }}</p>
+  <p>Имя: {% if user.first_name %}{{ user.first_name }}{% else %}<span style="font-style: italic;">неуказано</span>{% endif %}</p>
+  <p>Фамилия: {% if user.last_name %}{{ user.last_name }}{% else %}<span style="font-style: italic;">неуказано</span>{% endif %}</p>
+  <p>День рождения: {% if profile and profile.birthday %}{{ profile.birthday }}{% else %}<span style="font-style: italic;">неуказано</span>{% endif %}</p>
+  <p>Картинка: {% if profile and profile.image %}<img src="{{ profile.image.url }}" alt="">{% else %}<span style="font-style: italic;">нет картинки</span>{% endif %}</p>
+  <p>Количество попыток выпить кофе: {% if profile and profile.coffee_count %}{{ profile.coffee_count }}{% else %}<span style="font-style: italic;">нет данных</span>{% endif %}</p>
+{% endblock %}

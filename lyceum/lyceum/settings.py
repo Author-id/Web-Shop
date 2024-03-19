@@ -149,3 +149,6 @@ EMAIL_HOST = os.getenv("DJANGO_MAIL")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+LOGIN_REDIRECT_URL = "/auth/profile/"
+LOGIN_URL = "/auth/login/"
+LOGOUT_REDIRECT_URL = "/auth/login/"

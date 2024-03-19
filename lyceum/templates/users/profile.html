@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ user.username }}: изменить профиль{% endblock %}
+{% block content %}
+<h1>{{ user.username }}</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if user_form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+          {% for error in form.non_field_errors %}
+              <div>{{ error }}</div>
+          {% endfor %}
+      </div>
+    {% endif %}
+    {% for field in user_form %}
+    <div class="mb-3">
+        <label for="fieldInput" class="form-label">{{ field.label }}</label>
+        <p id="fieldInput" aria-describedby="help">{{ field }}</p>
+        {% for error in field.errors %}
+          <div class="invalid-feedback d-block">
+            {{ error }}
+          </div>
+        {% endfor %}
+        <div id="help" class="form-text">{{ field.help_text }}</div>
+    </div>
+    {% endfor %}
+
+    {% for field in profile_form %}
+    <div class="mb-3">
+        <label for="fieldInput" class="form-label">{{ field.label }}</label>
+        <p id="fieldInput" aria-describedby="help">{{ field }}</p>
+        {% for error in field.errors %}
+          <div class="invalid-feedback d-block">
+            {{ error }}
+          </div>
+        {% endfor %}
+        <div id="help" class="form-text">{{ field.help_text }}</div>
+    </div>
+    {% endfor %}
+
+    {% if messages %}
+    {% for message in messages %}
+    <p> {{ message }} </p>
+    {% endfor %}
+    {% endif %}
+    <a href="{% url "homepage:coffee" %}">Выпить кофе</a>
+    <button type="submit">Сохранить изменения</button>
+  </form>
+{% endblock content %}

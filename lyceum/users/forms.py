@@ -1,28 +1,61 @@
-from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+import django.forms
+import users.models
 
 
-class UserRegisterForm(UserCreationForm):
-    username = forms.CharField(
-        label="Введите логин",
-        required=True,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Введите логин"}),
-    )
-    #some = forms.ModelChoiceField(queryset=User.objects.all())
-    password1 = forms.CharField(
-        label="Введите пароль",
-        required=True,
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Введите пароль"})
-    )
-    password2 = forms.CharField(
-        label="Подтвердите пароль",
-        required=True,
-        widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Повторите пароль"})
+__all__ = []
 
-    )
 
+def custom_auth_form(form):
+    class CustomForm(form):
+        def __init__(self, *args, **kwargs) -> None:
+            super().__init__(*args, **kwargs)
+            for field in self.visible_fields():
+                if isinstance(field.field.widget, django.forms.CheckboxInput):
+                    field.field.widget.attrs["class"] = "form-check-input"
+                else:
+                    field.field.widget.attrs["class"] = "form-control"
+
+    return CustomForm
+
+
+class BootstrapModelForm(django.forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.visible_fields():
+            field.field.widget.attrs["class"] = "form-control"
+
+
+class ProfileForm(BootstrapModelForm):
     class Meta:
-        model = User
-        fields = ["username", "password1", "password2"]
+        model = users.models.Profile
+        fields = [
+            model.birthday.field.name,
+            model.image.field.name,
+            model.coffe_count.field.name,
+        ]
 
+        widgets = {
+            users.models.Profile.coffe_count.field.name: django.forms.NumberInput(
+                attrs={
+                    "readonly": "readonly",
+                    "disabled": "disabled",
+                },
+            ),
+        }
+
+
+class UserForm(BootstrapModelForm):
+    class Meta:
+        model = django.contrib.auth.get_user_model()
+        fields = [
+            model.username.field.name,
+            model.first_name.field.name,
+            model.last_name.field.name,
+        ]
+
+
+class SignUpForm(UserCreationForm):
+
+    class Meta(UserCreationForm.Meta):
+        fields = ("username", "email")
