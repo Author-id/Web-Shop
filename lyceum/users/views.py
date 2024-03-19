@@ -47,9 +47,9 @@ def activate(request, username):
         username=username,
     )
     if timezone.now() > user.date_joined + datetime.timedelta(hours=12):
-        messages.success(request, f"Сообщение успешно отправлено!")
+        messages.success(request, "Сообщение успешно отправлено!")
     else:
-        messages.error(request, f"Сообщение не отправлено!")
+        messages.error(request, "Сообщение не отправлено!")
 
     return redirect(reverse("homepage:main"))
 
@@ -89,10 +89,10 @@ def user_list(request):
     )
 
 
-def user_detail(request, id):
+def user_detail(request, ide):
     user = get_object_or_404(
         get_user_model(),
-        pk=id,
+        pk=ide,
     )
     try:
         profile = user.profile

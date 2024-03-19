@@ -46,7 +46,7 @@ urlpatterns = [
         name="user_list",
     ),
     path(
-        "user_list/<int:id>/",
+        "user_list/<int:ide>/",
         users.views.user_detail,
         name="user_detail",
     ),
