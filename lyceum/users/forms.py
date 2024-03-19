@@ -35,7 +35,7 @@ class ProfileForm(BootstrapModelForm):
         ]
 
         widgets = {
-            users.models.Profile.coffe_count.field.name: django.forms.NumberInput(
+            model.coffe_count.field.name: django.forms.NumberInput(
                 attrs={
                     "readonly": "readonly",
                     "disabled": "disabled",

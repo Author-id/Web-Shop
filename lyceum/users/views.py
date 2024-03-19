@@ -33,9 +33,7 @@ def signup(request):
             recipient_list=[form.cleaned_data["email"]],
         )
         username = form.cleaned_data.get("username")
-        messages.success(
-            request, f"Пользователь {username} был успешно создан!"
-        )
+        messages.success(request, f"Пользователь {username} был успешно создан!")
         return redirect(reverse("homepage:main"))
 
     return render(request, template, context)

@@ -9,8 +9,7 @@ __all__ = []
 class ReverseResponseMiddlewareTests(TestCase):
     def test_reverse_russian_words_defoult(self):
         contents = [
-            Client().get(reverse("homepage:coffee")).content.decode()
-            for _ in range(20)
+            Client().get(reverse("homepage:coffee")).content.decode() for _ in range(20)
         ]
         if settings.ALLOW_REVERSE:
             self.assertIn(
@@ -44,8 +43,7 @@ class ReverseResponseMiddlewareTests(TestCase):
     @override_settings(ALLOW_REVERSE=True)
     def test_reverse_russian_words_enabled(self):
         contents = [
-            Client().get(reverse("homepage:coffee")).content.decode()
-            for _ in range(20)
+            Client().get(reverse("homepage:coffee")).content.decode() for _ in range(20)
         ]
         self.assertIn(
             "Я кинйач",
@@ -72,7 +70,6 @@ class ReverseResponseMiddlewareTests(TestCase):
     @override_settings(ALLOW_REVERSE=False)
     def test_reverse_russian_words_desabled(self):
         contents = [
-            Client().get(reverse("homepage:coffee")).content.decode()
-            for _ in range(20)
+            Client().get(reverse("homepage:coffee")).content.decode() for _ in range(20)
         ]
         self.assertNotIn("Я кинйач", contents, "'Я кинйач' in twenty contents")

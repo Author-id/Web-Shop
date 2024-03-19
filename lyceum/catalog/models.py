@@ -87,16 +87,11 @@ class ItemManager(django.db.models.Manager):
             f"{Item.category.field.name}__{Category.name.field.name}",
             Item.text.field.name,
             f"{Item.tags.field.name}__{Tag.name.field.name}",
-            f"{Item.main_image.related.name}__"
-            f"{ItemMainImage.image.field.name}",
+            f"{Item.main_image.related.name}__" f"{ItemMainImage.image.field.name}",
         ).order_by(f"{Item.category.field.name}__{Category.name.field.name}")
 
     def on_main(self):
-        return (
-            self.published()
-            .filter(is_on_main=True)
-            .order_by(Item.name.field.name)
-        )
+        return self.published().filter(is_on_main=True).order_by(Item.name.field.name)
 
     def get_item(self):
         queryset = (
@@ -124,8 +119,7 @@ class ItemManager(django.db.models.Manager):
             f"{Item.category.field.name}__{Category.name.field.name}",
             Item.text.field.name,
             f"{Item.tags.field.name}__{Tag.name.field.name}",
-            f"{Item.main_image.related.name}__"
-            f"{ItemMainImage.image.field.name}",
+            f"{Item.main_image.related.name}__" f"{ItemMainImage.image.field.name}",
             f"{Item.images.field._related_name}__"
             f"{ItemSecondaryImage.image.field.name}",
         )

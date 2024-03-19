@@ -19,9 +19,7 @@ urlpatterns = [
         "login/",
         views.LoginView.as_view(
             template_name="users/login.html",
-            authentication_form=users.forms.custom_auth_form(
-                AuthenticationForm
-            ),
+            authentication_form=users.forms.custom_auth_form(AuthenticationForm),
         ),
         name="login",
     ),
