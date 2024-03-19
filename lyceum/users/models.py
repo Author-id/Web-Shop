@@ -7,6 +7,9 @@ __all__ = []
 
 
 class Profile(models.Model):
+    def upload_to(self, filename):
+        return f"uploads/{self.image}/{filename}"
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(
         "Биография",
@@ -31,6 +34,7 @@ class Profile(models.Model):
         blank=True,
         null=True,
         help_text="Аватар пользователя",
+        upload_to=upload_to,
     )
 
     class Meta:

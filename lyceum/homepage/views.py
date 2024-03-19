@@ -1,4 +1,4 @@
-from http import HTTPStatus
+import http
 
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import render
@@ -18,7 +18,14 @@ def home(request):
 
 
 def coffee(request):
-    return HttpResponse("Я чайник", status=HTTPStatus.IM_A_TEAPOT)
+    if request.user.is_authenticated:
+        user_profile = request.user.profile
+        user_profile.coffe_count += 1
+        user_profile.save()
+
+    response = HttpResponse("Я чайник")
+    response.status_code = http.HTTPStatus.IM_A_TEAPOT
+    return response
 
 
 def echo(request):
