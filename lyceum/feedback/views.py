@@ -43,7 +43,7 @@ def feedback(request):
 
     context = {
         "author": author_form,
-        "form": content_form,
+        "content": content_form,
         "files": files_form,
     }
     return render(request, "feedback/feedback.html", context)
