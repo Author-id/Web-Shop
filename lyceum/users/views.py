@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+
 import users.forms
 import users.models
 
@@ -23,7 +24,7 @@ def signup(request):
         "form": form,
     }
     if request.method == "POST" and form.is_valid():
-        user = form.save(commit=False)
+        user = form.save(commit=True)
         user.is_active = settings.DEFAULT_USER_IS_ACTIVE
         user.save()
         send_mail(
@@ -34,7 +35,8 @@ def signup(request):
         )
         username = form.cleaned_data.get("username")
         messages.success(
-            request, f"Пользователь {username} был успешно создан!"
+            request,
+            f"Пользователь {username} был успешно создан!",
         )
         return redirect(reverse("homepage:main"))
 

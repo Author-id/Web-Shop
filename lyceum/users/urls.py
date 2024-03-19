@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
     SetPasswordForm,
 )
 from django.urls import path, reverse_lazy
+
 import users.forms
 import users.views
 
@@ -20,7 +21,7 @@ urlpatterns = [
         views.LoginView.as_view(
             template_name="users/login.html",
             authentication_form=users.forms.custom_auth_form(
-                AuthenticationForm
+                AuthenticationForm,
             ),
         ),
         name="login",

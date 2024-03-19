@@ -45,5 +45,6 @@ def feedback(request):
         "author": author_form,
         "content": content_form,
         "files": files_form,
+        "form": content_form,
     }
     return render(request, "feedback/feedback.html", context)
