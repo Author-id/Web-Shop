@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
+
 
 __all__ = []
 
@@ -20,8 +22,7 @@ class Profile(models.Model):
     coffe_count = models.IntegerField(
         "Сколько раз пользователь пил кофе",
         default=0,
-        blank=False,
-        null=False,
+        validators=[MinValueValidator(0)],
         help_text="Количество переходов по /coffee/",
     )
     image = models.ImageField(

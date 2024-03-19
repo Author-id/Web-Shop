@@ -27,7 +27,7 @@ class BootstrapModelForm(django.forms.ModelForm):
 
 
 class ProfileForm(BootstrapModelForm):
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = users.models.Profile
         fields = [
             model.birthday.field.name,
@@ -46,7 +46,7 @@ class ProfileForm(BootstrapModelForm):
 
 
 class UserForm(BootstrapModelForm):
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = django.contrib.auth.get_user_model()
         fields = [
             model.username.field.name,

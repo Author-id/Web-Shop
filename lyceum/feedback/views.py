@@ -15,16 +15,16 @@ __all__ = ["feedback"]
 
 def feedback(request):
     author_form = FeedbackAuthorForm(request.POST or None)
-    content_form = FeedbackForm(request.POST or None)
+    form = FeedbackForm(request.POST or None)
     files_form = FeedbackFileForm(request.POST or None, request.FILES or None)
 
     if (
         request.method == "POST"
         and author_form.is_valid()
-        and content_form.is_valid()
+        and form.is_valid()
         and files_form.is_valid()
     ):
-        feedback_instance = content_form.save(commit=True)
+        feedback_instance = form.save(commit=True)
         author_form.instance.feedback = feedback_instance
         author_form.save(commit=True)
 
@@ -34,7 +34,7 @@ def feedback(request):
 
         send_mail(
             subject="Feedback",
-            message=content_form.cleaned_data["text"],
+            message=form.cleaned_data["text"],
             from_email=settings.EMAIL_HOST,
             recipient_list=[author_form.cleaned_data["mail"]],
         )
@@ -43,8 +43,7 @@ def feedback(request):
 
     context = {
         "author": author_form,
-        "content": content_form,
+        "form": form,
         "files": files_form,
-        "form": content_form,
     }
     return render(request, "feedback/feedback.html", context)
