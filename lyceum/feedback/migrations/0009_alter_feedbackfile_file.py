@@ -14,6 +14,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="feedbackfile",
             name="file",
-            field=models.FileField(upload_to=feedback.models.FeedbackFile.upload_to),
+            field=models.FileField(
+                upload_to=feedback.models.FeedbackFile.upload_to
+            ),
         ),
     ]
