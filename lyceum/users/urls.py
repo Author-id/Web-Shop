@@ -31,9 +31,9 @@ urlpatterns = [
         name="logout",
     ),
     path(
-        "reg/",
+        "signup/",
         users.views.signup,
-        name="reg",
+        name="signup",
     ),
     path(
         "profile/",
