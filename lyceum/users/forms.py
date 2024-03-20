@@ -45,7 +45,7 @@ class ProfileForm(BootstrapModelForm):
         }
 
 
-class UserForm(BootstrapModelForm):
+class UserForm(BootstrapModelForm, UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = django.contrib.auth.get_user_model()
         fields = [

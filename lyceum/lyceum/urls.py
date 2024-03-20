@@ -48,7 +48,7 @@ urlpatterns = [
         include(("django.conf.urls.i18n")),
     ),
     path(
-        "auth/",
+        "users/",
         include(("users.urls")),
     ),
     path(

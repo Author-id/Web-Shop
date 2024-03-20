@@ -22,7 +22,7 @@ class Profile(models.Model):
         null=True,
         help_text="Введите дату рождения пользователя",
     )
-    coffee_count = models.IntegerField(
+    coffee_count = models.PositiveIntegerField(
         "Сколько раз пользователь пил кофе",
         default=0,
         validators=[MinValueValidator(0)],
