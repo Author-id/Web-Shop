@@ -45,14 +45,17 @@ class ProfileForm(BootstrapModelForm):
         }
 
 
-class UserForm(BootstrapModelForm, UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        model = django.contrib.auth.get_user_model()
-        fields = [
-            model.username.field.name,
-            model.first_name.field.name,
-            model.last_name.field.name,
-        ]
+class CustomUserChangeForm(
+    django.contrib.auth.forms.UserChangeForm,
+    BootstrapModelForm,
+):
+    class Meta(django.contrib.auth.forms.UserChangeForm.Meta):
+        fields = (
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+        )
 
 
 class SignUpForm(UserCreationForm):
