@@ -58,7 +58,9 @@ class Migration(migrations.Migration):
             model_name="feedback",
             name="text",
             field=models.TextField(
-                help_text="Напишите текст письма", null=True, verbose_name="Текст"
+                help_text="Напишите текст письма",
+                null=True,
+                verbose_name="Текст",
             ),
         ),
         migrations.CreateModel(

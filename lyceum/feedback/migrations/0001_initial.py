@@ -24,7 +24,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "text",
-                    models.TextField(help_text="текстовое поле", verbose_name="текст"),
+                    models.TextField(
+                        help_text="текстовое поле", verbose_name="текст"
+                    ),
                 ),
                 (
                     "created_on",

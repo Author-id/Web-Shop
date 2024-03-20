@@ -22,6 +22,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="feedback",
             name="text",
-            field=models.TextField(help_text="Введите письмо", verbose_name="текст"),
+            field=models.TextField(
+                help_text="Введите письмо", verbose_name="текст"
+            ),
         ),
     ]
