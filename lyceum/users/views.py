@@ -62,7 +62,7 @@ def profile(request):
         request.POST or None,
         instance=request.user.profile,
     )
-    user_form = users.forms.UserForm(
+    user_form = users.forms.CustomUserChangeForm(
         request.POST or None,
         instance=request.user,
     )
