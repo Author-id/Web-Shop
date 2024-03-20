@@ -16,7 +16,7 @@ class ProfileInLine(admin.StackedInline):
         users.models.Profile.bio.field.name,
         users.models.Profile.image.field.name,
     ]
-    readonly_fields = (users.models.Profile.coffe_count.field.name,)
+    readonly_fields = (users.models.Profile.coffee_count.field.name,)
 
 
 class UserAdmin(BaseUserAdmin):
