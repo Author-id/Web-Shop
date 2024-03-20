@@ -18,7 +18,7 @@ def feedback(request):
         send_mail(
             subject="Django feedback",
             message=text,
-            from_email=settings.DJANGO_MAIL,
+            from_email=settings.EMAIL_HOST,
             recipient_list=[email],
         )
         messages.success(request, "Форма успешно отправлена")
