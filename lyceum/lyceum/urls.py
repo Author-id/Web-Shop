@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-import django.contrib.auth.urls
 from django.urls import include, path
 
 
@@ -53,7 +52,7 @@ urlpatterns = [
     ),
     path(
         "auth/",
-        include(django.contrib.auth.urls),
+        include(("django.contrib.auth.urls")),
     ),
 ] + static(
     settings.MEDIA_URL,
