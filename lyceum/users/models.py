@@ -1,5 +1,5 @@
 import sys
-from typing import cast
+from typing import cast, Optional
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -64,11 +64,11 @@ class CustomUserManager(models.Manager):
         return self.get_queryset().filter(is_active=True)
 
     def by_mail(self, mail: str) -> "User | None":
-        return cast(User | None, self.get_queryset().get(email=mail))
+        return cast(Optional[User], self.get_queryset().get(email=mail))
 
 
 class User(get_user_model()):
     objects = CustomUserManager()
 
     class Meta:
-        proxy = True
+        proxy = False
