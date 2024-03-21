@@ -1,5 +1,3 @@
-import sys
-
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import django.forms
@@ -9,9 +7,7 @@ import users.models
 
 __all__ = []
 
-
-if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
-    User._meta.get_field("email")._unique = True
+User._meta.get_field("email")._unique = True
 
 
 def custom_auth_form(form):
