@@ -1,4 +1,4 @@
-from users.models import User
+import users.models
 
 
 __all__ = []
@@ -8,15 +8,10 @@ class UserMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    @staticmethod
-    def authenticate(request):
-        if request.user.is_authenticated:
-            return True
-
-        return False
-
     def __call__(self, request):
-        if hasattr(request, "user") and self.authenticate(request):
-            request.user.__class__ = User
+        if hasattr(request, "user") and request.user.is_authenticated:
+            request.user = users.models.User.objects.active().get(
+                pk=request.user.id,
+            )
 
         return self.get_response(request)
