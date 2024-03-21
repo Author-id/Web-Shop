@@ -12,7 +12,7 @@ class UserModelBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = UserModel.objects.get(
-                Q(username=username) | Q(email__iexact=username)
+                Q(username=username) | Q(email__iexact=username),
             )
         except UserModel.DoesNotExist:
             return None
@@ -22,7 +22,7 @@ class UserModelBackend(ModelBackend):
             )
         else:
             if user.check_password(password) and self.user_can_authenticate(
-                user
+                user,
             ):
                 return user
 

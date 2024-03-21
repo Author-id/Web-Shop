@@ -1,9 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 import django.forms
 
 import users.models
 
 __all__ = []
+
+User._meta.get_field("email")._unique = True
 
 
 def custom_auth_form(form):
@@ -56,6 +59,7 @@ class CustomUserChangeForm(
             "first_name",
             "last_name",
         )
+        unique_together = ("email",)
 
 
 class SignUpForm(UserCreationForm):
