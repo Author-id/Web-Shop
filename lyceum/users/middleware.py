@@ -1,6 +1,9 @@
 from users.models import UserProxy
 
 
+__all__ = []
+
+
 class UserMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
