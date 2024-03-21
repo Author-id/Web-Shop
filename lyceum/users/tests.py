@@ -70,3 +70,62 @@ def test_user_signup_negative(self):
         },
     )
     self.assertFalse(User.objects.exists())
+
+
+def test_user_signup_identical_emails(self):
+    self.client.post(
+        reverse("users:signup"),
+        data={
+            "username": "test_username1",
+            "email": "qwerty@mail.ru",
+            "password1": "VeryStr0ngPa$$",
+            "password2": "VeryStr0ngPa$$",
+        },
+    )
+    self.client.post(
+        reverse("users:signup"),
+        data={
+            "username": "test_username2",
+            "email": "qwerty@mail.ru",
+            "password1": "VeryStr0ngPa$$",
+            "password2": "VeryStr0ngPa$$",
+        },
+    )
+    self.assertEqual(User.objects.count(), 1)
+
+
+@override_settings(DEFAULT_USER_IS_ACTIVE=False)
+def test_login_email_or_username(self):
+    self.client.post(
+        reverse("users:signup"),
+        data={
+            "username": "test_username",
+            "email": "qwerty@mail.ru",
+            "password1": "VeryStr0ngPa$$",
+            "password2": "VeryStr0ngPa$$",
+        },
+    )
+    self.client.get(reverse("users:activate", args=["test_username"]))
+    self.client.post(
+        reverse("users:login"),
+        data={
+            "username": "test_username",
+            "password": "VeryStr0ngPa$$",
+        },
+    )
+    self.assertEqual(
+        timezone.now().strftime("%d/%m/%Y %H:%M:%S"),
+        User.objects.first().last_login.strftime("%d/%m/%Y %H:%M:%S"),
+    )
+    self.client.get(reverse("users:logout"))
+    self.client.post(
+        reverse("users:login"),
+        data={
+            "username": "qwerty@mail.ru",
+            "password": "VeryStr0ngPa$$",
+        },
+    )
+    self.assertEqual(
+        timezone.now().strftime("%d/%m/%Y %H:%M:%S"),
+        User.objects.first().last_login.strftime("%d/%m/%Y %H:%M:%S"),
+    )

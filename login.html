@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Авторизоваться" %}
+{% endblock title %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+	<div class="col-12 col-md-6 col-lg-7">
+		<h2>{% trans "Авторизоваться" %}</h2>
+		{% include "includes/form.html" with form=form %}
+		<br><a href="{% url 'users:password_reset' %}">{% trans "Забыли пароль?" %}</a>
+	</div>
+</div>
+{% endblock content %}

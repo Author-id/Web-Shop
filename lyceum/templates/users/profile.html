@@ -2,7 +2,6 @@
 {% load static %}
 {% block title %}{{ user.username }}: изменить профиль{% endblock %}
 {% block content %}
-<h1>{{ user.username }}</h1>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% if user_form.non_field_errors %}
@@ -44,6 +43,6 @@
     {% endfor %}
     {% endif %}
     <a href="{% url "homepage:coffee" %}">Выпить кофе</a>
-    <button type="submit">Сохранить изменения</button>
+    <button type="submit" class="btn btn-outline-primary">Сохранить изменения</button>
   </form>
 {% endblock content %}

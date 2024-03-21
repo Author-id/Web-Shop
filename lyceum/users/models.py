@@ -1,3 +1,6 @@
+from typing import cast, Optional
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -40,3 +43,27 @@ class Profile(models.Model):
     class Meta:
         verbose_name = "Дополнительное поле"
         verbose_name_plural = "Дополнительные поля"
+
+
+class UserProxyManager(models.Manager):
+    def get_queryset(self) -> models.query.QuerySet:
+        return (
+            super()
+            .get_queryset()
+            .select_related(
+                User.profile.related.name,
+            )
+        )
+
+    def active(self) -> models.query.QuerySet:
+        return self.get_queryset().filter(is_active=True)
+
+    def by_mail(self, mail: str) -> "User | None":
+        return cast(Optional[User], self.get_queryset().get(email=mail))
+
+
+class UserProxy(get_user_model()):
+    objects = UserProxyManager()
+
+    class Meta:
+        proxy = True
