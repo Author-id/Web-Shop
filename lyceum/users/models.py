@@ -62,7 +62,7 @@ class UserProxyManager(models.Manager):
         return cast(Optional[User], self.get_queryset().get(email=mail))
 
 
-class UserProxy(get_user_model()):
+class User(get_user_model()):
     objects = UserProxyManager()
 
     class Meta:

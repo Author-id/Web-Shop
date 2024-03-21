@@ -1,4 +1,4 @@
-from users.models import UserProxy
+from users.models import User
 
 
 __all__ = []
@@ -17,6 +17,6 @@ class UserMiddleware:
 
     def __call__(self, request):
         if hasattr(request, "user") and self.authenticate(request):
-            request.user.__class__ = UserProxy
+            request.user.__class__ = User
 
         return self.get_response(request)

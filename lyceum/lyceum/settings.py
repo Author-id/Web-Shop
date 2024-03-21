@@ -56,6 +56,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "lyceum.middleware.ReverseResponseMiddleware",
+    "users.middleware.UserMiddleware",
 ]
 
 ROOT_URLCONF = "lyceum.urls"
