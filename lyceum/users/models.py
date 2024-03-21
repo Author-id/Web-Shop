@@ -45,7 +45,7 @@ class Profile(models.Model):
         verbose_name_plural = "Дополнительные поля"
 
 
-class UserProxyManager(models.Manager):
+class CustomUserManager(models.Manager):
     def get_queryset(self) -> models.query.QuerySet:
         return (
             super()
@@ -59,11 +59,11 @@ class UserProxyManager(models.Manager):
         return self.get_queryset().filter(is_active=True)
 
     def by_mail(self, mail: str) -> "User | None":
-        return cast(Optional[User], self.get_queryset().get(email=mail))
+        return cast(User | None, self.get_queryset().get(email=mail))
 
 
 class User(get_user_model()):
-    objects = UserProxyManager()
+    objects = CustomUserManager()
 
     class Meta:
         proxy = True
