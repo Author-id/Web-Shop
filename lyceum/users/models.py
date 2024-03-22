@@ -49,7 +49,7 @@ class Profile(models.Model):
         verbose_name_plural = "Дополнительные поля"
 
 
-class CustomUserManager(models.Manager):
+class UserManager(models.Manager):
     def get_queryset(self) -> models.query.QuerySet:
         return (
             super()
@@ -67,7 +67,7 @@ class CustomUserManager(models.Manager):
 
 
 class User(get_user_model()):
-    objects = CustomUserManager()
+    objects = UserManager()
 
     class Meta:
         proxy = True
