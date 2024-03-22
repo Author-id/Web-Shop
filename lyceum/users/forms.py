@@ -57,7 +57,6 @@ class CustomUserChangeForm(
             "first_name",
             "last_name",
         )
-        unique_together = ("email",)
 
 
 class SignUpForm(UserCreationForm):
