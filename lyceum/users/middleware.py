@@ -10,7 +10,7 @@ class UserMiddleware:
 
     def __call__(self, request):
         if hasattr(request, "user") and request.user.is_authenticated:
-            request.user = users.models.User.objects.active().get(
+            request.user = users.models.User.objects.get(
                 pk=request.user.id,
             )
 
