@@ -1,4 +1,5 @@
 import sys
+
 from typing import cast, Optional
 
 from django.contrib.auth import get_user_model
@@ -8,7 +9,6 @@ from django.db import models
 
 
 __all__ = []
-
 
 if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
     User._meta.get_field("email")._unique = True
@@ -71,4 +71,4 @@ class User(get_user_model()):
     objects = CustomUserManager()
 
     class Meta:
-        proxy = False
+        proxy = True
