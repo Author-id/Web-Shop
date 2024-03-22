@@ -9,8 +9,6 @@ from django.db import models
 
 __all__ = []
 
-User = get_user_model()
-
 if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
     User._meta.get_field("email")._unique = True
 
