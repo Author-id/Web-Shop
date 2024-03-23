@@ -14,8 +14,8 @@ if "makemigrations" not in sys.argv and "migrate" not in sys.argv:
 
 
 class Profile(models.Model):
-    def upload_to(self, filename):
-        return f"uploads/{self.image}/{filename}"
+    def image_path(self, filename):
+        return f"users/{self.user.id}/{filename}"
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(
@@ -41,7 +41,7 @@ class Profile(models.Model):
         blank=True,
         null=True,
         help_text="Аватар пользователя",
-        upload_to=upload_to,
+        upload_to=image_path,
     )
 
     class Meta:
