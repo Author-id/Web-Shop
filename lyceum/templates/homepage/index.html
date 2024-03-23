@@ -7,13 +7,6 @@
 {% endblock title %}
 
 {% block content %}
-{% if messages %}
-  {% for message in messages %}
-    <div class="alert alert-success" role="alert">
-      {{ message }}
-    </div>
-  {% endfor %}
-{% endif %}
   <h1 class="pb-2 mb-3">{% trans "homepage_title" %}</h1>
   {% if items %}
     <div class="row">

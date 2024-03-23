@@ -27,8 +27,12 @@ def signup(request):
         user = form.save(commit=True)
         user.is_active = settings.DEFAULT_USER_IS_ACTIVE
         user.save()
+        users.models.Profile.objects.create(
+            user=user,
+        )
+        user.profile.save()
         send_mail(
-            subject="User",
+            subject="Signup",
             message=render_to_string("users/signup_email.html"),
             from_email=settings.EMAIL_HOST,
             recipient_list=[form.cleaned_data["email"]],
@@ -38,7 +42,7 @@ def signup(request):
             request,
             f"Пользователь {username} был успешно создан!",
         )
-        return redirect(reverse("homepage:main"))
+        return redirect(reverse("users:login"))
 
     return render(request, template, context)
 
