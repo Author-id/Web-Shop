@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                         default=None,
                         help_text="Аватар пользователя",
                         null=True,
-                        upload_to=users.models.Profile.upload_to,
+                        upload_to=users.models.Profile.image_path,
                         verbose_name="Аватар",
                     ),
                 ),
