@@ -12,9 +12,7 @@ from feedback.forms import FeedbackAuthorForm, FeedbackFileForm, FeedbackForm
 from feedback.models import Feedback
 
 
-__all__ = [
-    "FormTests",
-]
+__all__ = []
 
 
 MEDIA_TEST: Path = settings.BASE_DIR / "media_test"
@@ -49,11 +47,11 @@ class FormTests(TestCase):
     @parameterized.expand(
         [
             ("form", FeedbackForm),
-            ("author_form", FeedbackAuthorForm),
-            ("files_form", FeedbackFileForm),
+            ("author", FeedbackAuthorForm),
+            ("files", FeedbackFileForm),
         ],
     )
-    def test_feedback_correct_context(
+    def test_correct_context(
         self,
         form_name,
         form_type,
@@ -104,7 +102,7 @@ class FormTests(TestCase):
         )
         self.assertFormError(
             response,
-            "author_form",
+            "author",
             "mail",
             "Введите правильный адрес электронной почты.",
         )
@@ -152,5 +150,4 @@ class FormTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super().setUpClass()
         shutil.rmtree(MEDIA_TEST)
