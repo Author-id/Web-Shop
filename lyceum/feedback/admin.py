@@ -5,6 +5,15 @@ import feedback.models
 __all__ = []
 
 
+class FeedbackAuthorInline(admin.TabularInline):
+    model = feedback.models.FeedbackAuthor
+    can_delete = False
+
+
+class FeedbackFileInline(admin.TabularInline):
+    model = feedback.models.FeedbackFile
+
+
 @admin.register(feedback.models.Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = (
@@ -22,6 +31,8 @@ class FeedbackAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = (feedback.models.Feedback.created_on.field.name,)
+
+    inlines = [FeedbackAuthorInline, FeedbackFileInline]
 
     def save_model(self, request, obj, form, change):
         if "status" in form.changed_data:
