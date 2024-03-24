@@ -28,6 +28,15 @@ class Profile(models.Model):
         null=True,
         help_text="Введите дату рождения пользователя",
     )
+    attempts_count = models.PositiveIntegerField(
+        "попытки аутентификации",
+        default=0,
+    )
+
+    block_date = models.DateTimeField(
+        "дата блокировки аккаунта",
+        null=True,
+    )
     coffee_count = models.PositiveIntegerField(
         "Сколько раз пользователь пил кофе",
         default=0,
