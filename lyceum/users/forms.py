@@ -63,3 +63,53 @@ class SignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         fields = ("username", "email")
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        email = users.models.UserManager().normalize_email(email)
+        try:
+            users.models.User.objects.by_mail(mail=email)
+            raise django.forms.ValidationError(
+                "Пользователь с такой почтой уже существует.",
+            )
+        except users.models.User.DoesNotExist:
+            return email
+
+
+class CustomAuthenticationForm(
+    django.contrib.auth.forms.AuthenticationForm,
+    BootstrapModelForm,
+):
+    username = django.forms.CharField(
+        label="Почта или имя пользователя",
+        max_length=254,
+    )
+
+    class Meta:
+        model = django.contrib.auth.get_user_model()
+        fields = (model.username.field.name, model.password.field.name)
+
+    def clean(self):
+        username_or_email = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+
+        if username_or_email and password:
+            user = django.contrib.auth.authenticate(
+                username=username_or_email,
+                password=password,
+            )
+            if not user:
+                email = users.models.UserManager().normalize_email(
+                    username_or_email,
+                )
+                user = django.contrib.auth.authenticate(
+                    email=email,
+                    password=password,
+                )
+
+            if not user:
+                raise django.forms.ValidationError(
+                    "Неправильные логин или пароль.",
+                )
+
+        return super(CustomAuthenticationForm, self).clean()

@@ -1,5 +1,3 @@
-import datetime
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -12,7 +10,7 @@ from django.utils import timezone
 
 import users.forms
 import users.models
-
+import users.email
 
 __all__ = []
 
@@ -52,12 +50,56 @@ def activate(request, username):
         get_user_model().objects,
         username=username,
     )
-    if timezone.now() > user.date_joined + datetime.timedelta(hours=12):
-        messages.success(request, "Сообщение успешно отправлено!")
+    registration_time_limit = timezone.now() - timezone.timedelta(hours=12)
+
+    if user.date_joined >= registration_time_limit:
+        user.is_active = True
+        user.save()
+        messages.success(request, "Активация прошла успешно")
     else:
-        messages.error(request, "Сообщение не отправлено!")
+        messages.error(request, "Ошибка при активации")
 
     return redirect(reverse("homepage:main"))
+
+
+def deactivate(request, username):
+    template = "users/user_deactivate.html"
+    context = {"attempts": settings.MAX_AUTH_ATTEMPTS}
+
+    user = get_object_or_404(
+        get_user_model(),
+        username=username,
+    )
+
+    users.email.send_user_email(
+        username,
+        user.email,
+        "users/reactivate_email.html",
+    )
+
+    return render(request, template, context)
+
+
+def reactivate(request, username):
+    user = get_object_or_404(
+        get_user_model().objects,
+        username=username,
+    )
+    reactivate_time_limit = timezone.now() - timezone.timedelta(days=7)
+
+    if user.profile.block_date >= reactivate_time_limit:
+        user.is_active = True
+        user.profile.auth_attempts = 0
+        user.save()
+        user.profile.save()
+        messages.success(
+            request,
+            "Ваш аккаунт снова активирован",
+        )
+    else:
+        messages.error(request, "Ошибка при активации")
+
+    return redirect(reverse("users:login"))
 
 
 @login_required

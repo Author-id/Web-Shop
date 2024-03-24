@@ -52,9 +52,19 @@ urlpatterns = [
         name="user_detail",
     ),
     path(
-        "activate/<username>/",
+        "activate/<str:username>/",
         users.views.activate,
         name="activate",
+    ),
+    path(
+        "reactivate/<str:username>/",
+        users.views.reactivate,
+        name="reactivate",
+    ),
+    path(
+        "deactivate/<str:username>/",
+        users.views.deactivate,
+        name="deactivate",
     ),
     path(
         "password_change/",

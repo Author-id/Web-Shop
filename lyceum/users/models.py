@@ -50,6 +50,37 @@ class Profile(models.Model):
 
 
 class UserManager(models.Manager):
+    def normalize_email(self, email):
+        email = super().normalize_email(email)
+        try:
+            email_name, domain_part = email.strip().rsplit("@", 1)
+            email_name, domain_part = email_name.lower(), domain_part.lower()
+        except ValueError:
+            pass
+        else:
+            if "+" in email_name:
+                email_name = email_name.split("+")[0]
+
+            if domain_part == "yandex.ru" or domain_part == "ya.ru":
+                domain_part = "yandex.ru"
+                email_name = email_name.replace(".", "-")
+
+            elif domain_part == "gmail.com":
+
+                email_name = email_name.replace(".", "")
+
+            email = email_name + "@" + domain_part
+
+        return email
+
+    CANONICAL_DOMAINS = {
+        "ya.ru": "yandex.ru",
+    }
+    DOTS = {
+        "yandex.ru": "-",
+        "gmail.com": "",
+    }
+
     def get_queryset(self) -> models.query.QuerySet:
         return (
             super()

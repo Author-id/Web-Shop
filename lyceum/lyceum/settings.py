@@ -111,9 +111,6 @@ if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
     INTERNAL_IPS = os.getenv("DJANGO_INTERNAL_IPS", "127.0.0.1").split(",")
-    DEFAULT_USER_IS_ACTIVE = True
-else:
-    DEFAULT_USER_IS_ACTIVE = False
 
 
 LANGUAGE_CODE = os.getenv("DJANGO_LANGUAGE_CODE", "ru")
@@ -155,6 +152,18 @@ LOGIN_URL = "/auth/login/"
 LOGOUT_REDIRECT_URL = "/auth/login/"
 
 AUTHENTICATION_BACKENDS = [
-    "users.backends.UserModelBackend",
+    "users.backends.AuthenticationBackend",
     "django.contrib.auth.backends.ModelBackend",
+]
+
+MAX_AUTH_ATTEMPTS = int(os.getenv("MAX_AUTH_ATTEMPTS", default=3))
+
+DEFAULT_USER_IS_ACTIVE = os.getenv(
+    "DEFAULT_USER_IS_ACTIVE",
+    default=str(DEBUG),
+).lower() in [
+    "true",
+    "1",
+    "yes",
+    "y",
 ]
