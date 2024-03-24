@@ -51,7 +51,7 @@ class Profile(models.Model):
 
 class UserManager(models.Manager):
     def normalize_email(self, email):
-        email = super().normalize_email(email)
+        email = self.normalize_email(email)
         try:
             email_name, domain_part = email.strip().rsplit("@", 1)
             email_name, domain_part = email_name.lower(), domain_part.lower()
@@ -72,14 +72,6 @@ class UserManager(models.Manager):
             email = email_name + "@" + domain_part
 
         return email
-
-    CANONICAL_DOMAINS = {
-        "ya.ru": "yandex.ru",
-    }
-    DOTS = {
-        "yandex.ru": "-",
-        "gmail.com": "",
-    }
 
     def get_queryset(self) -> models.query.QuerySet:
         return (

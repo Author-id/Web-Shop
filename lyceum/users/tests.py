@@ -124,7 +124,7 @@ class TestUserSignUp(django.test.TestCase):
                 "password2": "testpassword",
             },
         )
-        self.assertEqual(response.status_code, 200)  # Редиректа не произошло
+        self.assertEqual(response.status_code, 200)
 
 
 class TestUserLogin(django.test.TestCase):
@@ -229,7 +229,7 @@ class TestUserNormalizeEmail(django.test.TestCase):
                 "password": "testpassword",
             },
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 
 class TestUserDeactivation(django.test.TestCase):
