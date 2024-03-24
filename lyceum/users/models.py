@@ -1,11 +1,10 @@
 import sys
-from typing import cast, Optional
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
+from django.contrib.auth.models import BaseUserManager, User
 from django.core.validators import MinValueValidator
 from django.db import models
-
+from django.db.models import Q
 
 __all__ = []
 
@@ -49,9 +48,9 @@ class Profile(models.Model):
         verbose_name_plural = "дополнительные поля"
 
 
-class UserManager(models.Manager):
+class UserManager(BaseUserManager):
     def normalize_email(self, email):
-        email = self.normalize_email(email)
+        email = super().normalize_email(email)
         try:
             email_name, domain_part = email.strip().rsplit("@", 1)
             email_name, domain_part = email_name.lower(), domain_part.lower()
@@ -85,8 +84,18 @@ class UserManager(models.Manager):
     def active(self) -> models.query.QuerySet:
         return self.get_queryset().filter(is_active=True)
 
-    def by_mail(self, mail: str) -> "User | None":
-        return cast(Optional[User], self.get_queryset().get(email=mail))
+    def by_mail(self, mail):
+        mail = self.normalize_email(mail)
+        return self.get_queryset().get(email=mail)
+
+    def get_by_natural_key(self, username):
+        return (
+            self.get_queryset()
+            .filter(
+                Q(email=self.normalize_email(username)) | Q(username=username),
+            )
+            .first()
+        )
 
 
 class User(get_user_model()):
