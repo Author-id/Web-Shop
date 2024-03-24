@@ -8,9 +8,10 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 
+import users.email
 import users.forms
 import users.models
-import users.email
+
 
 __all__ = []
 
