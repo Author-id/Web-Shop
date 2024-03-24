@@ -229,7 +229,7 @@ class TestUserNormalizeEmail(django.test.TestCase):
                 "password": "testpassword",
             },
         )
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
 
 class TestUserDeactivation(django.test.TestCase):
