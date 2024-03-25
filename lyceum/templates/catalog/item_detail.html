@@ -61,4 +61,32 @@
       </div>
     {% endfor %}
   </div>
+<p>Average rating: {{ avg_rating }} ({{ total_ratings }} ratings)</p>
+{% if user_rating %}
+    <p>Your rating: {{ user_rating.rating_display }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <select name="rating">
+            <option value="1">Ненависть</option>
+            <option value="2">Неприязнь</option>
+            <option value="3">Нейтрально</option>
+            <option value="4">Обожание</option>
+            <option value="5">Любовь</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Изменить оценку</button>
+    </form>
+{% else %}
+    <p>You have not rated this item yet.</p>
+    <form method="post">
+        {% csrf_token %}
+        <select name="rating">
+            <option value="1">Ненависть</option>
+            <option value="2">Неприязнь</option>
+            <option value="3">Нейтрально</option>
+            <option value="4">Обожание</option>
+            <option value="5">Любовь</option>
+        </select>
+        <button type="submit">Оценить</button>
+    </form>
+{% endif %}
 {% endblock content %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "feedback.apps.FeedbackConfig",
     "homepage.apps.HomepageConfig",
     "users.apps.UsersConfig",
+    "rating.apps.RatingConfig",
     "sorl.thumbnail",
     "django_cleanup.apps.CleanupConfig",
     "tinymce",
