@@ -36,4 +36,5 @@ jobs:
         flake8 . --count --show-source --statistics
     - name: Test with pytest
       run: |
-        pytest
+        cd lyceum
+        python manage.py test
