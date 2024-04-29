@@ -1,16 +1,18 @@
 import datetime
 import random
 
-from django.db.models import F
+from django.db.models import Count, F, Sum
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import django.views.generic
 
 import catalog.models
-
-from django.shortcuts import render, get_object_or_404
-from catalog.models import Item
+from rating.forms import DeleteRatingForm, RatingForm
 from rating.models import Rating
+
 
 __all__ = []
 
@@ -26,50 +28,69 @@ class ItemListView(django.views.generic.ListView):
         return context
 
 
-class ItemDetailView(django.views.generic.View):
+class ItemDetailView(django.views.generic.DetailView):
     template_name = "catalog/item_detail.html"
     context_object_name = "item"
-    queryset = catalog.models.Item.objects.get_item()
+    queryset = catalog.models.Item.objects.published()
 
-    def get(self, request, pk):
-        item = get_object_or_404(Item, pk=pk)
-        ratings = Rating.objects.filter(item=item)
-        total_ratings = len(ratings)
-        avg_rating = 0
-        if total_ratings > 0:
-            avg_rating = (
-                sum(rating.rating for rating in ratings) / total_ratings
-            )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        item = self.get_object()
+        ratings = Rating.objects.filter(item=item).aggregate(
+            sum=Sum("rating"),
+            count=Count("rating"),
+        )
+        rating_count = ratings["count"]
+        rating_sum = ratings["sum"] or 0
 
         user_rating = None
-        if request.user.is_authenticated:
+        if self.request.user.is_authenticated:
             user_rating = Rating.objects.filter(
-                user=request.user, item=item
+                user=self.request.user,
+                item=item,
             ).first()
 
-        context = {
-            "item": item,
-            "avg_rating": avg_rating,
-            "total_ratings": total_ratings,
-            "user_rating": user_rating,
-        }
-        return render(request, self.template_name, context)
+        context.update(
+            {
+                "rating_form": RatingForm(instance=user_rating),
+                "delete_rating_form": DeleteRatingForm(),
+                "rating": (
+                    round(rating_sum / rating_count, 2)
+                    if rating_count > 0
+                    else 0
+                ),
+                "rating_count": rating_count,
+                "user_rating": user_rating,
+            },
+        )
 
-    def post(self, request, pk):
-        item = get_object_or_404(Item, pk=pk)
-        user_rating = Rating.objects.filter(
-            user=request.user, item=item
-        ).first()
+        return context
 
-        if user_rating:
-            user_rating.rating = request.POST["rating"]
-            user_rating.save()
-        else:
-            Rating.objects.create(
-                user=request.user, item=item, rating=request.POST["rating"]
-            )
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        self.object = self.get_object()
+        context = self.get_context_data()
+        user_rating = context["user_rating"]
+        form = RatingForm(request.POST, instance=user_rating)
+        delete_form = DeleteRatingForm(request.POST)
+        context["rating_form"] = form
+        if self.request.user.is_authenticated:
+            if form.is_valid():
+                if user_rating:
+                    form.save()
+                else:
+                    user_rating = form.save(False)
+                    user_rating.user = self.request.user
+                    user_rating.item = self.object
+                    user_rating.save()
 
-        return self.get(request, pk)
+                return redirect(reverse("catalog:item_detail", args=[pk]))
+
+            if user_rating and delete_form.is_valid():
+                user_rating.delete()
+                return redirect(reverse("catalog:item_detail", args=[pk]))
+
+        return self.render_to_response(context)
 
 
 class ItemListNewView(django.views.generic.ListView):

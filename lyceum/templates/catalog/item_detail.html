@@ -61,32 +61,20 @@
       </div>
     {% endfor %}
   </div>
-<p>Average rating: {{ avg_rating }} ({{ total_ratings }} ratings)</p>
-{% if user_rating %}
-    <p>Your rating: {{ user_rating.rating_display }}</p>
-    <form method="post">
-        {% csrf_token %}
-        <select name="rating">
-            <option value="1">Ненависть</option>
-            <option value="2">Неприязнь</option>
-            <option value="3">Нейтрально</option>
-            <option value="4">Обожание</option>
-            <option value="5">Любовь</option>
-        </select>
-        <button type="submit" class="btn btn-primary">Изменить оценку</button>
-    </form>
-{% else %}
-    <p>You have not rated this item yet.</p>
-    <form method="post">
-        {% csrf_token %}
-        <select name="rating">
-            <option value="1">Ненависть</option>
-            <option value="2">Неприязнь</option>
-            <option value="3">Нейтрально</option>
-            <option value="4">Обожание</option>
-            <option value="5">Любовь</option>
-        </select>
-        <button type="submit">Оценить</button>
-    </form>
-{% endif %}
+<div class="row">
+			<div class="col-12 col-md-9">
+				<p class="mb-0">{% blocktranslate count counter=rating_count %}item__rating -- {{counter}}{{ rating }}{% plural %}item__rating {{counter}}{{ rating }}{% endblocktranslate %}</p>
+				{% if user_rating %}
+					<p class="mb-0">{% translate "item__user_rating" %} -- {{ user_rating.rating }}</p>
+				{% endif %}
+			</div>
+			<div class="col-12 col-md-2">
+				{% translate "item__rate" as submit_text %}
+				{% include "includes/form.html" with form=rating_form submit_text=submit_text %}
+			</div>
+			<div class="col-12 col-md-1">
+				{% translate "item__delete_rate" as submit_delete_text %}
+				{% include "includes/form.html" with form=delete_rating_form submit_text=submit_delete_text %}
+			</div>
+</div>
 {% endblock content %}

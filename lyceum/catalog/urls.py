@@ -13,7 +13,9 @@ urlpatterns = [
         r"^re/(?P<pk>[1-9]\d*)/", views.ItemDetailView.as_view(), name="re"
     ),
     path(
-        "converter/<int:pk>/", views.ItemDetailView.as_view(), name="converter"
+        "converter/<pint:pk>/",
+        views.ItemDetailView.as_view(),
+        name="converter",
     ),
     path("new/", views.ItemListNewView.as_view(), name="new"),
     path("friday/", views.ItemListFridayView.as_view(), name="friday"),
