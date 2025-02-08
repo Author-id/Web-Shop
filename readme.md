@@ -1,4 +1,4 @@
-# Django Web-Site
+# Django Shop-Web-Site
 
 [![pipeline status](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/-/commits/main)
 
