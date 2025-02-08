@@ -1,4 +1,4 @@
-# Django Web-Site By Semyanov Andrey
+# Django Web-Site
 
 [![pipeline status](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/badges/main/pipeline.svg)](https://gitlab.crja72.ru/django/2024/spring/course/students/249419-semyanovandrew-course-1112/-/commits/main)
 
@@ -43,7 +43,7 @@
 1. Clone the repo
 
    ```bash
-   git clone git@gitlab.crja72.ru:django/2024/spring/course/students/199049-sahbievdg-course-1112.git
+   git clone https://github.com/andreylyceum/shop-site.git
    ```
 
 2. Install requirements
